@@ -1,1 +1,0 @@
-ROOT = /~now/disu.se

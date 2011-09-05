@@ -1,3 +1,4 @@
-tools/
-*.swp
 *.html
+*.swp
+config.mk
+tools/
