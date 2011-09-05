@@ -1,0 +1,173 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+input, textarea {
+  font-size: 100%;
+  font: inherit;
+}
+
+body {
+  background-color: #f6f6f6;
+  margin: 1em auto 0;
+  width: 40em;
+  font: 12pt/15pt sans-serif;
+}
+
+article h1 {
+  font-size: 200%;
+  /* TODO: Need more space above. */
+  margin: 1.27em 0 0.77em;
+  text-align: center;
+}
+
+section h1 {
+  font-size: 183%;
+  /* TODO: Need more space above. */
+  margin: 1.27em 0 0.77em;
+  text-align: left;
+}
+
+section section h1 {
+  font-size: 133%;
+  margin: 1.5em 0 .6em;
+  /*
+  font-variant: small-caps;
+  */
+}
+
+:link {
+  color: #d11;
+  text-decoration: underline;
+}
+
+:visited {
+  color: #d55;
+  text-decoration: underline;
+}
+
+:link:focus {
+  color: white;
+  background-color: #d11;
+}
+
+:visited:focus {
+  color: white;
+  background-color: #d55;
+}
+
+header {
+  position: relative;
+  height: 28pt;
+}
+
+header h1 {
+  position: absolute;
+  left: 0;
+  margin: 0;
+  font-size: 28pt;
+  letter-spacing: -0.08em;
+}
+
+.dis {
+  color: #f60;
+  color: black;
+}
+
+.use {
+  color: #fa3;
+  color: red;
+}
+
+#trail {
+  position: absolute;
+  top: 0;
+  left: 7em;
+  line-height: 26pt;
+}
+
+#trail li {
+  display: inline;
+}
+
+#trail li:before {
+  content: '/';
+  margin: 0 0.25em;
+}
+
+#search {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/*
+p {
+  text-align: justify;
+}
+*/
+
+p + p {
+  text-indent: 1.5em;
+}
+
+em {
+  font-style: oblique;
+}
+
+footer {
+  margin-top: 2em;
+  text-align: center;
+}
+
+.code-comment { color: #257325; }
+.code-constant { color: #951616; }
+.code-special { color: #f02626; }
+.code-identifier { color: #2f5a9b; }
+.code-statement { color: #766020; }
+.code-preproc { color: #93376e; }
+.code-type { color: #602f80; }
+.code-underlined { text-decoration: underline; }
+.code-number { color: #181818; }
+.code-error { color: #f0a500; }
+.code-todo { background-color: #f0a500; }
+.code-normal { color: #181818; }
