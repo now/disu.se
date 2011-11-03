@@ -7,7 +7,10 @@ NML2HTML = data/templates/disuse.xsl
 HTML = \
        www/about/contact/index.html \
        www/about/index.html \
-       www/index.html
+       www/about/resume/index.html \
+       www/index.html \
+       www/software/index.html \
+       www/software/lookout/index.html
 
 JING = jing-20091111
 
