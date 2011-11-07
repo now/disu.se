@@ -76,17 +76,20 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- TODO: Clean this up to make it easier to understand. -->
   <xsl:template name="nml.body.header.trail.part">
+    <xsl:param name="path" select="$root"/>
     <xsl:param name="subpath"/>
 
     <xsl:variable name="directory" select="substring-before($subpath, '/')"/>
     <xsl:variable name="rest" select="substring-after($subpath, '/')"/>
-    <xsl:variable name="more" select="substring-before(substring-before($rest, '/'), '/')"/>
+    <xsl:variable name="more" select="substring-after($rest, '/')"/>
 
     <li>
       <a
         title="Go back to {$directory}"
-        href="{concat($root, '/', $directory, '/')}">
+        href="{concat($path, '/', $directory, '/')}">
+        <!-- TODO: What did we think here?  This needs to be improved. -->
         <xsl:if test="not($more)">
           <xsl:attribute name="rel">up</xsl:attribute>
         </xsl:if>
@@ -96,6 +99,7 @@
 
     <xsl:if test="$more">
       <xsl:call-template name="nml.body.header.trail.part">
+        <xsl:with-param name="path" select="concat($path, '/', $directory)"/>
         <xsl:with-param name="subpath" select="$rest"/>
       </xsl:call-template>
     </xsl:if>

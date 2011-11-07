@@ -10,6 +10,11 @@ HTML = \
        www/about/resume/index.html \
        www/index.html \
        www/software/index.html \
+       www/software/lookout/api/String/index.html \
+       www/software/lookout/api/U/Buffer/index.html \
+       www/software/lookout/api/U/String/index.html \
+       www/software/lookout/api/U/index.html \
+       www/software/lookout/api/index.html \
        www/software/lookout/index.html
 
 JING = jing-20091111
