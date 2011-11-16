@@ -6,7 +6,7 @@ def init
 end
 
 def docstring_text
-  return '' if object.tags(:overload).size == 1
+  return '' if object.tags(:overload).size == 1 and object.docstring.empty?
   return object.tag(:return).text if object.docstring.strip.empty? and
     object.tags(:return).size == 1 and object.tag(:return).text
   object.docstring

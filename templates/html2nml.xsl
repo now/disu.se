@@ -256,7 +256,7 @@
       <xsl:apply-templates select="@*"/>
 
       <xsl:choose>
-        <xsl:when test="count(*) = 0">
+        <xsl:when test="node()[1][self::text()]">
           <p><xsl:apply-templates select="node()"/></p>
         </xsl:when>
 
