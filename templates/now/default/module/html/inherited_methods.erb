@@ -1,0 +1,18 @@
+<% if class_method_list.empty? and instance_method_list.empty? %>
+<section>
+  <h1>Method Summary</h1>
+<% end %>
+  <% @inherited_methods.each do |superclass, methods| %>
+  <p class="inherited">Methods <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify(superclass) %>:</p>
+  <ul>
+  <% methods.sort_by{ |e| e.name.to_s }.each do |method| %>
+    <li><p><%= linkify(method,
+                       superclass.type == :module && object.class_mixins.include?(superclass) ?
+                         method.name(true).sub(/\A#/, '') :
+                         method.name(true)) %></p></li>
+  <% end %>
+  </ul>
+  <% end %>
+<% if class_method_list.empty? and instance_method_list.empty? %>
+</section>
+<% end %>

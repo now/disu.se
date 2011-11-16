@@ -1,0 +1,9 @@
+<section>
+  <h1>Constants</h1>
+  <dl class="constants">
+  <% constant_list.each do |e| %>
+    <dt id="<%= urlencode(anchor_for(e)) %>"<%= e.has_tag?(:deprecated) ? ' class="deprecated"' : '' %>><%= e.name %></dt>
+    <dd><%= yieldall :object => e %></dd>
+  <% end %>
+  </dl>
+</section>

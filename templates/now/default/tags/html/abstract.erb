@@ -1,0 +1,6 @@
+<dt>Abstract</dt>
+<% if object.tag(:abstract).text.strip.empty? %>
+<dd><p>This <%= object.type %> is abstract.</p></dd>
+<% else %>
+<dd><%= htmlify(object.tag(:abstract).text) %></dd>
+<% end %>

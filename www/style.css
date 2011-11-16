@@ -77,12 +77,12 @@ section section h1 {
 
 :link {
   color: #d11;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 :visited {
   color: #d55;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 :link:focus {
@@ -109,7 +109,7 @@ header h1 {
 }
 
 a[rel="contents"] {
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 .dis {
@@ -121,7 +121,7 @@ a[rel="contents"] {
 }
 
 #trail {
-  display: inline-block;
+/* This seems unnecessary: display: inline-block; */
   position: absolute;
   left: 7em;
   line-height: 26pt;
@@ -195,6 +195,11 @@ li {
 sub {
   vertical-align: sub;
   font-size: 0.83em;
+}
+
+/* TODO: Not sure about this, but something closer to this value than the default. */
+sub.type {
+  font-size: 0.7em;
 }
 
 sup {

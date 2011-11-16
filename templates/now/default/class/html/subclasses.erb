@@ -1,0 +1,8 @@
+<section id="subclasses">
+  <h1>Direct Known Subclasses</h1>
+  <ul class="children">
+  <% @subclasses.each do |name, child| %>
+    <li><p><%= linkify(child, name) %></p></li>
+  <% end %>
+  </ul>
+</section>

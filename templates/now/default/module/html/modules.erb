@@ -1,0 +1,8 @@
+<section>
+  <h1>Modules</h1>
+  <ul>
+  <% @modules.each do |e| %>
+    <li><p><%= linkify(e, e.name) %></p></li>
+  <% end %>
+  </ul>
+</section>

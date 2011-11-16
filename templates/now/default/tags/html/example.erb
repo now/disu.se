@@ -1,0 +1,9 @@
+<dt>Examples</dt>
+<dd>
+  <dl>
+  <% object.tags(:example).each do |tag| %>
+    <dt><%= now_inline_htmlify(tag.name) %></dt>
+    <dd><pre class="example code"><code><%= html_syntax_highlight(tag.text) %></code></pre></dd>
+  <% end %>
+  </dl>
+</dd>

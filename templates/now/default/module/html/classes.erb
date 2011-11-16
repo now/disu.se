@@ -1,0 +1,8 @@
+<section>
+  <h1>Classes</h1>
+  <ul>
+  <% @classes.each do |e| %>
+    <li><p><%= linkify(e, e.name) %></p></li>
+  <% end %>
+  </ul>
+</section>

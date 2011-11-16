@@ -1,4 +1,5 @@
 *.html
 *.swp
 config.mk
-tools/
+/tools/
+/www/software/u/api/

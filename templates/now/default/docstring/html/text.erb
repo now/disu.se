@@ -1,0 +1,5 @@
+<% if object.respond_to? :is_alias? and object.is_alias? %>
+<p>This is an alias for <%= linkify(object.alias_for, object.alias_for.name) %>.</p>
+<% else %>
+<%= htmlify(docstring_text) %>
+<% end %>

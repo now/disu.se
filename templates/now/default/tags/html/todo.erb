@@ -1,0 +1,4 @@
+<% object.tags(:todo).each do |tag| %>
+<dt>TODO</dt>
+<dd><%= htmlify(tag.text) %></dd>
+<% end %>

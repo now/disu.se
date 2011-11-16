@@ -1,0 +1,6 @@
+<dt>Deprecated</dt>
+<% if object.tag(:deprecated).text.strip.empty? %>
+<dd><p>This <%= object.type %> has been deprecated.</p></dd>
+<% else %>
+<dd><%= htmlify(object.tag(:deprecated).text) %></dd>
+<% end %>
