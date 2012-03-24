@@ -1,4 +1,4 @@
 <section>
-  <h1 id="<%= urlencode(anchor_for(object)) %>" class="signature"><%= title_signature(object.tags(:overload).size == 1 ? object.tag(:overload) : object) %></h1>
+  <h1 id="<%= urlencode(anchor_for(object)) %>" class="signature"><%= title_signature(object.tags(:overload).size > 1 ? object.tag(:overload) : object) %></h1>
   <%= yieldall %>
 </section>
