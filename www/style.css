@@ -150,7 +150,14 @@ p {
 */
 
 p + p {
-  text-indent: 1.5em;
+  margin-top: 1em;
+/*  text-indent: 1.5em; */
+}
+
+table {
+  margin: 1em 0;
+  border-collapse: separate;
+  border-spacing: 1.5em 0;
 }
 
 em {
@@ -171,10 +178,25 @@ code {
   font-family: monospace;
 }
 
-ul {
-  list-style-type: disc;
+dl, ol, ul {
   margin: 1em 0;
+}
+
+/* TODO: Alternative -0.5em and have li add 2em. */
+ol, ul {
   margin-left: -1em;
+}
+
+dd ol, dd ul {
+  margin-left: 0;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+  margin-left: 1em;
+}
+
+ol {
+  list-style-type: decimal;
 }
 
 nav ol {
@@ -182,10 +204,22 @@ nav ol {
   margin: 0;
 }
 
-ol {
-  list-style-type: decimal;
-  margin: 1em 0;
-  margin-left: -1em;
+ul {
+  list-style-type: disc;
+}
+
+/*
+dt.name {
+  font-style: oblique;
+}
+
+dt.name sub.type {
+  font-style: normal;
+}
+*/
+
+dd {
+  margin-left: 1em;
 }
 
 li {

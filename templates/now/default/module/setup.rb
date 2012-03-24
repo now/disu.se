@@ -169,7 +169,7 @@ def overload_summary_signature(method)
                        h(link.name),
                        :title => h(YARD::CodeObjects::MethodObject === link ? link.name(true) : link.name)),
               format_args(overload),
-              format_block(overload)]
+              now_format_block(overload)]
 end
 
 def summary_signature(method)

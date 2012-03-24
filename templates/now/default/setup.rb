@@ -15,11 +15,24 @@ def now_inline_htmlify(object)
 end
 
 def overloaded_format_args(method)
-  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + format_block(e) }.uniq.size > 1 ? '…' : format_args(method)
+  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + now_format_block(e) }.uniq.size > 1 ? '…' : format_args(method)
 end
 
 def overloaded_format_block(method)
-  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + format_block(e) }.uniq.size > 1 ? '' : format_block(method)
+  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + now_format_block(e) }.uniq.size > 1 ? '' : now_format_block(method)
+end
+
+def now_format_block(object)
+  if object.has_tag?(:yield) && object.tag(:yield).types
+    params = object.tag(:yield).types
+  elsif object.has_tag?(:yieldparam)
+    params = object.tags(:yieldparam).map{ |t| t.name }
+  elsif object.has_tag?(:yield)
+    return '{ … }'
+  else
+    params = nil
+  end
+  params ? h('{ |' + params.join(', ') + '| … }') : ''
 end
 
 def title_signature(method)

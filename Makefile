@@ -37,7 +37,7 @@ tools/jing.jar tools/xercesImpl.jar:
 # directory?
 %.html: %.nml $(NML2HTML) tools/jing.jar tools/xercesImpl.jar
 	stylesheet=$(ROOT)/www/style.css; \
-	local=`basename "$@"`.css; \
+	local=$(basename $@).css; \
 	test -e "$$local" && stylesheet=$(ROOT)/$$local; \
 	$(JAVA) \
 	  -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration \
