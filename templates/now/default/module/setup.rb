@@ -120,37 +120,6 @@ def docstring_summary(obj)
   docstring_full(obj).summary
 end
 
-# TODO: Re-enable support for this.  Groups will have to be per scope.
-def groups(list)
-  if groups_data = object.groups
-    others = list.select {|m| !m.group }
-    groups_data.each do |name|
-      items = list.select {|m| m.group == name }
-      yield(items, name) unless items.empty?
-    end
-  else
-    others = []
-    group_data = {}
-    list.each do |meth|
-      if meth.group
-        (group_data[meth.group] ||= []) << meth
-      else
-        others << meth
-      end
-    end
-    group_data.each {|group, items| yield(items, group) unless items.empty? }
-  end
-
-  scopes(others){ |items, scope| yield items, scope }
-end
-
-def scopes(list)
-  [:class, :instance].each do |scope|
-    items = list.select{ |m| m.scope == scope }
-    yield items, scope unless items.empty?
-  end
-end
-
 def mixed_into(object)
   unless globals.mixed_into
     globals.mixed_into = {}
