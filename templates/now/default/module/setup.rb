@@ -174,7 +174,11 @@ end
 
 def summary_signature(method)
   if method.respond_to? :is_alias? and method.is_alias?
-    link, overload = method, convert_method_to_overload(method.alias_for)
+    if method.alias_for
+      link, overload = method, convert_method_to_overload(method.alias_for)
+    else
+      link = overload = method
+    end
   else
     overload = link = convert_method_to_overload(method)
   end
