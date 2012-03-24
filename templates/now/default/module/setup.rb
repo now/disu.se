@@ -108,8 +108,9 @@ def sort_listing(list)
 end
 
 def docstring_full(obj)
-  docstring = obj.tags(:overload).size == 1 && obj.docstring.empty? ? obj.tag(:overload).docstring : obj.docstring
+  docstring = (obj.docstring.empty? and obj.tags(:overload).size > 0) ? obj.tag(:overload).docstring : obj.docstring
   if docstring.summary.empty? and obj.tags(:return).size == 1 and obj.tag(:return).text
+    # TODO: Perhaps add a “Returns ” prefix and add a “.” suffix, if missing.
     docstring = Docstring.new(obj.tag(:return).text)
   end
   docstring
