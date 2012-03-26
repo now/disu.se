@@ -1,5 +1,5 @@
 <section id="class-method-summary">
   <h1>Class Method Summary</h1>
-<%= @list = class_method_list; erb(:method_summary) %>
-<%= @list = inherited_class_method_list; erb(:inherited_methods) %>
+<%= @list = @class_methods; erb(:method_summary) %>
+<%= @list = @inherited_class_methods; erb(:inherited_methods) %>
 </section>

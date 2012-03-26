@@ -1,12 +1,12 @@
 <section>
   <h1>Constants</h1>
   <dl class="constants">
-  <% constant_list.each do |e| %>
+  <% @constants.each do |e| %>
     <dt id="<%= urlencode(anchor_for(e)) %>"<%= e.has_tag?(:deprecated) ? ' class="deprecated"' : '' %>><%= e.name %></dt>
     <dd><%= yieldall :object => e %></dd>
   <% end %>
   </dl>
-<% inherited_constant_list.each do |superclass, constants| %>
+<% @inherited_constants.each do |superclass, constants| %>
   <p class="inherited">Constants <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify(superclass) %>:</p>
   <ul>
   <% constants.sort_by{ |e| e.name.to_s }.each do |constant| %>

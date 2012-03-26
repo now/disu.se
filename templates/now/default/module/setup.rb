@@ -25,18 +25,16 @@ def classes
 end
 
 def children_of_type(type)
-  run_verifier(object.children.select{ |e| e.type == type }.sort_by{ |e| e.name.to_s })
+  run_verifier(object.children.select{ |e| e.type == type }).sort_by{ |e| e.name.to_s }
 end
 
 def constant_summary
-  erb(:constant_summary) unless constant_list.empty? and inherited_constant_list.empty?
-end
-
-def inherited_constant_list
-  @inherited_constants ||= inherited_x{ |e|
-    e.constants(:included => false, :inherited => false).
+  @constants = run_verifier(object.constants(:inherited => false, :included => false) + object.cvars)
+  @inherited_constants = inherited_x{ |e|
+    e.constants(:inherited => false, :included => false).
       select{ |c| object.child(:type => :constant, :name => c.name).nil? }
   }
+  erb(:constant_summary) unless @constants.empty? and @inherited_constants.empty?
 end
 
 def inherited_x
@@ -47,72 +45,46 @@ def inherited_x
 end
 
 def class_method_summary
-  erb(:class_method_summary) unless class_method_list.empty? and inherited_class_method_list.empty?
+  @class_methods = scoped_methods(:class)
+  @inherited_class_methods = scoped_inherited_methods(:class)
+  erb(:class_method_summary) unless @class_methods.empty? and @inherited_class_methods.empty?
 end
 
 def instance_method_summary
-  erb(:instance_method_summary) unless instance_method_list.empty? and inherited_instance_method_list.empty?
-end
-
-def inherited_class_method_list
-  @inherited_class_methods ||= scoped_inherited_methods(:class)
-end
-
-def inherited_instance_method_list
-  @inherited_instance_methods ||= scoped_inherited_methods(:instance)
+  @instance_methods = scoped_methods(:instance)
+  @inherited_instance_methods = scoped_inherited_methods(:instance)
+  erb(:instance_method_summary) unless @instance_methods.empty? and @inherited_instance_methods.empty?
 end
 
 def scoped_inherited_methods(scope)
   inherited_x{ |e|
-    e.meths(:included => false, :inherited => false, :scope => scope).
+    e.meths(:inherited => false, :included => false, :scope => scope).
       select{ |m| object.child(:scope => scope, :name => m.name).nil? }.
       reject{ |m| special_method?(m) }
   }
 end
 
 def methodmissing
-  return unless @mm = object.meths(:inherited => true, :included => true).find{ |e| e.name == :method_missing and e.scope == :instance }
+  return unless @mm = object.meths(:inherited => true, :included => true).find{ |e| e.name(true) == '#method_missing' }
   erb(:methodmissing)
 end
 
 def class_methods
-  erb(:class_methods) unless non_special_class_method_list.empty?
+  @non_special_class_methods = scoped_methods(:class, false)
+  erb(:class_methods) unless @non_special_class_methods.empty?
 end
 
 def instance_methods
-  erb(:instance_methods) unless non_special_instance_method_list.empty?
+  @non_special_instance_methods = scoped_methods(:instance, false)
+  erb(:instance_methods) unless @non_special_instance_methods.empty?
 end
 
-def constant_list
-  @constants ||= run_verifier(object.constants(:included => false, :inherited => false) + object.cvars)
-end
-
-def class_method_list
-  @class_methods ||= scoped_method_listing(:class)
-end
-
-def instance_method_list
-  @instance_methods ||= scoped_method_listing(:instance)
-end
-
-def non_special_class_method_list
-  @non_special_class_methods ||= scoped_method_listing(:class, false)
-end
-
-def non_special_instance_method_list
-  @non_special_instance_methods ||= scoped_method_listing(:instance, false)
-end
-
-def scoped_method_listing(scope, include_specials = true)
-  method_listing(include_specials).select{ |e| e.scope == scope }
-end
-
-def method_listing(include_specials = true)
-  return @smeths ||= method_listing.reject{ |m| special_method?(m) } unless include_specials
-  @meths ||= run_verifier(object.meths(:inherited => false, :included => false)).
-    sort_by{ |e| [e.scope.to_s, e.name.to_s.downcase] }.
+def scoped_methods(scope, include_specials = true)
+  run_verifier(object.meths(:inherited => false, :included => false, :scope => scope)).
+    sort_by{ |e| e.name.to_s }.
     map{ |e| inline_overloads(e) }.
-    flatten
+    flatten.
+    select{ |m| include_specials or not special_method? m }
 end
 
 def special_method?(method)
@@ -130,20 +102,13 @@ def inline_overloads(method)
   }
 end
 
-def docstring_summary(obj)
-  obj.docstring.summary.empty? ? Docstring.new(text_from_return(obj)).summary : obj.docstring.summary
-end
-
 def mixed_into(object)
-  unless globals.mixed_into
-    globals.mixed_into = {}
-    run_verifier(Registry.all(:class, :module)).each do |e|
-      e.mixins.each do |m|
-        (globals.mixed_into[m.path] ||= []) << e
-      end
-    end
-  end
-  globals.mixed_into[object.path] || []
+  (globals.mixed_into ||= run_verifier(Registry.all(:class, :module)).reduce({}){ |h, e|
+     e.mixins.each do |m|
+       (h[m.path] ||= []) << e
+     end
+     h
+   })[object.path] || []
 end
 
 def summary_signature(method)
