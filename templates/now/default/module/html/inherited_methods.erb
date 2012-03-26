@@ -1,9 +1,5 @@
-<% if class_method_list.empty? and instance_method_list.empty? %>
-<section>
-  <h1>Method Summary</h1>
-<% end %>
-  <% @inherited_methods.each do |superclass, methods| %>
-  <p class="inherited">Methods <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify(superclass) %>:</p>
+<% @list.each do |superclass, methods| %>
+  <p class="inherited"><%= superclass.type == :class ? 'Inherited' : 'Included' %> from <%= linkify(superclass) %>:</p>
   <ul>
   <% methods.sort_by{ |e| e.name.to_s }.each do |method| %>
     <li><p><%= linkify(method,
@@ -12,7 +8,4 @@
                          method.name(true)) %></p></li>
   <% end %>
   </ul>
-  <% end %>
-<% if class_method_list.empty? and instance_method_list.empty? %>
-</section>
 <% end %>

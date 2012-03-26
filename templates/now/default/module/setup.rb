@@ -13,7 +13,6 @@ def init
     :constant_summary, [T('docstring')],
     :class_method_summary, [:item_summary],
     :instance_method_summary, [:item_summary],
-    :inherited_methods,
     :methodmissing, [T('method_details')],
     :class_methods, [T('method_details')],
     :instance_methods, [T('method_details')]
@@ -38,27 +37,41 @@ def constant_summary
 end
 
 def inherited_constant_list
-  @inherited_constants ||= inherited_x{ |e| e.constants(:included => false, :inherited => false) }
+  @inherited_constants ||= inherited_x{ |e|
+    e.constants(:included => false, :inherited => false).
+      select{ |c| object.child(:type => :constant, :name => c.name).nil? }
+  }
 end
 
 def inherited_x
   object.inheritance_tree(true)[1..-1].
     reject{ |e| YARD::CodeObjects::Proxy === e }.
-    map{ |e| [e, run_verifier(yield(e)).select{ |m| object.child(:scope => :class, :name => m.name).nil? }] }.
+    map{ |e| [e, run_verifier(yield(e)).sort_by{ |x| x.name.to_s }] }.
     reject{ |_, e| e.empty? }
 end
 
 def class_method_summary
-  erb(:class_method_summary) unless class_method_list.empty?
+  erb(:class_method_summary) unless class_method_list.empty? and inherited_class_method_list.empty?
 end
 
 def instance_method_summary
-  erb(:instance_method_summary) unless instance_method_list.empty?
+  erb(:instance_method_summary) unless instance_method_list.empty? and inherited_instance_method_list.empty?
 end
 
-def inherited_methods
-  @inherited_methods ||= inherited_x{ |e| e.meths(:included => false, :inherited => false) }
-  erb(:inherited_methods) unless @inherited_methods.empty?
+def inherited_class_method_list
+  @inherited_class_methods ||= scoped_inherited_methods(:class)
+end
+
+def inherited_instance_method_list
+  @inherited_instance_methods ||= scoped_inherited_methods(:instance)
+end
+
+def scoped_inherited_methods(scope)
+  inherited_x{ |e|
+    e.meths(:included => false, :inherited => false, :scope => scope).
+      select{ |m| object.child(:scope => scope, :name => m.name).nil? }.
+      reject{ |m| special_method?(m) }
+  }
 end
 
 def methodmissing
@@ -99,11 +112,15 @@ def scoped_method_listing(scope, include_specials = true)
 end
 
 def method_listing(include_specials = true)
-  return @smeths ||= method_listing.reject{ |o| o.constructor? or o.name(true) == '#method_missing' } unless include_specials
+  return @smeths ||= method_listing.reject{ |m| special_method?(m) } unless include_specials
   @meths ||= run_verifier(object.meths(:inherited => false, :included => false)).
     sort_by{ |e| [e.scope.to_s, e.name.to_s.downcase] }.
     map{ |e| inline_overloads(e) }.
     flatten
+end
+
+def special_method?(method)
+  method.constructor? or method.name(true) == '#method_missing'
 end
 
 def inline_overloads(method)

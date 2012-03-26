@@ -1,8 +1,5 @@
 <section id="class-method-summary">
   <h1>Class Method Summary</h1>
-  <dl class="summary methods">
-  <% class_method_list.each do |e| %>
-    <%= yieldall :item => e %>
-  <% end %>
-  </dl>
+<%= @list = class_method_list; erb(:method_summary) %>
+<%= @list = inherited_class_method_list; erb(:inherited_methods) %>
 </section>

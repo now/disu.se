@@ -1,0 +1,7 @@
+<% unless @list.empty? %>
+  <dl class="summary methods">
+  <% @list.each do |e| %>
+    <%= yieldall :item => e %>
+  <% end %>
+  </dl>
+<% end %>
