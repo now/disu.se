@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# TODO: Remove dependency on prune_method_listing in class or at least move
-# this include there.
-include Helpers::ModuleHelper
-
 def init
   sections :header,
     :box_info,

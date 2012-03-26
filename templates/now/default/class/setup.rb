@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 include T('default/module')
+include Helpers::ModuleHelper
 
 def init
   super
