@@ -6,9 +6,5 @@ def init
 end
 
 def docstring_text
-  return object.tag(:return).text if
-    object.docstring.strip.empty? and
-    object.tags(:return).size == 1 and
-    object.tag(:return).text
-  object.docstring
+  object.docstring.strip.empty? ? text_from_return(object) : object.docstring
 end

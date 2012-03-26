@@ -63,6 +63,12 @@ def now_format_block(object)
   params ? h('{ |' + params.join(', ') + '| … }') : ''
 end
 
+def text_from_return(object)
+  return '' unless object.tags(:return).size == 1 and not object.tag(:return).text.empty?
+  text = object.tag(:return).text
+  'Returns %s%s%s' % [text[0..0].downcase, text[1..-1], text.end_with?('.') ? '' : '.']
+end
+
 class YARD::Serializers::FileSystemSerializer
   class SerializedPath
     def initialize(object, extension)

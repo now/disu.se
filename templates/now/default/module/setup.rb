@@ -135,12 +135,7 @@ def inline_overloads(method)
 end
 
 def docstring_summary(obj)
-  # TODO: Perhaps add a “Returns ” prefix and add a “.” suffix, if missing.
-  return Docstring.new(obj.tag(:return).text).summary if
-    obj.docstring.summary.empty? and
-    obj.tags(:return).size == 1 and
-    obj.tag(:return).text
-  obj.docstring.summary
+  obj.docstring.summary.empty? ? Docstring.new(text_from_return(obj)).summary : obj.docstring.summary
 end
 
 def mixed_into(object)
