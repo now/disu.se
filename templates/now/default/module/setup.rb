@@ -119,5 +119,5 @@ def summary_signature(method)
   '%s%s%s' %
     [link_url(url_for(method), h(method.name), :title => h(method.name(true))),
      format_args(target),
-     format_block(target)]
+     now_format_block(target)]
 end
