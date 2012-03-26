@@ -45,13 +45,13 @@ def inherited_x
 end
 
 def class_method_summary
-  @class_methods = scoped_methods(:class)
+  @class_methods = scoped_methods(:class).sort_by{ |e| e.name.to_s }
   @inherited_class_methods = scoped_inherited_methods(:class)
   erb(:class_method_summary) unless @class_methods.empty? and @inherited_class_methods.empty?
 end
 
 def instance_method_summary
-  @instance_methods = scoped_methods(:instance)
+  @instance_methods = scoped_methods(:instance).sort_by{ |e| e.name.to_s }
   @inherited_instance_methods = scoped_inherited_methods(:instance)
   erb(:instance_method_summary) unless @instance_methods.empty? and @inherited_instance_methods.empty?
 end
@@ -81,7 +81,6 @@ end
 
 def scoped_methods(scope, include_specials = true)
   run_verifier(object.meths(:inherited => false, :included => false, :scope => scope)).
-    sort_by{ |e| e.name.to_s }.
     map{ |e| inline_overloads(e) }.
     flatten.
     select{ |m| include_specials or not special_method? m }
