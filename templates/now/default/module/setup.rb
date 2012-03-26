@@ -11,7 +11,6 @@ def init
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
-    :inherited_constants,
     :class_method_summary, [:item_summary],
     :instance_method_summary, [:item_summary],
     :inherited_methods,
@@ -35,12 +34,11 @@ def children_of_type(type)
 end
 
 def constant_summary
-  erb(:constant_summary) unless constant_list.empty?
+  erb(:constant_summary) unless constant_list.empty? and inherited_constant_list.empty?
 end
 
-def inherited_constants
-  @inherited_constants = inherited_x{ |e| e.constants(:included => false, :inherited => false) }
-  erb(:inherited_constants) unless @inherited_constants.empty?
+def inherited_constant_list
+  @inherited_constants ||= inherited_x{ |e| e.constants(:included => false, :inherited => false) }
 end
 
 def inherited_x

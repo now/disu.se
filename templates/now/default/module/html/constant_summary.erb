@@ -6,4 +6,12 @@
     <dd><%= yieldall :object => e %></dd>
   <% end %>
   </dl>
+<% inherited_constant_list.each do |superclass, constants| %>
+  <p class="inherited">Constants <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify(superclass) %>:</p>
+  <ul>
+  <% constants.sort_by{ |e| e.name.to_s }.each do |constant| %>
+    <li><p><%= linkify(constant, constant.name) %></p></li>
+  <% end %>
+  </ul>
+<% end %>
 </section>
