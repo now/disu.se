@@ -24,7 +24,7 @@
 <% if @item.has_tag? :deprecated %>
 <%= htmlify(@item.tag(:deprecated).text) %>
 <% elsif @item.is_alias? %>
-<p>This is an alias for <%= @item.alias_for ? linkify(@item.alias_for, @item.alias_for.name) : @item.namespace.aliases[@item] %>.</p>
+<p>This is an alias for <%= link_to_alias(@item) %>.</p>
 <% else %>
 <%= htmlify(@item.docstring.summary.empty? ? Docstring.new(text_from_return(@item)).summary : @item.docstring.summary) %>
 <% end %>

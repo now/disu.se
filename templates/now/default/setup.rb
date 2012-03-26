@@ -17,10 +17,16 @@ end
 def title_signature(method)
   types = title_signature_types(method)
   # TODO: Deal with method.visibility?
-  '%s%s%s%s' % [h(method.name),
+  '%s%s%s%s' % [method_name_h(method.name),
                 format_args(method),
                 now_format_block(method),
                 types.empty? ? '' : '<sub class="type">%s</sub>' % types]
+end
+
+def link_to_alias(object)
+  object.alias_for ?
+    linkify(object.alias_for, object.alias_for.name) :
+    method_name_h(object.namespace.aliases[object])
 end
 
 def title_signature_types(method)
@@ -154,5 +160,9 @@ module YARD::Templates::Helpers::HtmlHelper
     else
       object.to_s
     end
+  end
+
+  def method_name_h(name)
+    (Operators.include?(name) ? '<code>%s</code>' : '%s') % name
   end
 end
