@@ -1,5 +1,5 @@
 <% if object.respond_to? :is_alias? and object.is_alias? %>
 <p>This is an alias for <%= object.alias_for ? linkify(object.alias_for, object.alias_for.name) : object.namespace.aliases[object] %>.</p>
 <% else %>
-<%= htmlify(docstring_text) %>
+<%= htmlify(object.docstring.strip.empty? ? text_from_return(object) : object.docstring) %>
 <% end %>
