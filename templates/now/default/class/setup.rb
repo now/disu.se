@@ -9,6 +9,7 @@ def init
 end
 
 def constructor_details
+  # TODO: Why not use #constructor? here?
   return unless @constructor = object.meths(:inherited => true, :included => true).find{ |e| e.name == :initialize }
   erb(:constructor_details) unless prune_method_listing([@constructor]).empty?
 end

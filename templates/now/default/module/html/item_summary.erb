@@ -1,14 +1,6 @@
-<% if @item.tags(:overload).size > 1 and not @item.is_alias? %>
-<% @item.tags(:overload).each do |e| %>
 <dt class="<%= @item.visibility %><%= @item.has_tag?(:deprecated) ? ' deprecated' : '' %>">
-  <%= overload_summary_signature(e) %>
+  <%= summary_signature(@item) %>
 </dt>
-<% end %>
-<% else %>
-<dt class="<%= @item.visibility %><%= @item.has_tag?(:deprecated) ? ' deprecated' : '' %>">
-  <%= summary_signature(@item.tags(:overload).size == 1 ? @item.tag(:overload) : @item) %>
-</dt>
-<% end %>
 <dd>
 <% if @item.visibility != :public or
       (@item.has_tag? :api and @item.tag(:api).text == 'private') or
@@ -19,7 +11,7 @@
     <li class="<% @item.visibility %>"><p><%= @item.visibility %></p></li>
   <% end %>
   <% if @item.has_tag? :api and @item.tag(:api).text == 'private' %>
-    <li class="abstract"><p>Private</p></li>
+    <li class="private-api"><p>Private</p></li>
   <% end %>
   <% if @item.has_tag? :deprecated %>
     <li class="deprecated"><p>Deprecated</p></li>

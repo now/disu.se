@@ -10,7 +10,7 @@ def init
       end
     end
   end
-  sections :index, [:private] + tags, :overload, [T('docstring')]
+  sections :index, [:private] + tags
 end
 
 def private

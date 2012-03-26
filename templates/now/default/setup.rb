@@ -14,42 +14,17 @@ def now_inline_htmlify(object)
   htmlify(object).sub(%r'\A<p>', '').sub(%r'</p>', '')
 end
 
-def overloaded_format_args(method)
-  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + now_format_block(e) }.uniq.size > 1 ? '…' : format_args(method)
-end
-
-def overloaded_format_block(method)
-  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| format_args(e) + now_format_block(e) }.uniq.size > 1 ? '' : now_format_block(method)
-end
-
-def now_format_block(object)
-  if object.has_tag?(:yield) && object.tag(:yield).types
-    params = object.tag(:yield).types
-  elsif object.has_tag?(:yieldparam)
-    params = object.tags(:yieldparam).map{ |t| t.name }
-  elsif object.has_tag?(:yield)
-    return '{ … }'
-  else
-    params = nil
-  end
-  params ? h('{ |' + params.join(', ') + '| … }') : ''
-end
-
 def title_signature(method)
-  overload = convert_method_to_overload(method)
-  types = overloaded_title_signature_types(overload)
-  # TODO: Deal with overload.visibility?
-  '%s%s%s%s' % [h(overload.name),
-                overloaded_format_args(overload),
-                overloaded_format_block(overload),
+  types = title_signature_types(method)
+  # TODO: Deal with method.visibility?
+  '%s%s%s%s' % [h(method.name),
+                format_args(method),
+                now_format_block(method),
                 types.empty? ? '' : '<sub class="type">%s</sub>' % types]
 end
 
-def overloaded_title_signature_types(method)
-  method.tags(:overload).size > 1 && method.tags(:overload).map{ |e| title_signature_types(e) }.uniq.size > 1 ? '' : title_signature_types(method)
-end
-
 def title_signature_types(method)
+  # TODO: Why is this needed?
   method = method.object if method.respond_to?(:object) and not method.has_tag?(:return)
   return h(options[:default_return]) unless method.tag(:return) and method.tag(:return).types
   types = method.tags(:return).map{ |e| e.types ? e.types : [] }.flatten.uniq
@@ -73,6 +48,19 @@ def title_signature_format_types(*types)
     '<code>%s</code>' %
       e.gsub(/([^\w:]*)([\w:]+)?/){ h($1) + ($2 ? linkify($2, $2) : '') }
   }.join(', ')
+end
+
+def now_format_block(object)
+  if object.has_tag?(:yield) && object.tag(:yield).types
+    params = object.tag(:yield).types
+  elsif object.has_tag?(:yieldparam)
+    params = object.tags(:yieldparam).map{ |t| t.name }
+  elsif object.has_tag?(:yield)
+    return '{ … }'
+  else
+    params = nil
+  end
+  params ? h('{ |' + params.join(', ') + '| … }') : ''
 end
 
 class YARD::Serializers::FileSystemSerializer

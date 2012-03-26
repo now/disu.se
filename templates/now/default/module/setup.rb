@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# TODO: Remove dependency on prune_method_listing in class or at least move
+# this include there.
 include Helpers::ModuleHelper
 
 def init
@@ -19,13 +21,17 @@ def init
 end
 
 def modules
-  @modules = run_verifier(object.children.select{ |e| e.type == :module }.sort_by{ |e| e.name.to_s })
+  @modules = children_of_type(:module)
   erb(:modules) unless @modules.empty?
 end
 
 def classes
-  @classes = run_verifier(object.children.select{ |e| e.type == :class }.sort_by{ |e| e.name.to_s })
+  @classes = children_of_type(:class)
   erb(:classes) unless @classes.empty?
+end
+
+def children_of_type(type)
+  run_verifier(object.children.select{ |e| e.type == type }.sort_by{ |e| e.name.to_s })
 end
 
 def constant_summary
@@ -95,29 +101,31 @@ def scoped_method_listing(scope, include_specials = true)
 end
 
 def method_listing(include_specials = true)
-  return @smeths ||= method_listing.reject{ |o| special_method?(o) } unless include_specials
-  @meths ||= sort_listing(run_verifier(object.meths(:inherited => false, :included => false)))
+  return @smeths ||= method_listing.reject{ |o| o.constructor? or o.name(true) == '#method_missing' } unless include_specials
+  @meths ||= run_verifier(object.meths(:inherited => false, :included => false)).
+    sort_by{ |e| [e.scope.to_s, e.name.to_s.downcase] }.
+    map{ |e| inline_overloads(e) }.
+    flatten
 end
 
-def special_method?(method)
-  method.constructor? or method.name(true) == '#method_missing'
-end
-
-def sort_listing(list)
-  list.sort_by{ |e| [e.scope.to_s, e.name.to_s.downcase] }
-end
-
-def docstring_full(obj)
-  docstring = (obj.docstring.empty? and obj.tags(:overload).size > 0) ? obj.tag(:overload).docstring : obj.docstring
-  if docstring.summary.empty? and obj.tags(:return).size == 1 and obj.tag(:return).text
-    # TODO: Perhaps add a “Returns ” prefix and add a “.” suffix, if missing.
-    docstring = Docstring.new(obj.tag(:return).text)
-  end
-  docstring
+def inline_overloads(method)
+  return method if method.tags(:overload).empty?
+  method.tags(:overload).map{ |e|
+    n = method.dup
+    n.signature = e.signature
+    n.parameters = e.parameters
+    n.docstring = e.docstring
+    n
+  }
 end
 
 def docstring_summary(obj)
-  docstring_full(obj).summary
+  # TODO: Perhaps add a “Returns ” prefix and add a “.” suffix, if missing.
+  return Docstring.new(obj.tag(:return).text).summary if
+    obj.docstring.summary.empty? and
+    obj.tags(:return).size == 1 and
+    obj.tag(:return).text
+  obj.docstring.summary
 end
 
 def mixed_into(object)
@@ -132,30 +140,13 @@ def mixed_into(object)
   globals.mixed_into[object.path] || []
 end
 
-def overload_summary_signature(method)
-  overload = link = convert_method_to_overload(method)
-  # TODO: Deal with overload.visibility?
-  '%s%s%s' % [link_url(url_for(link.respond_to?(:object) ? link.object : link),
-                       h(link.name),
-                       :title => h(YARD::CodeObjects::MethodObject === link ? link.name(true) : link.name)),
-              format_args(overload),
-              now_format_block(overload)]
-end
-
 def summary_signature(method)
-  if method.respond_to? :is_alias? and method.is_alias?
-    if method.alias_for
-      link, overload = method, convert_method_to_overload(method.alias_for)
-    else
-      link = overload = method
-    end
-  else
-    overload = link = convert_method_to_overload(method)
-  end
-  # TODO: Deal with overload.visibility?
-  '%s%s%s' % [link_url(url_for(link.respond_to?(:object) ? link.object : link),
-                       h(link.name),
-                       :title => h(YARD::CodeObjects::MethodObject === link ? link.name(true) : link.name)),
-              overloaded_format_args(overload),
-              overloaded_format_block(overload)]
+  target = (method.respond_to? :is_alias? and method.is_alias? and method.alias_for) ?
+    method.alias_for :
+    method
+  # TODO: Deal with method.visibility?
+  '%s%s%s' %
+    [link_url(url_for(method), h(method.name), :title => h(method.name(true))),
+     format_args(target),
+     format_block(target)]
 end
