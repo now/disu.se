@@ -29,7 +29,7 @@ def return
   tag(:return)
 end
 
-[:abstract, :deprecated, :note, :todo, :example, :see].each do |t|
+[:abstract, :deprecated, :example, :note, :return, :see, :todo].each do |t|
   define_method t do
     erb(t) if object.has_tag? t
   end
