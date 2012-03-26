@@ -24,12 +24,13 @@ def return
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
     return
   end
+  return if object.docstring.strip.empty? # We’ve already output this information
   return erb(:returns_void) if object.tags(:return).size == 1 and
     object.tag(:return).types == ['void']
-  tag(:return)
+  erb(:return)
 end
 
-[:abstract, :deprecated, :example, :note, :return, :see, :todo].each do |t|
+[:abstract, :deprecated, :example, :note, :see, :todo].each do |t|
   define_method t do
     erb(t) if object.has_tag? t
   end
