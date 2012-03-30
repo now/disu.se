@@ -13,21 +13,21 @@
 <% unless object.mixins(:class).empty? %>
   <dt>Extended by</dt>
   <dd>
-    <ul class="module-list extends">
-    <% object.mixins(:class).sort_by{ |e| e.path }.each do |e| %>
+    <ol class="module-list extends">
+    <% object.mixins(:class).each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
-    </ul>
+    </ol>
   </dd>
 <% end %>
 <% unless object.mixins(:instance).empty? %>
   <dt>Includes</dt>
   <dd>
-    <ul class="module-list includes">
-    <% object.mixins(:instance).sort_by{ |e| e.path }.each do |e| %>
+    <ol class="module-list includes">
+    <% object.mixins(:instance).each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
-    </ul>
+    </ol>
   </dd>
 <% end %>
 <% unless mixed_into(object).empty? %>
