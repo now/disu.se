@@ -1,4 +1,4 @@
 <% object.tags(:return).each do |tag| %>
-  <dt>Returns<sub class="type"><%= tag_format_types(tag.types) %></sub></dt>
+  <dt>Returns<sub class="type"><%= now_format_arg_types(tag.types) %></sub></dt>
   <dd><%= htmlify(tag.text) %></dd>
 <% end %>

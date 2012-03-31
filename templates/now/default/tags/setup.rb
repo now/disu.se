@@ -24,7 +24,7 @@ def return
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
     return
   end
-  return if object.docstring.strip.empty? # We’ve already output this information
+  return if object.docstring.strip.empty? or (object.tags(:return).size == 1 and (object.tag(:return).text.nil? or object.tag(:return).text.empty?))
   return erb(:returns_void) if object.tags(:return).size == 1 and
     object.tag(:return).types == ['void']
   erb(:return)
@@ -34,6 +34,10 @@ end
   define_method t do
     erb(t) if object.has_tag? t
   end
+end
+
+def param
+  tag(:param) if params_documented? object
 end
 
 private
@@ -52,10 +56,4 @@ def tag(name)
                            [true, true]
                          end
   erb('tag')
-end
-
-def tag_format_types(types)
-  return '' unless Array === types
-  result = title_signature_format_types(*types)
-  types.length > 1 ? '[%s]' % result : result
 end

@@ -117,6 +117,6 @@ def summary_signature(method)
   # TODO: Deal with method.visibility?
   '%s%s%s' %
     [link_url(url_for(method), method_name_h(method.name), :title => h(method.name(true))),
-     format_args(target),
+     now_format_args(target, false),
      now_format_block(target)]
 end

@@ -10,7 +10,7 @@
   <% else %>
   <dl class="<%= @name %>">
   <% object.tags(@name).each do |tag| %>
-    <dt class="type"><%= tag.types.nil? || tag.types.empty? ? 'Object' : tag_format_types(tag.types) %></dt>
+    <dt class="type"><%= now_format_arg_types(tag.types) %></dt>
     <dd><%= htmlify(tag.text) %></dd>
   <% end %>
   </dl>
@@ -18,13 +18,13 @@
 <% else %>
   <dl class="<%= @name %>">
   <% object.tags(@name).each do |tag| %>
-    <dt class="name"><%= h(tag.name) %><% unless @no_types %><sub class="type"><%= tag_format_types(tag.types) %></sub><% end %><% if @name == :param and (o = object.parameters.assoc(tag.name.to_s)) and o[1] %> = <code class="default"><%= h(o[1]) %></code><% end %></dt>
+    <dt class="name"><%= h(tag.name) %><% unless @no_types %><sub class="type"><%= now_format_arg_types(tag.types) %></sub><% end %><% if @name == :param and (o = object.parameters.assoc(tag.name.to_s)) and o[1] %> = <code class="default"><%= h(o[1]) %></code><% end %></dt>
     <dd>
       <%= htmlify(tag.text) %>
     <% if @name == :param and not((tags = object.tags(:option).select{ |e| e.name == tag.name }).empty?) %>
       <dl class="options">
       <% tags.each do |tag| %>
-        <dt><%= h(tag.pair.name) %><sub class="type"><%= tag_format_types(tag.pair.types || ['Object']) %></sub><% if tag.pair.defaults %> = <code class="default"><%= h(tag.pair.defaults.join(', ')) %></code><% end %></dt>
+        <dt><%= h(tag.pair.name) %><sub class="type"><%= now_format_arg_types(tag.pair.types) %></sub><% if tag.pair.defaults %> = <code class="default"><%= h(tag.pair.defaults.join(', ')) %></code><% end %></dt>
         <dd><%= htmlify(tag.pair.text) if tag.pair.text %></dd>
       <% end %>
       </dl>
