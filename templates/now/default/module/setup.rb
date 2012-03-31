@@ -110,6 +110,10 @@ def mixed_into(object)
    })[object.path] || []
 end
 
+def now_format_object_title(object)
+  '%s<sub class="type">%s</sub>' % [object.path, format_object_type(object)]
+end
+
 def summary_signature(method)
   target = (method.respond_to? :is_alias? and method.is_alias? and method.alias_for) ?
     method.alias_for :

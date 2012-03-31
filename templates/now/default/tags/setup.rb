@@ -57,3 +57,7 @@ def tag(name)
                          end
   erb('tag')
 end
+
+def now_inline_htmlify(object)
+  htmlify(object).sub(%r'\A<p>', '').sub(%r'</p>', '')
+end
