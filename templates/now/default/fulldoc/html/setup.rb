@@ -19,7 +19,10 @@ def init
     rescue => e
       log.error 'Exception occurred while serializing object: %s' %
         options[:serializer].serialized_path(object)
-      log.backtrace e
+      if log.show_backtraces
+        log.error '%s: %s' % [e.class.class_name, e.message]
+        log.error "Stack trace: %s\n" % e.backtrace[0..5].join("\n")
+      end
     end
   end
 end
