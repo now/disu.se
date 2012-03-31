@@ -37,11 +37,8 @@ def link_to_alias(object)
 end
 
 def title_signature_format_types(*types)
-  # TODO: Why wrap it in <code>…</code>?  I don’t think this is necessary
-  # unless the type is #[], #<=>, or similar.
   types.map{ |e|
-    '<code>%s</code>' %
-      e.gsub(/([^\w:]*)([\w:]+)?/){ h($1) + ($2 ? linkify($2, $2) : '') }
+    e.gsub(/([^\w:]*)([\w:]+)?/){ method_name_h($1) + ($2 ? linkify($2, $2) : '') }
   }.join(', ')
 end
 
@@ -152,6 +149,7 @@ module YARD::Templates::Helpers::HtmlHelper
   end
 
   def method_name_h(name)
-    (Operators.include?(name) ? '<code>%s</code>' : '%s') % name
+    ((Operators.include? name.to_sym or
+      (name.to_s.start_with? '#' and Operators.include? name.to_s[1..-1].to_sym)) ? '<code>%s</code>' : '%s') % h(name)
   end
 end
