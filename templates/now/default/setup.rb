@@ -21,7 +21,7 @@ def now_format_args(method, show_types = !params_documented?(method))
   parameters = (method.has_tag? :yield or method.has_tag? :yieldparam) ?
     method.parameters.reject{ |e| e.first.start_with? '&' and not method.tags(:param).any?{ |t| t.name == e.first[1..-1] } } :
     method.parameters
-  return '' if method.parameters.empty?
+  return '' if parameters.empty?
   '(%s)' % parameters.map{ |n, v|
              type = (show_types and tag = method.tags(:param).find{ |t| t.name == n }) ?
                '<sub class="type">%s</sub>' % now_format_arg_types(tag.types) :
