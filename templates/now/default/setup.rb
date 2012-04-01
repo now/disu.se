@@ -12,6 +12,10 @@ def now_format_arg_types(types)
   types.length > 1 ? '[%s]' % result : result
 end
 
+def now_format_arg_types_h(types)
+  '<sub class="type">%s</sub>' % now_format_arg_types(types)
+end
+
 def params_documented?(method)
   method.tags(:param).any?{ |e| e.text and not e.text.empty? }
 end
@@ -46,10 +50,14 @@ end
 def now_format_parameters_with_types(parameters, tags)
   parameters.map{ |name, default|
     type = (tag = tags.find{ |e| e.name == name }) ?
-    '<sub class="type">%s</sub>' % now_format_arg_types(tag.types) :
-    ''
+      now_format_arg_types_h(tag.types) :
+      ''
     default ? '%s%s = %s' % [h(name), type, h(default)] : '%s%s' % [h(name), type]
   }.join(', ')
+end
+
+def yieldreturn_only_for_type?(method)
+  method.tags(:yieldreturn).size == 1 and (method.tag(:yieldreturn).text.nil? or method.tag(:yieldreturn).text.empty?)
 end
 
 # TODO: Include :yieldreturn after |…|, if it has no description.
@@ -65,7 +73,10 @@ def now_format_block(object, show_types = !yield_documented?(object))
   end
   formatted = now_format_parameters_with_types(params, show_types ? object.tags(:yieldparam) : [])
   return '' if formatted.empty?
-  '{ |%s| … }' % formatted
+  '{ |%s|%s … }' % [formatted,
+                    (show_types and yieldreturn_only_for_type?(object)) ?
+                      now_format_arg_types_h(object.tag(:yieldreturn).types) :
+                      '']
 end
 
 def text_from_return(object)

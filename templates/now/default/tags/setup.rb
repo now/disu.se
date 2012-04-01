@@ -30,7 +30,11 @@ def return
   erb(:return)
 end
 
-[:abstract, :deprecated, :example, :note, :see, :todo, :yieldreturn].each do |t|
+def yieldreturn
+  erb(:yieldreturn) if object.has_tag? :yieldreturn and not yieldreturn_only_for_type? object
+end
+
+[:abstract, :deprecated, :example, :note, :see, :todo].each do |t|
   define_method t do
     erb(t) if object.has_tag? t
   end
