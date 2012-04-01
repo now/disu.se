@@ -21,18 +21,14 @@ def now_format_args(method, show_types = !params_documented?(method))
   parameters = (method.has_tag? :yield or method.has_tag? :yieldparam) ?
     method.parameters.reject{ |e| e.first.start_with? '&' and not method.tags(:param).any?{ |t| t.name == e.first[1..-1] } } :
     method.parameters
-  return '' if parameters.empty?
-  '(%s)' % parameters.map{ |n, v|
-             type = (show_types and tag = method.tags(:param).find{ |t| t.name == n }) ?
-               '<sub class="type">%s</sub>' % now_format_arg_types(tag.types) :
-               ''
-             v ? '%s%s = %s' % [h(n), type, h(v)] : '%s%s' % [h(n), type]
-           }.join(', ')
+  formatted = now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
+  return '' if formatted.empty?
+  '(%s)' % formatted
 end
 
 def link_to_alias(object)
   object.alias_for ?
-    linkify(object.alias_for, object.alias_for.name) :
+    linkify(object.alias_for, method_name_h(object.alias_for.name)) :
     method_name_h(object.namespace.aliases[object])
 end
 
@@ -42,17 +38,34 @@ def title_signature_format_types(*types)
   }.join(', ')
 end
 
-def now_format_block(object)
+def yield_documented?(method)
+  # TODO: Shouldn’t we check the contents of the :yield tag?
+  method.has_tag? :yield or method.tags(:yieldparam).any?{ |e| e.text and not e.text.empty? }
+end
+
+def now_format_parameters_with_types(parameters, tags)
+  parameters.map{ |name, default|
+    type = (tag = tags.find{ |e| e.name == name }) ?
+    '<sub class="type">%s</sub>' % now_format_arg_types(tag.types) :
+    ''
+    default ? '%s%s = %s' % [h(name), type, h(default)] : '%s%s' % [h(name), type]
+  }.join(', ')
+end
+
+# TODO: Include :yieldreturn after |…|, if it has no description.
+def now_format_block(object, show_types = !yield_documented?(object))
   if object.has_tag? :yield and object.tag(:yield).types
     params = object.tag(:yield).types
   elsif object.has_tag? :yieldparam
-    params = object.tags(:yieldparam).map{ |t| t.name }
+    params = object.tags(:yieldparam).map(&:name)
   elsif object.has_tag? :yield
     return '{ … }'
   else
-    params = nil
+    params = []
   end
-  params ? h('{ |' + params.join(', ') + '| … }') : ''
+  formatted = now_format_parameters_with_types(params, show_types ? object.tags(:yieldparam) : [])
+  return '' if formatted.empty?
+  '{ |%s| … }' % formatted
 end
 
 def text_from_return(object)

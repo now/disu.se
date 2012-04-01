@@ -1,0 +1,4 @@
+<% object.tags(:yieldreturn).each do |tag| %>
+  <dt>Yield Returns<sub class="type"><%= now_format_arg_types(tag.types) %></sub></dt>
+  <dd><%= htmlify(tag.text) %></dd>
+<% end %>
