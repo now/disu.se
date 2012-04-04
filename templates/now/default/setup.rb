@@ -32,8 +32,8 @@ end
 
 def link_to_alias(object)
   object.alias_for ?
-    linkify(object.alias_for, method_name_h(object.alias_for.name)) :
-    method_name_h(object.namespace.aliases[object])
+    linkify(object.alias_for, method_name_h('#%s' % object.alias_for.name)) :
+    method_name_h('#%s' % object.namespace.aliases[object])
 end
 
 def title_signature_format_types(*types)
