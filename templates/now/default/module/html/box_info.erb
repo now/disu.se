@@ -1,12 +1,14 @@
 <dl>
-<% if CodeObjects::ClassObject === object && object.superclass %>
+<% unless (ancestors = object.inheritance_tree(true)[1..-1]).empty? and not CodeObjects::ClassObject === object %>
   <dt>Ancestors</dt>
   <dd>
     <ol class="module-list ancestors">
-    <% object.inheritance_tree[1..-1].each do |e| %>
+    <% ancestors.each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
-      <li><p><%= linkify P(:Object) %></p></li>
+    <% if CodeObjects::ClassObject === object %>
+      <li><p><%= linkify(P(:Object)) %></p></li>
+    <% end %>
     </ol>
   </dd>
 <% end %>
@@ -15,16 +17,6 @@
   <dd>
     <ol class="module-list extends">
     <% object.mixins(:class).each do |e| %>
-      <li><p><%= linkify(e) %></p></li>
-    <% end %>
-    </ol>
-  </dd>
-<% end %>
-<% unless object.mixins(:instance).empty? %>
-  <dt>Includes</dt>
-  <dd>
-    <ol class="module-list includes">
-    <% object.mixins(:instance).each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
     </ol>
