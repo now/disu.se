@@ -6,11 +6,11 @@ end
 
 def title_signature(method)
   types = title_signature_types(method)
-  # TODO: Deal with method.visibility?
-  '%s%s%s%s' % [method_name_h(method.name),
-                now_format_args(method),
-                now_format_block(method),
-                types.empty? ? '' : '<sub class="type">%s</sub>' % types]
+  '%s%s%s%s%s' % [method_name_h(method.name),
+                  now_format_args(method),
+                  now_format_block(method),
+                  types.empty? ? '' : '<sub class="type">%s</sub>' % types,
+                  method.visibility != :public ? '<sub class="visibility">%s</sub>' % method.visibility : '']
 end
 
 def title_signature_types(method)

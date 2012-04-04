@@ -2,25 +2,6 @@
   <%= summary_signature(@item) %>
 </dt>
 <dd>
-<% if @item.visibility != :public or
-      (@item.has_tag? :api and @item.tag(:api).text == 'private') or
-      @item.has_tag? :deprecated or
-      @item.has_tag? :abstract %>
-  <ul class="notes">
-  <% if @item.visibility != :public %>
-    <li class="<% @item.visibility %>"><p><%= @item.visibility %></p></li>
-  <% end %>
-  <% if @item.has_tag? :api and @item.tag(:api).text == 'private' %>
-    <li class="private-api"><p>Private</p></li>
-  <% end %>
-  <% if @item.has_tag? :deprecated %>
-    <li class="deprecated"><p>Deprecated</p></li>
-  <% end %>
-  <% if @item.has_tag? :abstract %>
-    <li class="abstract"><p>Abstract</p></li>
-  <% end %>
-  </ul>
-<% end %>
 <% if @item.has_tag? :deprecated %>
 <%= htmlify(@item.tag(:deprecated).text) %>
 <% elsif @item.is_alias? %>

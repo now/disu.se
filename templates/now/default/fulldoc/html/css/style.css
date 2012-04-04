@@ -232,8 +232,12 @@ sub {
 }
 
 /* TODO: Not sure about this, but something closer to this value than the default. */
-sub.type {
+sub.type, sub.visibility {
   font-size: 0.7em;
+}
+
+sub.type + sub.visibility:before {
+  content: ', ';
 }
 
 sup {
