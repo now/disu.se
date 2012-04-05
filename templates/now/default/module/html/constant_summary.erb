@@ -2,7 +2,7 @@
   <h1>Constants</h1>
   <dl class="constants">
   <% @constants.each do |e| %>
-    <dt id="<%= urlencode(anchor_for(e)) %>"<%= e.has_tag?(:deprecated) ? ' class="deprecated"' : '' %>><%= e.name %></dt>
+    <dt id="<%= urlencode(anchor_for(e)) %>"<%= e.has_tag?(:deprecated) ? ' class="deprecated"' : '' %>><%= e.name %><a href="#<%= urlencode(anchor_for(e)) %>" class="anchor"> #</a></dt>
     <dd><%= yieldall :object => e %></dd>
   <% end %>
   </dl>

@@ -245,6 +245,18 @@ sup {
   font-size: 0.83em;
 }
 
+.anchor {
+  display: none;
+}
+
+h1:hover > .anchor, dt:hover > .anchor {
+  display: inline;
+}
+
+:target > .anchor {
+  display: inline;
+}
+
 .code-comment { color: #257325; }
 .code-constant { color: #951616; }
 .code-special { color: #f02626; }
