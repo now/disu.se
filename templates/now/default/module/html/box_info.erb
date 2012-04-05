@@ -1,8 +1,9 @@
+<% unless ancestors.empty? and not CodeObjects::ClassObject === object and object.mixins(:class).empty? and mixed_into(object).empty? %>
 <dl>
-<% unless (ancestors = object.inheritance_tree(true)[1..-1]).empty? and not CodeObjects::ClassObject === object %>
+<% unless ancestors.empty? and not CodeObjects::ClassObject === object %>
   <dt>Ancestors</dt>
   <dd>
-    <ol class="module-list ancestors">
+    <ol class="modules ancestors">
     <% ancestors.each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
@@ -15,7 +16,7 @@
 <% unless object.mixins(:class).empty? %>
   <dt>Extended by</dt>
   <dd>
-    <ol class="module-list extends">
+    <ol class="modules extends">
     <% object.mixins(:class).each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
@@ -25,7 +26,7 @@
 <% unless mixed_into(object).empty? %>
   <dt>Included by</dt>
   <dd>
-    <ul class="module-list includers">
+    <ul class="modules includers">
     <% mixed_into(object).sort_by{ |e| e.path }.each do |e| %>
       <li><p><%= linkify(e) %></p></li>
     <% end %>
@@ -33,3 +34,4 @@
   </dd>
 <% end %>
 </dl>
+<% end %>

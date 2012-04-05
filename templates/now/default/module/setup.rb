@@ -2,8 +2,8 @@
 
 def init
   sections :header,
-    :box_info,
     T('docstring'),
+    :box_info,
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
@@ -12,6 +12,10 @@ def init
     :methodmissing, [T('method_details')],
     :class_methods, [T('method_details')],
     :instance_methods, [T('method_details')]
+end
+
+def ancestors
+  @ancestors ||= object.inheritance_tree(true)[1..-1]
 end
 
 def modules

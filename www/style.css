@@ -257,6 +257,22 @@ h1:hover > .anchor, dt:hover > .anchor {
   display: inline;
 }
 
+ol.modules, ol.modules > li, ol.modules > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ol.modules > li:first-child:before {
+  content: '';
+}
+
+ol.modules > li:before {
+  content: ' < ';
+  font-size: smaller;
+  vertical-align: text-top;
+}
+
 p.inherited {
   display: inline;
 }
