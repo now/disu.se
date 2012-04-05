@@ -257,6 +257,24 @@ h1:hover > .anchor, dt:hover > .anchor {
   display: inline;
 }
 
+p.inherited {
+  display: inline;
+}
+
+ul.inherited, ul.inherited > li, ul.inherited > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.inherited > li:after {
+  content: ', ';
+}
+
+ul.inherited > li:last-child:after {
+  content: '.';
+}
+
 .code-comment { color: #257325; }
 .code-constant { color: #951616; }
 .code-special { color: #f02626; }

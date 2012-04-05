@@ -1,6 +1,6 @@
 <% @list.each do |superclass, methods| %>
   <p class="inherited"><%= superclass.type == :class ? 'Inherited' : 'Included' %> from <%= linkify(superclass) %>:</p>
-  <ul>
+  <ul class="inherited">
   <% methods.each do |method| %>
     <li><p><%= linkify(method, method_name_h(method.name)) %></p></li>
   <% end %>
