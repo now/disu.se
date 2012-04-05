@@ -1,11 +1,8 @@
 <% @list.each do |superclass, methods| %>
   <p class="inherited"><%= superclass.type == :class ? 'Inherited' : 'Included' %> from <%= linkify(superclass) %>:</p>
   <ul>
-  <% methods.sort_by{ |e| e.name.to_s }.each do |method| %>
-    <li><p><%= linkify(method,
-                       superclass.type == :module && object.class_mixins.include?(superclass) ?
-                         method.name(true).sub(/\A#/, '') :
-                         method.name(true)) %></p></li>
+  <% methods.each do |method| %>
+    <li><p><%= linkify(method, method_name_h(method.name)) %></p></li>
   <% end %>
   </ul>
 <% end %>
