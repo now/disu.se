@@ -24,9 +24,9 @@ def return
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
     return
   end
-  return if object.docstring.strip.empty? or (object.tags(:return).size == 1 and (object.tag(:return).text.nil? or object.tag(:return).text.empty? or object.tag(:return).types == %w'self'))
-  return erb(:returns_void) if object.tags(:return).size == 1 and
-    object.tag(:return).types == ['void']
+  return if object.docstring.strip.empty? and not text_from_return(object).empty?
+  return if object.tags(:return).size == 1 and object.tag(:return).types == %w'self'
+  return erb(:returns_void) if object.tags(:return).size == 1 and object.tag(:return).types == ['void']
   erb(:return)
 end
 
