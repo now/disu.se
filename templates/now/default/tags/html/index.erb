@@ -1,3 +1,5 @@
+<% unless (result = yieldall).strip.empty? %>
 <dl class="tags">
-  <%= yieldall %>
+  <%= result %>
 </dl>
+<% end %>
