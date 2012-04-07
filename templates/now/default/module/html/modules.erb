@@ -1,8 +1,9 @@
 <section>
   <h1>Modules</h1>
-  <ul>
+  <dl class="children">
   <% @modules.each do |e| %>
-    <li><p><%= linkify(e, e.name) %></p></li>
+    <dt><%= linkify(e, e.name) %></dt>
+    <dd><%= htmlify(e.docstring.summary) %></dd>
   <% end %>
-  </ul>
+  </dl>
 </section>
