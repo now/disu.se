@@ -5,7 +5,7 @@ include Helpers::ModuleHelper
 
 def init
   super
-  sections.place(:subclasses).before(:modules)
+  sections.find{ |e| e.name == :box_info } << :subclasses
 #  sections.place(:constructor_details, [T('method_details')]).before(:methodmissing)
 end
 

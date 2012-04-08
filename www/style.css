@@ -191,6 +191,10 @@ dd ol, dd ul {
   margin-left: 0;
 }
 
+dd dl {
+  margin: 0;
+}
+
 ol ol, ol ul, ul ol, ul ul {
   margin-left: 1em;
 }
@@ -303,18 +307,26 @@ ul.inherited.class > li:last-child:after {
   content: ']';
 }
 
-ul.method-summary, ul.method-summary > li, ul.method-summary > li > p {
-  display: inline;
+ul.method-summary {
+  text-align: center;
   margin: 0;
+}
+
+ul.method-summary > li, ul.method-summary > li > p {
+  display: inline;
   padding: 0;
 }
 
+ul.method-summary > li:first-child {
+  margin-right: 0.5em;
+}
+
 ul.method-summary > li {
-  margin-right: 1em;
+  margin: 0 .5em;
 }
 
 ul.method-summary > li:last-child {
-  margin-right: 0;
+  margin-left: 0.5em;
 }
 
 .code-comment { color: #257325; }

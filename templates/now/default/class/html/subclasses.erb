@@ -1,9 +1,9 @@
-<section id="subclasses">
-  <h1>Direct Known Subclasses</h1>
+<dt>Subclasses</dt>
+<dd>
   <dl class="children">
   <% @subclasses.each do |name, child| %>
-    <dt><%= linkify(child, name) %></p>
-    <dd><%= htmlify(child.docstring.summary) %></li>
+    <dt><%= linkify(child, name) %></dt>
+    <dd><%= htmlify(child.docstring.summary) %></dd>
   <% end %>
   </dl>
-</section>
+</dd>
