@@ -283,12 +283,38 @@ ul.inherited, ul.inherited > li, ul.inherited > li > p {
   padding: 0;
 }
 
+ul.inherited > li:first-child:before {
+  content: ' (';
+}
+
 ul.inherited > li:after {
   content: ', ';
 }
 
 ul.inherited > li:last-child:after {
-  content: '.';
+  content: ')';
+}
+
+ul.inherited.class > li:first-child:before {
+  content: ' [';
+}
+
+ul.inherited.class > li:last-child:after {
+  content: ']';
+}
+
+ul.method-summary, ul.method-summary > li, ul.method-summary > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.method-summary > li {
+  margin-right: 1em;
+}
+
+ul.method-summary > li:last-child {
+  margin-right: 0;
 }
 
 .code-comment { color: #257325; }

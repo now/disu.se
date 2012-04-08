@@ -8,7 +8,7 @@
   </dl>
 <% @inherited_constants.each do |superclass, constants| %>
   <p class="inherited">Constants <%= superclass.type == :class ? 'inherited' : 'included' %> from <%= linkify(superclass) %>:</p>
-  <ul class="inherited">
+  <ul class="inherited constants">
   <% constants.sort_by{ |e| e.name.to_s }.each do |constant| %>
     <li><p><%= linkify(constant, constant.name) %></p></li>
   <% end %>

@@ -1,7 +1,7 @@
 <section>
-  <h1>Classes</h1>
-  <dl class="children">
-  <% @classes.each do |e| %>
+  <h1><%= @type.to_s.capitalize %>s</h1>
+  <dl class="<%= @type %>s">
+  <% @children.each do |e| %>
     <dt><%= linkify(e, e.name) %></dt>
     <dd><%= htmlify(e.docstring.summary) %></dd>
   <% end %>

@@ -1,11 +1,26 @@
-<% unless ancestors.empty? and not CodeObjects::ClassObject === object and object.mixins(:class).empty? and mixed_into(object).empty? %>
 <dl>
-<% unless ancestors.empty? and not CodeObjects::ClassObject === object %>
+<% unless @ancestors.empty? and not CodeObjects::ClassObject === object %>
   <dt>Ancestors</dt>
   <dd>
     <ol class="modules ancestors">
-    <% ancestors.each do |e| %>
-      <li><p><%= linkify(e) %></p></li>
+    <% @ancestors.each do |e| %>
+      <li>
+        <p><%= linkify(e) %></p>
+      <% unless (inherited = (@inherited_class_methods.find{ |c, _| c == e } || [nil, []]).last).empty? %>
+        <ul class="inherited class">
+        <% inherited.each do |m| %>
+          <li><p><%= linkify(m, method_name_h(m.name)) %></p></li>
+        <% end %>
+        </ul>
+      <% end %>
+      <% unless (inherited = (@inherited_instance_methods.find{ |c, _| c == e } || [nil, []]).last).empty? %>
+        <ul class="inherited instance">
+        <% inherited.each do |m| %>
+          <li><p><%= linkify(m, method_name_h(m.name)) %></p></li>
+        <% end %>
+        </ul>
+      <% end %>
+      </li>
     <% end %>
     <% if CodeObjects::ClassObject === object %>
       <li><p><%= linkify(P(:Object)) %></p></li>
@@ -34,4 +49,3 @@
   </dd>
 <% end %>
 </dl>
-<% end %>

@@ -1,0 +1,13 @@
+<section id="<%= @scope %>-methods">
+  <h1><%= @scope.to_s.capitalize %> Methods</h1>
+<% if @methods.size > 5 %>
+  <ul class="method-summary">
+  <% @methods.sort_by{ |e| e.name }.each do |e| %>
+    <li><p><%= linkify(e, method_name_h(e.name)) %></p></li>
+  <% end %>
+  </ul>
+<% end %>
+<% @methods.each do |e| %>
+  <%= yieldall :object => e %>
+<% end %>
+</section>
