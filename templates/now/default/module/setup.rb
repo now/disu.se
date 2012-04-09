@@ -19,8 +19,10 @@ end
 
 def methods_inherited_from(ancestor, scope)
   return [] if YARD::CodeObjects::Proxy === ancestor
+  @inherited_methods ||= { :class => {}, :instance => {} }
   run_verifier(ancestor.meths(:inherited => false, :included => false, :scope => scope).
-    reject{ |m| object.child(:scope => scope, :name => m.name) or special_method? m }).
+    reject{ |e| object.child(:scope => scope, :name => e.name) or special_method? e or @inherited_methods[scope].include? e.name }).
+    tap{ |es| es.each{ |e| @inherited_methods[scope][e.name] = true } }.
     sort_by{ |e| e.name.to_s }
 end
 
