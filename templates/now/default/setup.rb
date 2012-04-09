@@ -191,7 +191,8 @@ module YARD::Templates::Helpers::HtmlHelper
   end
 
   def method_name_h(name)
-    ((Operators.include? name.to_sym or
-      (name.to_s.start_with? '#' and Operators.include? name.to_s[1..-1].to_sym)) ? '<code>%s</code>' : '%s') % h(name)
+    (start = (String === name and name.rindex(/[#.]/))) ?
+      (Operators.include?(name[start+1..-1].to_sym) ? '%s<code>%s</code>' % [h(name[0..start]), h(name[start+1..-1])] : h(name)) :
+      (Operators.include?(name.to_sym) ? '<code>%s</code>' % h(name) : h(name))
   end
 end
