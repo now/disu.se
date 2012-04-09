@@ -107,7 +107,3 @@ def inline_overloads(method)
     n
   }
 end
-
-def now_format_object_title(object)
-  '%s<sub class="type">%s</sub>' % [object.path, format_object_type(object)]
-end
