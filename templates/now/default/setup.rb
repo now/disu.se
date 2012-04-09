@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 def now_format_arg_types(types)
-  types = %w'Object' if types.nil? or types.empty?
-  result = title_signature_format_types(*types)
-  types.length > 1 ? '[%s]' % result : result
+  title_signature_format_types(*(types.nil? || types.empty? ? %w'Object' : types))
 end
 
 def now_format_arg_types_h(types)
