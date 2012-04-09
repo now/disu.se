@@ -87,9 +87,9 @@ end
 def methods(scope)
   @scope = scope
   @methods = run_verifier(object.meths(:inherited => false, :included => false, :scope => scope)).
+    reject{ |m| special_method? m }.
     map{ |e| inline_overloads(e) }.
-    flatten.
-    reject{ |m| special_method? m }
+    flatten
   erb(:methods) unless @methods.empty?
 end
 
