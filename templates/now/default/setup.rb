@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-class YARD::CodeObjects::MethodObject
-  def alias_for
-    namespace.child(namespace.aliases[self])
-  end
-end
-
 def now_format_arg_types(types)
   types = %w'Object' if types.nil? or types.empty?
   result = title_signature_format_types(*types)
@@ -28,12 +22,6 @@ def now_format_args(method, show_types = !params_documented?(method))
   formatted = now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
   return '' if formatted.empty?
   '(%s)' % formatted
-end
-
-def link_to_alias(object)
-  object.alias_for ?
-    linkify(object.alias_for, method_name_h('#%s' % object.alias_for.name)) :
-    method_name_h('#%s' % object.namespace.aliases[object])
 end
 
 def title_signature_format_types(*types)
