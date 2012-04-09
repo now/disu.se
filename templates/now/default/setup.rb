@@ -179,7 +179,9 @@ module YARD::Templates::Helpers::HtmlHelper
             elsif CodeObjects::MethodObject === resolved and resolved.scope == :class and resolved.parent == object
               h([object.name, resolved.sep].join('')) + method_name_h(resolved.name)
             elsif CodeObjects::Base === object
-              h(object.relative_path(resolved))
+              send(CodeObjects::MethodObject === resolved ? :method_name_h : :h, object.relative_path(resolved))
+            elsif CodeObjects::MethodObject === resolved
+              method_name_h(resolved.name)
             else
               h(resolved.to_s)
             end
