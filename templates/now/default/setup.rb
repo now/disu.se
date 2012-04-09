@@ -187,9 +187,9 @@ module YARD::Templates::Helpers::HtmlHelper
             elsif resolved.root?
               'Top-level Namespace'
             elsif String === obj
-              h(obj)
+              CodeObjects::MethodObject === resolved ? method_name_h(obj) : h(obj)
             elsif CodeObjects::MethodObject === resolved and resolved.scope == :class and resolved.parent == object
-              h([object.name, resolved.sep, resolved.name].join)
+              h([object.name, resolved.sep].join('')) + method_name_h(resolved.name)
             elsif CodeObjects::Base === object
               h(object.relative_path(resolved))
             else
@@ -205,5 +205,3 @@ module YARD::Templates::Helpers::HtmlHelper
       (name.to_s.start_with? '#' and Operators.include? name.to_s[1..-1].to_sym)) ? '<code>%s</code>' : '%s') % h(name)
   end
 end
-
-YARD::Tags::Library.define_tag 'Overriden Method', :override
