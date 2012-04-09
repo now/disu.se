@@ -1,0 +1,7 @@
+<% unless (inherited = methods_inherited_from(@ancestor, @scope)).empty? %>
+<ul class="inherited <%= @scope %>">
+<% inherited.each do |m| %>
+  <li><p><%= linkify(m, method_name_h(m.name)) %></p></li>
+<% end %>
+</ul>
+<% end %>

@@ -3,7 +3,7 @@
 def init
   sections :header,
     T('docstring'),
-    :box_info,
+    :box_info, [:ancestors, :extends, :includers],
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
@@ -12,29 +12,24 @@ def init
     :instance_methods, [T('method_details')]
 end
 
-def box_info
-  @ancestors = object.inheritance_tree(true)[1..-1]
-  @inherited_class_methods = scoped_inherited_methods(:class)
-  @inherited_instance_methods = scoped_inherited_methods(:instance)
-  erb(:box_info) unless @ancestors.empty? and
-    not CodeObjects::ClassObject === object and
-    object.mixins(:class).empty? and
-    mixed_into(object).empty?
+def ancestors
+  @ancestors = object.inheritance_tree[1..-1]
+  erb(:ancestors) unless @ancestors.empty? and not CodeObjects::ClassObject === object
 end
 
-def scoped_inherited_methods(scope)
-  inherited_x{ |e|
-    e.meths(:inherited => false, :included => false, :scope => scope).
-      select{ |m| object.child(:scope => scope, :name => m.name).nil? }.
-      reject{ |m| special_method?(m) }
-  }
+def methods_inherited_from(ancestor, scope)
+  return [] if YARD::CodeObjects::Proxy === ancestor
+  run_verifier(ancestor.meths(:inherited => false, :included => false, :scope => scope).
+    reject{ |m| object.child(:scope => scope, :name => m.name) or special_method? m }).
+    sort_by{ |e| e.name.to_s }
 end
 
-def inherited_x
-  object.inheritance_tree(true)[1..-1].
-    reject{ |e| YARD::CodeObjects::Proxy === e }.
-    map{ |e| [e, run_verifier(yield(e)).sort_by{ |x| x.name.to_s }] }.
-    reject{ |_, e| e.empty? }
+def extends
+  erb(:extends) unless object.mixins(:class).empty?
+end
+
+def includers
+  erb(:includers) unless mixed_into(object).empty?
 end
 
 def mixed_into(object)
@@ -67,6 +62,13 @@ def constant_summary
       select{ |c| object.child(:type => :constant, :name => c.name).nil? }
   }
   erb(:constant_summary) unless @constants.empty? and @inherited_constants.empty?
+end
+
+def inherited_x
+  object.inheritance_tree(true)[1..-1].
+    reject{ |e| YARD::CodeObjects::Proxy === e }.
+    map{ |e| [e, run_verifier(yield(e)).sort_by{ |x| x.name.to_s }] }.
+    reject{ |_, e| e.empty? }
 end
 
 def methodmissing

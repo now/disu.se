@@ -1,0 +1,15 @@
+<dt>Ancestors</dt>
+<dd>
+  <ol class="modules ancestors">
+  <% @ancestors.each do |e| %>
+    <li>
+      <p><%= linkify(e) %></p>
+      <%= @ancestor = e; @scope = :class; erb(:inherited_methods) %>
+      <%= @scope = :instance; erb(:inherited_methods) %>
+    </li>
+  <% end %>
+  <% if CodeObjects::ClassObject === object %>
+    <li><p><%= linkify(P(:Object)) %></p></li>
+  <% end %>
+  </ol>
+</dd>

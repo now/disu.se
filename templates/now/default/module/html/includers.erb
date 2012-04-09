@@ -1,0 +1,8 @@
+<dt>Included by</dt>
+<dd>
+  <ul class="modules includers">
+  <% mixed_into(object).sort_by{ |e| e.path }.each do |e| %>
+    <li><p><%= linkify(e) %></p></li>
+  <% end %>
+  </ul>
+</dd>

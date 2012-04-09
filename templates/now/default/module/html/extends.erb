@@ -1,0 +1,8 @@
+<dt>Extended by</dt>
+<dd>
+  <ol class="modules extends">
+  <% object.mixins(:class).each do |e| %>
+    <li><p><%= linkify(e) %></p></li>
+  <% end %>
+  </ol>
+</dd>

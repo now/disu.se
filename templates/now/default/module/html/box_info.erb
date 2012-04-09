@@ -1,52 +1,5 @@
+<% unless (result = yieldall).strip.empty? %>
 <dl>
-<% unless @ancestors.empty? and not CodeObjects::ClassObject === object %>
-  <dt>Ancestors</dt>
-  <dd>
-    <ol class="modules ancestors">
-    <% @ancestors.each do |e| %>
-      <li>
-        <p><%= linkify(e) %></p>
-      <% unless (inherited = (@inherited_class_methods.find{ |c, _| c == e } || [nil, []]).last).empty? %>
-        <ul class="inherited class">
-        <% inherited.each do |m| %>
-          <li><p><%= linkify(m, method_name_h(m.name)) %></p></li>
-        <% end %>
-        </ul>
-      <% end %>
-      <% unless (inherited = (@inherited_instance_methods.find{ |c, _| c == e } || [nil, []]).last).empty? %>
-        <ul class="inherited instance">
-        <% inherited.each do |m| %>
-          <li><p><%= linkify(m, method_name_h(m.name)) %></p></li>
-        <% end %>
-        </ul>
-      <% end %>
-      </li>
-    <% end %>
-    <% if CodeObjects::ClassObject === object %>
-      <li><p><%= linkify(P(:Object)) %></p></li>
-    <% end %>
-    </ol>
-  </dd>
-<% end %>
-<% unless object.mixins(:class).empty? %>
-  <dt>Extended by</dt>
-  <dd>
-    <ol class="modules extends">
-    <% object.mixins(:class).each do |e| %>
-      <li><p><%= linkify(e) %></p></li>
-    <% end %>
-    </ol>
-  </dd>
-<% end %>
-<% unless mixed_into(object).empty? %>
-  <dt>Included by</dt>
-  <dd>
-    <ul class="modules includers">
-    <% mixed_into(object).sort_by{ |e| e.path }.each do |e| %>
-      <li><p><%= linkify(e) %></p></li>
-    <% end %>
-    </ul>
-  </dd>
-<% end %>
-<%= yieldall %>
+<%= result %>
 </dl>
+<% end %>
