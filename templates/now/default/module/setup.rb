@@ -2,8 +2,8 @@
 
 def init
   sections :header,
-    T('docstring'),
     :box_info, [:namespace, :ancestors, :extends, :includers],
+    T('docstring'),
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
