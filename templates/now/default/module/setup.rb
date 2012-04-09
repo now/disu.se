@@ -3,13 +3,17 @@
 def init
   sections :header,
     T('docstring'),
-    :box_info, [:ancestors, :extends, :includers],
+    :box_info, [:namespace, :ancestors, :extends, :includers],
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
     :methodmissing, [T('method_details')],
     :class_methods, [T('method_details')],
     :instance_methods, [T('method_details')]
+end
+
+def namespace
+  erb(:namespace) unless object.root?
 end
 
 def ancestors

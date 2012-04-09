@@ -1,1 +1,1 @@
-<h1><%= object.path %><sub class="type"><%= format_object_type(object) %></sub></h1>
+<h1><%= object.root? ? 'Top-level Namespace' : object.name %><sub class="type"><%= format_object_type(object) %></sub></h1>
