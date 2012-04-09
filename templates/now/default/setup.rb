@@ -179,8 +179,31 @@ module YARD::Templates::Helpers::HtmlHelper
     end
   end
 
+  def link_object(obj, otitle = nil, anchor = nil, relative = true)
+    return otitle unless obj
+    resolved = String === obj ? Registry.resolve(object, obj, true, true) : obj
+    title = if otitle
+              otitle.to_s
+            elsif resolved.root?
+              'Top-level Namespace'
+            elsif String === obj
+              h(obj)
+            elsif CodeObjects::MethodObject === resolved and resolved.scope == :class and resolved.parent == object
+              h([object.name, resolved.sep, resolved.name].join)
+            elsif CodeObjects::Base === object
+              h(object.relative_path(resolved))
+            else
+              h(resolved.to_s)
+            end
+    return title if not serializer or CodeObjects::Proxy === resolved
+    link = url_for(resolved, anchor, relative)
+    link ? link_url(link, title, :title => h('%s (%s)' % [resolved.path, resolved.type])) : title
+  end
+
   def method_name_h(name)
     ((Operators.include? name.to_sym or
       (name.to_s.start_with? '#' and Operators.include? name.to_s[1..-1].to_sym)) ? '<code>%s</code>' : '%s') % h(name)
   end
 end
+
+YARD::Tags::Library.define_tag 'Overriden Method', :override
