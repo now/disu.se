@@ -12,28 +12,9 @@ def params_documented?(method)
   method.tags(:param).any?{ |e| e.text and not e.text.empty? }
 end
 
-def now_format_args(method, show_types = !params_documented?(method))
-  return '' if method.parameters.nil?
-  parameters = (method.has_tag? :yield or method.has_tag? :yieldparam) ?
-    method.parameters.reject{ |e| e.first.start_with? '&' and not method.tags(:param).any?{ |t| t.name == e.first[1..-1] } } :
-    method.parameters
-  formatted = now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
-  return '' if formatted.empty?
-  '(%s)' % formatted
-end
-
 def title_signature_format_types(*types)
   types.map{ |e|
     e.gsub(/([^\w:]*)([\w:]+)?/){ method_name_h($1) + ($2 ? linkify($2, $2) : '') }
-  }.join(', ')
-end
-
-def now_format_parameters_with_types(parameters, tags)
-  parameters.map{ |name, default|
-    type = (tag = tags.find{ |e| e.name == name }) ?
-      now_format_arg_types_h(tag.types) :
-      ''
-    default ? '%s%s = %s' % [h(name), type, h(default)] : '%s%s' % [h(name), type]
   }.join(', ')
 end
 
@@ -60,16 +41,6 @@ def yieldreturn_only_for_type?(method)
     (method.tag(:yieldreturn).text.nil? or method.tag(:yieldreturn).text.empty?) and
     not (params = now_format_block_params(method)).nil? and
     not params.empty?
-end
-
-def now_format_block(method, show_types = !yield_documented?(method))
-  params = now_format_block_params(method)
-  return '' if params.nil?
-  return '{ … }' if params.empty?
-  '{ |%s|%s … }' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
-                    (show_types and yieldreturn_only_for_type?(method)) ?
-                      now_format_arg_types_h(method.tag(:yieldreturn).types) :
-                      '']
 end
 
 def text_from_return(object)
