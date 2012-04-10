@@ -27,7 +27,7 @@ def return
   return if object.docstring.strip.empty? and not text_from_return(object).empty?
   return if object.tags(:return).size == 1 and object.tag(:return).types == %w'self'
   return erb(:returns_void) if object.tags(:return).size == 1 and object.tag(:return).types == ['void']
-  erb(:return)
+  tag(:return)
 end
 
 def yieldreturn
@@ -41,7 +41,7 @@ end
 end
 
 def param
-  tag(:param) if params_documented? object
+  erb(:param) if params_documented? object
 end
 
 def yieldparam
@@ -51,8 +51,9 @@ end
 private
 
 def tag(name)
-  return unless object.has_tag?(name)
+  return unless object.has_tag? name
   @name = name
+  @label = Tags::Library.labels[name]
   @no_names, @no_types = case Tags::Library.factory_method_for(name)
                          when :with_types
                            [true, false]
@@ -63,7 +64,7 @@ def tag(name)
                          else
                            [true, true]
                          end
-  erb('tag')
+  erb(:tag)
 end
 
 def now_inline_htmlify(object)
