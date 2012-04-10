@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 def init
-  sections :layout, [T(object.root? ? :module : object.type)]
+  sections :layout, [T(object.type)]
 end
 
 def stylesheets
