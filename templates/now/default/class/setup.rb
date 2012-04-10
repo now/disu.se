@@ -23,7 +23,8 @@ def subclasses
                                 h
                               }).fetch(object.path, []).
                              map{ |e| [e.path.split('::'), e] }).
-    map{ |p, e| [p.join('::'), e] }
+    map{ |p, e| [p.join('::'), e] }.
+    sort_by{ |e| e.first }
   erb(:subclasses) unless @subclasses.empty?
 end
 
