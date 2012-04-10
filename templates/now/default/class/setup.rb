@@ -17,11 +17,24 @@ end
 
 def subclasses
   return if object.path == 'Object'
-  @subclasses = (globals.subclasses ||= run_verifier(Registry.all(:class)).reduce({}){ |h, e|
-                   (h[e.superclass.path] ||= []) << e if e.superclass
-                   h
-                 }).fetch(object.path, []).sort_by{ |e| e.path }.map{ |e|
-    [object.namespace ? object.relative_path(e) : e.path, e]
-  }
+  @subclasses =
+    shortest_unique_suffixes((globals.subclasses ||= run_verifier(Registry.all(:class)).reduce({}){ |h, e|
+                                (h[e.superclass.path] ||= []) << e if e.superclass
+                                h
+                              }).fetch(object.path, []).
+                             map{ |e| [e.path.split('::'), e] }).
+    map{ |p, e| [p.join('::'), e] }
   erb(:subclasses) unless @subclasses.empty?
+end
+
+def shortest_unique_suffixes(array)
+  done, remaining = array.partition{ |e| e.first.empty? }
+  return done if remaining.empty?
+  same, different = remaining.partition{ |e| e.first.last == remaining.first.first.last }
+  done.
+    concat(same.size > 1 ?
+             shortest_unique_suffixes(same.map{ |e| [e.first[0..-2], e.last] }).
+               map.with_index{ |e, i| e.first.push(same[i].first.last); e } :
+             [[[same.first.first.last], same.first.last]]).
+    concat(shortest_unique_suffixes(different))
 end
