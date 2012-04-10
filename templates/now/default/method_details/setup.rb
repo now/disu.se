@@ -15,21 +15,10 @@ end
 
 def title_signature_types(method)
   # TODO: Why is this needed?
-  method = method.object if method.respond_to?(:object) and not method.has_tag?(:return)
+  method = method.object if method.respond_to? :object and not method.has_tag? :return
+  return '' unless return_only_for_type_and_docstring? method
   return h(options[:default_return]) unless method.tag(:return) and method.tag(:return).types
-  types = method.tags(:return).map{ |e| e.types or [] }.flatten.uniq
-  if types.size == 2 and types.last == 'nil'
-    '%s<sup>?</sup>' % title_signature_format_types(types.first)
-  elsif types.size == 2 and types.last =~ /\A(?:Array)?<#{Regexp.quote(types.first)}>\z/
-    '%s<sup>+</sup>' % title_signature_format_types(types.first)
-  elsif types.size > 2
-    # TODO: Why?
-    '%s, …' % title_signature_format_types(types.first)
-  elsif types == ['void'] and options[:hide_void_return]
-    ''
-  else
-    title_signature_format_types(*types)
-  end
+  title_signature_format_types(*method.tags(:return).map{ |e| e.types or [] }.flatten.uniq)
 end
 
 def now_format_args(method, show_types = !params_documented?(method))

@@ -24,8 +24,7 @@ def return
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
     return
   end
-  return if object.docstring.strip.empty? and not text_from_return(object).empty?
-  return if object.tags(:return).size == 1 and object.tag(:return).types == %w'self'
+  return if return_only_for_type_and_docstring? object
   return erb(:returns_void) if object.tags(:return).size == 1 and object.tag(:return).types == ['void']
   tag(:return)
 end

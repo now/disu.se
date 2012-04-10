@@ -13,6 +13,10 @@ def params_documented?(method)
 end
 
 def title_signature_format_types(*types)
+  return '%s<sup class="type">?</sup>' % title_signature_format_types(types.first) if
+    types.size == 2 and types.last == 'nil'
+  return '%s<sup class="type">+</sup>' % title_signature_format_types(types.first) if
+    types.size == 2 and types.last =~ /\A(?:Array)?<#{Regexp.quote(types.first)}>\z/
   types.map{ |e|
     e.gsub(/([^\w:]*)([\w:]+)?/){ method_name_h($1) + ($2 ? linkify($2, $2) : '') }
   }.join(', ')
@@ -35,6 +39,12 @@ def yield_documented?(method)
   method.has_tag? :yield or method.tags(:yieldparam).any?{ |e| e.text and not e.text.empty? }
 end
 
+def return_only_for_type_and_docstring?(method)
+  (object.docstring.strip.empty? and
+   object.tags(:return).size == 1 and not object.tag(:return).text.empty?) or
+    (object.tags(:return).size == 1 and object.tag(:return).types == %w'self')
+end
+
 def yieldreturn_only_for_type?(method)
   not yield_documented? method and
     method.tags(:yieldreturn).size == 1 and
@@ -44,7 +54,7 @@ def yieldreturn_only_for_type?(method)
 end
 
 def text_from_return(object)
-  return '' unless object.tags(:return).size == 1 and not object.tag(:return).text.empty?
+  return '' unless return_only_for_type_and_docstring? object
   text = object.tag(:return).text
   'Returns %s%s%s' % [text[0..0].downcase, text[1..-1], text.end_with?('.') ? '' : '.']
 end

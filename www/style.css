@@ -250,6 +250,11 @@ sup {
   font-size: 0.83em;
 }
 
+sup.type {
+  font-size: 1em;
+  vertical-align: 0.17em;
+}
+
 .anchor {
   display: none;
 }
