@@ -1,6 +1,6 @@
 <section>
-  <h1><%= @type.to_s.capitalize %>s</h1>
-  <dl class="<%= @type %>s">
+  <h1><%= @name %></h1>
+  <dl class="<%= @name %>s">
   <% @children.each do |e| %>
     <dt><%= linkify(e, e.name) %></dt>
     <dd><%= htmlify(e.docstring.summary) %></dd>

@@ -48,15 +48,15 @@ def mixed_into(object)
 end
 
 def modules
-  children(:module)
+  children('Modules', :module)
 end
 
 def classes
-  children(:classes)
+  children('Classes', :class)
 end
 
-def children(type)
-  @type = type
+def children(name, type)
+  @name = name
   @children = run_verifier(object.children.select{ |e| e.type == type }).sort_by{ |e| e.name.to_s }
   erb(:children) unless @children.empty?
 end
