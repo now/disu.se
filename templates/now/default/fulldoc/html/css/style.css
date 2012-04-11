@@ -236,8 +236,8 @@ sub {
   font-size: 0.83em;
 }
 
-/* TODO: Not sure about this, but something closer to this value than the default. */
 sub.type, sub.visibility {
+  vertical-align: -0.17em;
   font-size: 0.7em;
 }
 
@@ -251,8 +251,8 @@ sup {
 }
 
 sup.type {
-  font-size: 1em;
   vertical-align: 0.17em;
+  font-size: 1em;
 }
 
 .anchor {
