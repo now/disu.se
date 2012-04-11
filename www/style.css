@@ -149,6 +149,10 @@ p {
   text-align: justify;
 }
 */
+p {
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
 
 p + p {
   margin-top: 1em;
@@ -321,6 +325,8 @@ ul.method-summary {
 ul.method-summary > li, ul.method-summary > li > p {
   display: inline;
   padding: 0;
+  -moz-hyphens: manual;
+  hyphens: manual;
 }
 
 ul.method-summary > li:first-child {
