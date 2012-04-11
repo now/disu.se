@@ -19,9 +19,8 @@ def now_format_args(method, show_types = !params_documented?(method))
   parameters = (method.has_tag? :yield or method.has_tag? :yieldparam) ?
     method.parameters.reject{ |e| e.first.start_with? '&' and not method.tags(:param).any?{ |t| t.name == e.first[1..-1] } } :
     method.parameters
-  formatted = now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
-  return '' if formatted.empty?
-  '(%s)' % formatted
+  return '' if parameters.empty?
+  '(%s)' % now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
 end
 
 def now_format_block(method, show_types = !yield_documented?(method))
@@ -29,7 +28,7 @@ def now_format_block(method, show_types = !yield_documented?(method))
   return '' if params.nil?
   return '{ … }' if params.empty?
   '{ |%s|%s … }' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
-                    (show_types and yieldreturn_only_for_type?(method)) ?
+                    (show_types and yieldreturn_only_for_type? method) ?
                       now_format_types_h(method.tag(:yieldreturn).types) :
                       '']
 end
