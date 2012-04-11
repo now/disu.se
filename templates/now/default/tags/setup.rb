@@ -55,15 +55,12 @@ def tag(name)
   return unless object.has_tag? name
   @name = name
   @label = Tags::Library.labels[name]
+  @factory_method = Tags::Library.factory_method_for(name)
   @no_names, @no_types = case Tags::Library.factory_method_for(name)
-                         when :with_types
-                           [true, false]
-                         when :with_types_and_name
-                           [false, false]
-                         when :with_name
-                           [false, true]
-                         else
-                           [true, true]
+                         when :with_types then          [true, false]
+                         when :with_types_and_name then [false, false]
+                         when :with_name then           [false, true]
+                         else                           [true, true]
                          end
   erb(:tag)
 end
