@@ -32,7 +32,7 @@ def return
 end
 
 def yieldreturn
-  erb(:yieldreturn) if object.has_tag? :yieldreturn and not yieldreturn_only_for_type? object
+  tag(:yieldreturn) unless yieldreturn_only_for_type? object
 end
 
 [:abstract, :deprecated, :example, :see].each do |t|
