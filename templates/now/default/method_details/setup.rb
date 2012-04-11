@@ -15,8 +15,7 @@ end
 
 def title_signature_types(method)
   return '' unless return_only_for_type_and_docstring? method
-  return h(options[:default_return]) unless method.tag(:return) and method.tag(:return).types
-  title_signature_format_types(*method.tags(:return).map{ |e| e.types or [] }.flatten.uniq)
+  now_format_arg_types(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq)
 end
 
 def now_format_args(method, show_types = !params_documented?(method))
