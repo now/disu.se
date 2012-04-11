@@ -35,10 +35,8 @@ end
 
 def now_format_parameters_with_types(parameters, tags)
   parameters.map{ |name, default|
-    type = (tag = tags.find{ |e| e.name == name }) ?
-      now_format_types_h(tag.types) :
-      ''
-    (not type.empty? and default) ? '%s%s = <code class="default">%s</code>' % [h(name), type, h(default)] : '%s%s' % [h(name), type]
+    type = (tag = tags.find{ |e| e.name == name }) ? now_format_types_h(tag.types) : nil
+    [h(name), type, type ? now_format_default(default) : ''].join('')
   }.join(', ')
 end
 

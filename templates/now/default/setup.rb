@@ -15,6 +15,10 @@ def now_format_types_h(types)
   '<sub class="type">%s</sub>' % now_format_types(types)
 end
 
+def now_format_default(default)
+  default ? ' = <code class="default">%s</code>' % h(default) : ''
+end
+
 def now_block_params(method)
   if method.has_tag? :yield and method.tag(:yield).types
     method.tag(:yield).types

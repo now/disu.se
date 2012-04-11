@@ -2,13 +2,13 @@
 <dd>
   <dl class="parameters">
   <% object.tags(:param).each do |e| %>
-    <dt class="name"><%= h(e.name) %><%= now_format_types_h(e.types) %><% if param = object.parameters.assoc(e.name.to_s) and param[1] %> = <code class="default"><%= h(param[1]) %></code><% end %></dt>
+    <dt class="name"><%= h(e.name) %><%= now_format_types_h(e.types) %><%= (param = object.parameters.assoc(e.name.to_s)) ? now_format_default(param[1]) : '' %></dt>
     <dd>
       <%= htmlify(e.text) %>
     <% unless (options = object.tags(:option).select{ |o| o.name == e.name }).empty? %>
       <dl class="options">
       <% options.each do |o| %>
-        <dt><%= h(o.pair.name) %><%= now_format_types_h(o.pair.types) %><% if o.pair.defaults %> = <code class="default"><%= h(o.pair.defaults.join(', ')) %></code><% end %></dt>
+        <dt><%= h(o.pair.name) %><%= now_format_types_h(o.pair.types) %><%= o.pair.defaults ? now_format_default(o.pair.defaults.join(', ')) : '' %></dt>
         <dd><%= htmlify(o.pair.text) %></dd>
       <% end %>
       </dl>
