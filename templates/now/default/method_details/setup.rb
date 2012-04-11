@@ -9,7 +9,7 @@ def title_signature(method)
                   now_format_args(method),
                   now_format_block(method),
                   return_only_for_type_and_docstring?(method) ?
-                    now_format_types_h(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq) :
+                    now_format_types_h(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq, 'return type') :
                     '',
                   method.visibility != :public ? '<sub class="visibility">%s</sub>' % method.visibility : '']
 end

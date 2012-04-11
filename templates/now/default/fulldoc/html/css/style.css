@@ -245,7 +245,7 @@ sub.type, sub.visibility {
   font-size: 0.7em;
 }
 
-sub.type + sub.visibility:before {
+sub.return + sub.visibility:before {
   content: ', ';
 }
 

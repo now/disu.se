@@ -13,8 +13,8 @@ def now_format_types(types)
   }.join(', ')
 end
 
-def now_format_types_h(types)
-  '<sub class="type">%s</sub>' % now_format_types(types)
+def now_format_types_h(types, hclass = 'type')
+  '<sub class="%s">%s</sub>' % [hclass, now_format_types(types)]
 end
 
 def now_format_default(default)
