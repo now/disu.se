@@ -9,7 +9,7 @@ def title_signature(method)
                   now_format_args(method),
                   now_format_block(method),
                   return_only_for_type_and_docstring?(method) ?
-                    now_format_arg_types_h(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq) :
+                    now_format_types_h(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq) :
                     '',
                   method.visibility != :public ? '<sub class="visibility">%s</sub>' % method.visibility : '']
 end
@@ -30,14 +30,14 @@ def now_format_block(method, show_types = !yield_documented?(method))
   return '{ … }' if params.empty?
   '{ |%s|%s … }' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
                     (show_types and yieldreturn_only_for_type?(method)) ?
-                      now_format_arg_types_h(method.tag(:yieldreturn).types) :
+                      now_format_types_h(method.tag(:yieldreturn).types) :
                       '']
 end
 
 def now_format_parameters_with_types(parameters, tags)
   parameters.map{ |name, default|
     type = (tag = tags.find{ |e| e.name == name }) ?
-      now_format_arg_types_h(tag.types) :
+      now_format_types_h(tag.types) :
       ''
     (not type.empty? and default) ? '%s%s = <code class="default">%s</code>' % [h(name), type, h(default)] : '%s%s' % [h(name), type]
   }.join(', ')

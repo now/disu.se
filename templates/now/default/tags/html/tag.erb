@@ -16,12 +16,12 @@
     <dd>
       <dl class="<%= @name %>">
       <% object.tags(@name).each do |e| %>
-        <dt class="type"><%= now_format_arg_types(e.types) %></dt>
+        <dt class="type"><%= now_format_types(e.types) %></dt>
         <dd><%= htmlify(e.text) %></dd>
       <% end %>
       </dl>
   <% else %>
-    <dt><%= @label %><%= now_format_arg_types_h(object.tag(@name).types) %></dt>
+    <dt><%= @label %><%= now_format_types_h(object.tag(@name).types) %></dt>
     <dd><%= htmlify(object.tag(@name).text) %></dd>
   <% end %>
 <% else %>
@@ -29,7 +29,7 @@
   <dd>
     <dl class="<%= @name %>">
     <% object.tags(@name).each do |e| %>
-      <dt class="name"><%= h(e.name) %><% unless @no_types %><%= now_format_arg_types_h(e.types) %><% end %></dt>
+      <dt class="name"><%= h(e.name) %><% unless @no_types %><%= now_format_types_h(e.types) %><% end %></dt>
       <dd><%= htmlify(e.text) %></dd>
     <% end %>
     </dl>

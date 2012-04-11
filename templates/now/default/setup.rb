@@ -1,25 +1,18 @@
 # -*- coding: utf-8 -*-
 
-def now_format_arg_types(types)
-  title_signature_format_types(*(types.nil? || types.empty? ? %w'Object' : types))
-end
-
-def now_format_arg_types_h(types)
-  '<sub class="type">%s</sub>' % now_format_arg_types(types)
-end
-
-def params_documented?(method)
-  method.tags(:param).any?{ |e| e.text and not e.text.empty? }
-end
-
-def title_signature_format_types(*types)
-  return '%s<sup class="type">?</sup>' % title_signature_format_types(types.first) if
+def now_format_types(types)
+  return now_format_types(%w'Object') if types.nil? or types.empty?
+  return '%s<sup class="type">?</sup>' % now_format_types([types.first]) if
     types.size == 2 and types.last == 'nil'
-  return '%s<sup class="type">+</sup>' % title_signature_format_types(types.first) if
+  return '%s<sup class="type">+</sup>' % now_format_types([types.first]) if
     types.size == 2 and types.last =~ /\A(?:Array)?<#{Regexp.quote(types.first)}>\z/
   types.map{ |e|
     e.gsub(/([^\w:]*)([\w:]+)?/){ method_name_h($1) + ($2 ? linkify($2, $2) : '') }
   }.join(', ')
+end
+
+def now_format_types_h(types)
+  '<sub class="type">%s</sub>' % now_format_types(types)
 end
 
 def now_format_block_params(method)
@@ -32,6 +25,10 @@ def now_format_block_params(method)
   else
     nil
   end
+end
+
+def params_documented?(method)
+  method.tags(:param).any?{ |e| e.text and not e.text.empty? }
 end
 
 def yield_documented?(method)
