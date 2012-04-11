@@ -5,17 +5,13 @@ def init
 end
 
 def title_signature(method)
-  types = title_signature_types(method)
   '%s%s%s%s%s' % [method_name_h(method.name),
                   now_format_args(method),
                   now_format_block(method),
-                  types.empty? ? '' : '<sub class="type">%s</sub>' % types,
+                  return_only_for_type_and_docstring?(method) ?
+                    now_format_arg_types_h(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq) :
+                    '',
                   method.visibility != :public ? '<sub class="visibility">%s</sub>' % method.visibility : '']
-end
-
-def title_signature_types(method)
-  return '' unless return_only_for_type_and_docstring? method
-  now_format_arg_types(method.tags(:return).map{ |e| e.types or [] }.flatten.uniq)
 end
 
 def now_format_args(method, show_types = !params_documented?(method))
