@@ -2,11 +2,15 @@
   <% if @no_types %>
     <dt><%= @label %></dt>
     <dd>
+    <% if object.tags(@name).size > 1 %>
       <ul class="<%= @name %>">
       <% object.tags(@name).each do |e| %>
         <li><%= htmlify(e.text) %></li>
       <% end %>
       </ul>
+    <% else %>
+      <%= htmlify(object.tag(@name).text) %>
+    <% end %>
   <% elsif object.tags(@name).size > 1 %>
     <dt><%= @label %></dt>
     <dd>

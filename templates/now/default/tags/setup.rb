@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+Tags::Library.labels[:todo] = 'TODO'
+
 def init
   return if object.respond_to? :is_alias? and object.is_alias?
   tags = Tags::Library.visible_tags - [:option, :overload]
@@ -33,7 +35,7 @@ def yieldreturn
   erb(:yieldreturn) if object.has_tag? :yieldreturn and not yieldreturn_only_for_type? object
 end
 
-[:abstract, :deprecated, :example, :note, :see, :todo].each do |t|
+[:abstract, :deprecated, :example, :see].each do |t|
   define_method t do
     erb(t) if object.has_tag? t
   end
