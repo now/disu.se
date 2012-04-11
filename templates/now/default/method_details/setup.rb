@@ -14,8 +14,6 @@ def title_signature(method)
 end
 
 def title_signature_types(method)
-  # TODO: Why is this needed?
-  method = method.object if method.respond_to? :object and not method.has_tag? :return
   return '' unless return_only_for_type_and_docstring? method
   return h(options[:default_return]) unless method.tag(:return) and method.tag(:return).types
   title_signature_format_types(*method.tags(:return).map{ |e| e.types or [] }.flatten.uniq)
