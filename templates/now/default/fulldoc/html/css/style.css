@@ -335,6 +335,20 @@ ul.method-summary > li:last-child {
   margin-left: 0.5em;
 }
 
+ul.tags, ul.tags > li, ul.tags > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tags > li:after {
+  content: ', ';
+}
+
+ul.tags > li:last-child:after {
+  content: '';
+}
+
 .code-comment { color: #257325; }
 .code-constant { color: #951616; }
 .code-special { color: #f02626; }

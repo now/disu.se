@@ -3,7 +3,7 @@
 <% if object.tags(:see).size == 1 %>
   <p><%= linkify(object.tag(:see).name, object.tag(:see).text) %></p>
 <% else %>
-  <ul class="see">
+  <ul class="tags see">
   <% for tag in object.tags(:see) %>
     <li><p><%= linkify(tag.name, tag.text) %></p></li>
   <% end %>
