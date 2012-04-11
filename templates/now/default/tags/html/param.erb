@@ -1,8 +1,8 @@
 <dt>Parameters</dt>
 <dd>
   <dl class="parameters">
-  <% object.tags(:param).each do |e| %>
-    <dt class="name"><%= h(e.name) %><%= now_format_types_h(e.types) %><%= (param = object.parameters.assoc(e.name.to_s)) ? now_format_default(param[1]) : '' %></dt>
+  <% object.tags(:param).select{ |e| object.parameters.assoc(e.name.to_s) }.each do |e| %>
+    <dt class="name"><%= h(e.name) %><%= now_format_types_h(e.types) %><%= now_format_default(object.parameters.assoc(e.name.to_s)[1]) %></dt>
     <dd>
       <%= htmlify(e.text) %>
     <% unless (options = object.tags(:option).select{ |o| o.name == e.name }).empty? %>

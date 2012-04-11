@@ -107,8 +107,10 @@ def inline_overloads(method)
   return method if method.tags(:overload).empty?
   method.tags(:overload).map{ |e|
     n = method.dup
-    n.signature = e.signature
-    n.parameters = e.parameters
+    unless e.signature.empty?
+      n.signature = e.signature
+      n.parameters = e.parameters.map{ |n, d| [n.to_s, d] }
+    end
     n.docstring = e.docstring
     n
   }
