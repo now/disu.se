@@ -36,18 +36,18 @@ def yield_documented?(method)
   method.has_tag? :yield or method.tags(:yieldparam).any?{ |e| e.text and not e.text.empty? }
 end
 
-def return_only_for_type_and_docstring?(method)
-  (object.docstring.strip.empty? and
-   object.tags(:return).size == 1 and not object.tag(:return).text.empty?) or
-    (object.tags(:return).size == 1 and object.tag(:return).types == %w'self')
-end
-
 def yieldreturn_only_for_type?(method)
   not yield_documented? method and
     method.tags(:yieldreturn).size == 1 and
     (method.tag(:yieldreturn).text.nil? or method.tag(:yieldreturn).text.empty?) and
     not (params = now_block_params(method)).nil? and
     not params.empty?
+end
+
+def return_only_for_type_and_docstring?(method)
+  (object.docstring.strip.empty? and
+   object.tags(:return).size == 1 and not object.tag(:return).text.empty?) or
+    (object.tags(:return).size == 1 and object.tag(:return).types == %w'self')
 end
 
 class YARD::Serializers::FileSystemSerializer
