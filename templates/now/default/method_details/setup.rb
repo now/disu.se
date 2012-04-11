@@ -25,7 +25,7 @@ def now_format_args(method, show_types = !params_documented?(method))
 end
 
 def now_format_block(method, show_types = !yield_documented?(method))
-  params = now_format_block_params(method)
+  params = now_block_params(method)
   return '' if params.nil?
   return '{ … }' if params.empty?
   '{ |%s|%s … }' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),

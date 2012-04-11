@@ -15,7 +15,7 @@ def now_format_types_h(types)
   '<sub class="type">%s</sub>' % now_format_types(types)
 end
 
-def now_format_block_params(method)
+def now_block_params(method)
   if method.has_tag? :yield and method.tag(:yield).types
     method.tag(:yield).types
   elsif method.has_tag? :yieldparam
@@ -46,7 +46,7 @@ def yieldreturn_only_for_type?(method)
   not yield_documented? method and
     method.tags(:yieldreturn).size == 1 and
     (method.tag(:yieldreturn).text.nil? or method.tag(:yieldreturn).text.empty?) and
-    not (params = now_format_block_params(method)).nil? and
+    not (params = now_block_params(method)).nil? and
     not params.empty?
 end
 
