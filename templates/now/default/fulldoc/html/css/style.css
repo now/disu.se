@@ -149,6 +149,10 @@ p {
   text-align: justify;
 }
 */
+p {
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
 
 p + p {
   margin-top: 1em;
