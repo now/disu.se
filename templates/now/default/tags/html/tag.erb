@@ -4,7 +4,7 @@
     <dd>
       <ul class="<%= @name %>">
       <% object.tags(@name).each do |e| %>
-        <li><p><%= htmlify(e.text) %></p></li>
+        <li><%= htmlify(e.text) %></li>
       <% end %>
       </ul>
   <% elsif object.tags(@name).size > 1 %>
