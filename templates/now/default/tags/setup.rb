@@ -35,6 +35,10 @@ def yieldreturn
   tag(:yieldreturn) unless yieldreturn_only_for_type? object
 end
 
+def yield
+  tag(:tag) if object.has_tag? :yield and not object.tag(:yield).text.empty?
+end
+
 [:abstract, :deprecated, :example, :see].each do |t|
   define_method t do
     erb(t) if object.has_tag? t
