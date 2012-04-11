@@ -5,7 +5,6 @@ def init
   options.delete :objects
   options.delete :files
 
-  @object = Registry.root
   Object.new.extend(T('layout')).stylesheets.uniq.each do |file|
     options[:serializer].serialize(file, file(file, true)) if options[:serializer]
   end
