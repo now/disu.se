@@ -6,6 +6,8 @@ def now_format_types(types)
     types.size == 2 and types.last == 'nil'
   return '%s<sup class="type">+</sup>' % now_format_types([types.first]) if
     types.size == 2 and types.last =~ /\A(?:Array)?<#{Regexp.quote(types.first)}>\z/
+  return '%s<sup class="type">*</sup>' % now_format_types([types.first]) if
+    types.size == 2 and types.last == '…'
   types.map{ |e|
     e.gsub(/([^\w:]*)([\w:]+)?/){ method_name_h($1) + ($2 ? linkify($2, $2) : '') }
   }.join(', ')
