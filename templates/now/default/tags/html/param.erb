@@ -1,7 +1,7 @@
 <dt>Parameters</dt>
 <dd>
   <dl class="parameters">
-  <% object.tags(:param).select{ |e| object.parameters.assoc(e.name.to_s) }.each do |e| %>
+  <% object.tags(:param).select{ |e| object.parameters.assoc(e.name.to_s) }.sort_by{ |e| object.parameters.index{ |p| p[0] == e.name.to_s } }.each do |e| %>
     <dt class="name"><%= h(e.name) %><%= now_format_types_h(e.types) %><%= now_format_default(object.parameters.assoc(e.name.to_s)[1]) %></dt>
     <dd>
       <%= htmlify(e.text) %>
