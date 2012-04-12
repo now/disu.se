@@ -17,7 +17,7 @@ def namespace
 end
 
 def ancestors
-  @ancestors = object.inheritance_tree[1..-1]
+  @ancestors = object.inheritance_tree(true)[1..-1]
   erb(:ancestors) unless @ancestors.empty? and not CodeObjects::ClassObject === object
 end
 
