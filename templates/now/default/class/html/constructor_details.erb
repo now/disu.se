@@ -1,7 +1,7 @@
 <section id="constructor">
   <h1>Constructor</h1>
   <% if @constructor.namespace != object %>
-    <p class="notice">This class inherits a constructor from <%= linkify(@constructor, object.relative_path(@constructor.namespace.path)) %>.</p>
+    <p class="notice">This class inherits its constructor from <%= linkify(@constructor, object.relative_path(@constructor.namespace.path)) %>.</p>
   <% else %>
     <%= yieldall :object => @constructor %>
   <% end %>
