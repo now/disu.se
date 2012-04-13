@@ -20,13 +20,13 @@ def private
 end
 
 def return
-  if object.type == :method and object.name == :initialize and object.scope == :instance
+  if object.respond_to? :constructor and object.constructor?
     warn 'return tag on #initialize method ignored' unless object.tags(:return).size == 1 and
       object.tag(:return).types.length == 1 and
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
     return
   end
-  return if return_only_for_type_and_docstring? object
+  return if return_only_for_type? object or return_used_for_docstring? object
   return erb(:returns_void) if object.tags(:return).size == 1 and object.tag(:return).types == ['void']
   tag(:return)
 end

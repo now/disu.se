@@ -12,7 +12,8 @@ def link_to_alias(object)
 end
 
 def text_from_return(object)
-  return '' unless return_only_for_type_and_docstring? object
+  return '' unless return_used_for_docstring? object
+  return '' if object.respond_to? :constructor? and object.constructor?
   text = object.tag(:return).text
   'Returns %s%s%s' % [text[0..0].downcase, text[1..-1], text.end_with?('.') ? '' : '.']
 end

@@ -52,10 +52,15 @@ def yieldreturn_only_for_type?(method)
     not params.empty?
 end
 
-def return_only_for_type_and_docstring?(method)
-  (object.docstring.strip.empty? and
-   object.tags(:return).size == 1 and not object.tag(:return).text.empty?) or
-    (object.tags(:return).size == 1 and object.tag(:return).types == %w'self')
+def return_only_for_type?(method)
+  method.tags(:return).size == 1 and
+    (method.tag(:return).text.nil? or method.tag(:return).text.empty?)
+end
+
+def return_used_for_docstring?(method)
+  method.docstring.strip.empty? and
+    method.tags(:return).size == 1 and
+    not (method.tag(:return).text.nil? or method.tag(:return).text.empty?)
 end
 
 class YARD::Serializers::FileSystemSerializer
