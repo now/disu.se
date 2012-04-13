@@ -259,11 +259,12 @@ sup.type {
   font-size: 1em;
 }
 
-.anchor {
+.anchor, .source {
   display: none;
+  margin-left: 0.5em;
 }
 
-h1:hover > .anchor, dt:hover > .anchor {
+h1:hover > .anchor, h1:hover > .source, dt:hover > .anchor {
   display: inline;
 }
 
