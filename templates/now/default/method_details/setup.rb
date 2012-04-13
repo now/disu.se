@@ -23,14 +23,15 @@ def now_format_args(method, show_types = !params_documented?(method))
   '(%s)' % now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
 end
 
-def now_format_block(method, show_types = !yield_documented?(method))
+def now_format_block(method, show_types = !yieldparams_documented?(method))
   params = now_block_params(method)
   return '' if params.nil?
   return '{ … }' if params.empty?
-  '{ |%s|%s … }' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
-                    (show_types and yieldreturn_only_for_type? method) ?
-                      now_format_types_h(method.tag(:yieldreturn).types) :
-                      '']
+  '{ |%s|%s … }%s' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
+                      (show_types and yieldreturn_only_for_type? method) ?
+                        now_format_types_h(method.tag(:yieldreturn).types) :
+                        '',
+                      yield_optional?(method) ? '<sup class="type">?</sup>' : '']
 end
 
 def now_format_parameters_with_types(parameters, tags)

@@ -22,7 +22,7 @@ def now_format_default(default)
 end
 
 def now_block_params(method)
-  if method.has_tag? :yield and method.tag(:yield).types
+  if method.has_tag? :yield and method.tag(:yield).types and not yield_optional?(method)
     method.tag(:yield).types
   elsif method.has_tag? :yieldparam
     method.tags(:yieldparam).map(&:name)
@@ -33,18 +33,20 @@ def now_block_params(method)
   end
 end
 
+def yield_optional?(method)
+  method.has_tag? :yield and method.tag(:yield).types == ['?']
+end
+
 def params_documented?(method)
   method.tags(:param).any?{ |e| (e.text and not e.text.empty?) or method.tags(:option).any?{ |o| o.name == e.name } }
 end
 
-def yield_documented?(method)
-  # TODO: Shouldn’t we check the contents of the :yield tag?
-  method.has_tag? :yield or method.tags(:yieldparam).any?{ |e| e.text and not e.text.empty? }
+def yieldparams_documented?(method)
+  method.tags(:yieldparam).any?{ |e| e.text and not e.text.empty? }
 end
 
 def yieldreturn_only_for_type?(method)
-  not yield_documented? method and
-    method.tags(:yieldreturn).size == 1 and
+  method.tags(:yieldreturn).size == 1 and
     (method.tag(:yieldreturn).text.nil? or method.tag(:yieldreturn).text.empty?) and
     not (params = now_block_params(method)).nil? and
     not params.empty?

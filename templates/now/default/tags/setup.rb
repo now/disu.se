@@ -36,7 +36,7 @@ def yieldreturn
 end
 
 def yield
-  tag(:tag) if object.has_tag? :yield and not object.tag(:yield).text.empty?
+  tag(:yield) if object.has_tag? :yield and not object.tag(:yield).text.empty?
 end
 
 [:abstract, :deprecated, :example, :see].each do |t|
@@ -50,7 +50,7 @@ def param
 end
 
 def yieldparam
-  tag(:yieldparam) if yield_documented? object
+  tag(:yieldparam) if yieldparams_documented? object
 end
 
 private
