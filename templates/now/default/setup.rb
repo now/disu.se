@@ -34,7 +34,7 @@ def now_block_params(method)
 end
 
 def params_documented?(method)
-  method.tags(:param).any?{ |e| e.text and not e.text.empty? }
+  method.tags(:param).any?{ |e| (e.text and not e.text.empty?) or method.tags(:option).any?{ |o| o.name == e.name } }
 end
 
 def yield_documented?(method)
