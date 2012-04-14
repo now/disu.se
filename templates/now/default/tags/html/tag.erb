@@ -11,6 +11,7 @@
     <% else %>
       <%= htmlify(object.tag(@name).text) %>
     <% end %>
+    </dd>
   <% elsif object.tags(@name).size > 1 %>
     <dt><%= @label %></dt>
     <dd>
@@ -20,6 +21,7 @@
         <dd><%= htmlify(e.text) %></dd>
       <% end %>
       </dl>
+    </dd>
   <% else %>
     <dt><%= @label %><%= now_format_types_h(object.tag(@name).types) %></dt>
     <dd><%= htmlify(object.tag(@name).text) %></dd>
@@ -33,5 +35,5 @@
       <dd><%= htmlify(e.text) %></dd>
     <% end %>
     </dl>
+  </dd>
 <% end %>
-</dd>
