@@ -20,7 +20,7 @@ def private
 end
 
 def return
-  if object.respond_to? :constructor and object.constructor?
+  if object.type == :method and object.scope == :instance and object.name == :initialize
     warn 'return tag on #initialize method ignored' unless object.tags(:return).size == 1 and
       object.tag(:return).types.length == 1 and
       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
