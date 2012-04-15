@@ -15,6 +15,8 @@ def text_from_return(object)
   return '' unless return_used_for_docstring? object
   return '' if object.respond_to? :constructor? and object.constructor?
   text = object.tag(:return).text
-  'Returns %s%s%s' % [text[0..0].downcase, text[1..-1], text.end_with?('.') ? '' : '.']
+  '%s %s%s%s' % [(object.respond_to? :writer? and object.writer?) ?
+                 'Sets and returns' : 'Returns', text[0..0].downcase,
+                 text[1..-1], text.end_with?('.') ? '' : '.']
 end
 
