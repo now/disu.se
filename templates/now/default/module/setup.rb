@@ -7,8 +7,8 @@ def init
     :modules,
     :classes,
     :constant_summary, [T('docstring')],
-    :methodmissing, [T('method_details')],
     :class_methods, [T('method_details')],
+    :methodmissing, [T('method_details')],
     :instance_methods, [T('method_details')]
 end
 
