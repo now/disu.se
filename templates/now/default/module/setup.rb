@@ -114,7 +114,8 @@ def methods(scope)
 end
 
 def special_method?(method)
-  method.constructor? or method.name(true) == '#method_missing'
+  (method.name == :initialize and method.scope == :instance) or
+    method.name(true) == '#method_missing'
 end
 
 def inline_overloads(method)
