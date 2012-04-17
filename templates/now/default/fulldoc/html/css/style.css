@@ -260,16 +260,16 @@ sup.type {
 }
 
 .anchor, .source {
-  display: none;
+  visibility: hidden;
   margin-left: 0.5em;
 }
 
 h1:hover > .anchor, h1:hover > .source, dt:hover > .anchor {
-  display: inline;
+  visibility: visible;
 }
 
 :target > .anchor {
-  display: inline;
+  visibility: visible;
 }
 
 ol.modules, ol.modules > li, ol.modules > li > p {
