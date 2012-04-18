@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
 
+def inline_overloads(method)
+  return [] unless method
+  return [method] if method.tags(:overload).empty?
+  method.tags(:overload).map{ |e|
+    n = method.dup
+    unless e.signature.empty?
+      n.signature = e.signature
+      n.parameters = e.parameters.map{ |n, d| [n.to_s, d] }
+    end
+    n.docstring = e.docstring unless e.docstring.empty?
+    n
+  }
+end
+
 def fetch_shortest_unique_suffixes(hash, object)
   shortest_unique_suffixes(hash.fetch(object.path, []).map{ |e| [e.path.split('::'), e] }).
     map{ |p, e| r, s = object.relative_path(e), p.join('::'); [r.length < s.length ? r : s, e] }.

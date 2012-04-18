@@ -11,9 +11,10 @@ end
 
 def constructor_details
   # TODO: Why not use #constructor? here?
-  return unless @constructor = object.meths(:inherited => true, :included => true).find{ |e| e.name == :initialize }
-  return if prune_method_listing([@constructor]).empty?
-  erb(:constructor_details) unless @constructor.docstring.strip.empty? and @constructor.tags.reject{ |e| e.tag_name.to_s == 'return' }.empty?
+   @constructors = inline_overloads(object.meths(:inherited => true, :included => true).find{ |e| e.name == :initialize })
+   return if @constructors.empty?
+   return if prune_method_listing(@constructors).empty?
+   erb(:constructor_details) unless @constructors.all?{ |e| e.docstring.strip.empty? and e.tags.reject{ |e| e.tag_name.to_s == 'return' }.empty? }
 end
 
 def subclasses
