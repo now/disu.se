@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
 
+def fetch_shortest_unique_suffixes(hash, object)
+  shortest_unique_suffixes(hash.fetch(object.path, []).map{ |e| [e.path.split('::'), e] }).
+    map{ |p, e| r, s = object.relative_path(e), p.join('::'); [r.length < s.length ? r : s, e] }.
+    sort_by{ |_, e| e.path }
+end
+
+def shortest_unique_suffixes(array)
+  done, remaining = array.partition{ |e| e.first.empty? }
+  return done if remaining.empty?
+  same, different = remaining.partition{ |e| e.first.last == remaining.first.first.last }
+  done.
+    concat(same.size > 1 ?
+             shortest_unique_suffixes(same.map{ |e| [e.first[0..-2], e.last] }).
+               map.with_index{ |e, i| e.first.push(same[i].first.last); e } :
+             [[[same.first.first.last], same.first.last]]).
+    concat(shortest_unique_suffixes(different))
+end
+
 def now_format_types(types)
   return now_format_types(%w'Object') if types.nil? or types.empty?
   return '%s<sup class="type">?</sup>' % now_format_types([types.first]) if

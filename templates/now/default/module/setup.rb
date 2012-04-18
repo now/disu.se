@@ -35,16 +35,16 @@ def extends
 end
 
 def includers
-  erb(:includers) unless mixed_into(object).empty?
+  erb(:includers) unless (@includers = mixed_into(object)).empty?
 end
 
 def mixed_into(object)
-  (globals.mixed_into ||= run_verifier(Registry.all(:class, :module)).reduce({}){ |h, e|
-     e.mixins.each do |m|
-       (h[m.path] ||= []) << e
-     end
-     h
-   })[object.path] || []
+  fetch_shortest_unique_suffixes((globals.mixed_into ||= run_verifier(Registry.all(:class, :module)).reduce({}){ |h, e|
+                                    e.mixins.each do |m|
+                                      (h[m.path] ||= []) << e
+                                    end
+                                    h
+                                  }), object)
 end
 
 def modules
