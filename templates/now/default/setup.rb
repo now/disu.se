@@ -152,7 +152,14 @@ module YARD::Templates::Helpers::HtmlHelper
 
   def link_object(obj, otitle = nil, anchor = nil, relative = true)
     return otitle unless obj
-    resolved = String === obj ? Registry.resolve(object, obj, true, true) : obj
+    resolved = if String === obj and obj == 'super' and
+                   object.respond_to? :overridden_method and object.overridden_method
+                 object.overridden_method
+               elsif String === obj
+                 Registry.resolve(object, obj, true, true)
+               else
+                 obj
+               end
     title = if otitle
               otitle.to_s
             elsif resolved.root?
