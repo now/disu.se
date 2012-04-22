@@ -21,9 +21,10 @@ end
 
 def return
   if object.type == :method and object.scope == :instance and object.name == :initialize
-    warn 'return tag on #initialize method ignored' unless object.tags(:return).size == 1 and
-      object.tag(:return).types.length == 1 and
-      object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first
+    warn 'return tag on #initialize method ignored' unless object.tags(:return).size == 0 or
+      (object.tags(:return).size == 1 and
+       object.tag(:return).types.length == 1 and
+       object.tag(:return).text == 'a new instance of %s' % object.tag(:return).types.first)
     return
   end
   return if return_only_for_type? object or return_used_for_docstring? object

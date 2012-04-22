@@ -95,7 +95,7 @@ def methods(scope)
   @methods = run_verifier(object.meths(:inherited => false, :included => false, :scope => scope)).
     reject{ |m| special_method? m }.
     map{ |e| inline_overloads(e) }.
-    flatten.partition(&is_explicit?).flatten
+    flatten.partition{ |e| e.is_explicit? }.flatten
   erb(:methods) unless @methods.empty?
 end
 
