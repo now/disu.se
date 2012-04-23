@@ -17,7 +17,7 @@ def namespace
 end
 
 def ancestors
-  @ancestors = object.inheritance_tree(true)[1..-1]
+  @ancestors = object.inheritance_tree(true)[1..-1].reverse.reduce([[], {}]){ |v, e| v.last[e.path] ||= v.first << e; v }.first.reverse
   erb(:ancestors) unless @ancestors.empty? and not CodeObjects::ClassObject === object
 end
 
@@ -95,7 +95,21 @@ def methods(scope)
   @methods = run_verifier(object.meths(:inherited => false, :included => false, :scope => scope)).
     reject{ |m| special_method? m }.
     map{ |e| inline_overloads(e) }.
-    flatten.partition{ |e| e.is_explicit? }.flatten
+    flatten.
+    partition{ |e| e.is_explicit? }.
+    flatten.
+    each{ |e|
+      if e.parameters.assoc('other') and not e.tags(:param).find{ |e| e.name == 'other' }
+        e.docstring.add_tag(YARD::Tags::Tag.new(:param, '', object.namespace ? object.namespace.relative_path(object) : object, 'other'))
+      end
+      if [:===, :==, :=~].include? e.name and e.tags(:return).size < 2
+        if e.tags(:return).size == 0
+          e.docstring.add_tag(YARD::Tags::Tag.new(:return, '', %w'Boolean'))
+        elsif not e.tag(:return).types
+          e.tag(:return).types = %w'Boolean'
+        end
+      end
+  }
   erb(:methods) unless @methods.empty?
 end
 
