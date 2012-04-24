@@ -9,7 +9,7 @@ def inline_overloads(method)
       n.signature = e.signature
       n.parameters = e.parameters.map{ |n, d| [n.to_s, d] }
     end
-    n.docstring = e.docstring unless e.docstring.empty?
+    n.docstring = e.docstring unless e.docstring.blank?
     n
   }
 end
