@@ -97,19 +97,7 @@ def methods(scope)
     map{ |e| inline_overloads(e) }.
     flatten.
     partition{ |e| e.is_explicit? }.
-    flatten.
-    each{ |e|
-      if e.parameters.assoc('other') and not e.tags(:param).find{ |e| e.name == 'other' }
-        e.docstring.add_tag(YARD::Tags::Tag.new(:param, '', object.namespace ? object.namespace.relative_path(object) : object, 'other'))
-      end
-      if [:===, :==, :=~].include? e.name and e.tags(:return).size < 2
-        if e.tags(:return).size == 0
-          e.docstring.add_tag(YARD::Tags::Tag.new(:return, '', %w'Boolean'))
-        elsif not e.tag(:return).types
-          e.tag(:return).types = %w'Boolean'
-        end
-      end
-  }
+    flatten
   erb(:methods) unless @methods.empty?
 end
 
