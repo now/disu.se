@@ -102,6 +102,5 @@ def methods(scope)
 end
 
 def special_method?(method)
-  (method.name == :initialize and method.scope == :instance) or
-    method.name(true) == '#method_missing'
+  method.constructor? or method.name(true) == '#method_missing'
 end
