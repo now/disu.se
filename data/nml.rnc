@@ -1,0 +1,13 @@
+include 'http://disu.se/software/nml/relaxng/1.0/nml.rnc'
+
+subscript = element subscript { subscript.attributes, subscript.content }
+subscript.attributes =
+  common.attributes
+subscript.content = common.inline.content
+common.inline.elements |= subscript
+
+superscript = element superscript { superscript.attributes, superscript.content }
+superscript.attributes =
+  common.attributes
+superscript.content = common.inline.content
+common.inline.elements |= superscript

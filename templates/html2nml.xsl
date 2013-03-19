@@ -135,21 +135,11 @@
 
   <xsl:template match="html">
     <nml>
-      <title><xsl:value-of select="head/title"/></title>
-      <xsl:apply-templates select="body/*"/>
+      <xsl:apply-templates select="body/article/*"/>
     </nml>
   </xsl:template>
 
-  <xsl:template match="article">
-    <section>
-      <xsl:apply-templates select="@*|node()"/>
-    </section>
-  </xsl:template>
-
-  <xsl:template match="section |
-                       code |
-                       span |
-                       p">
+  <xsl:template match="section|code|span|p">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
@@ -251,19 +241,16 @@
     </itemization>
   </xsl:template>
 
-  <xsl:template match="li">
+  <xsl:template match="li[node()[1][self::text() and string-length(normalize-space()) > 0]]">
     <item>
       <xsl:apply-templates select="@*"/>
+      <p><xsl:apply-templates select="node()"/></p>
+    </item>
+  </xsl:template>
 
-      <xsl:choose>
-        <xsl:when test="node()[1][self::text()]">
-          <p><xsl:apply-templates select="node()"/></p>
-        </xsl:when>
-
-        <xsl:otherwise>
-          <xsl:apply-templates select="node()"/>
-        </xsl:otherwise>
-      </xsl:choose>
+  <xsl:template match="li">
+    <item>
+      <xsl:apply-templates select="@*|node()"/>
     </item>
   </xsl:template>
 
@@ -274,24 +261,17 @@
   </xsl:template>
 
   <xsl:template match="a">
-    <ref>
+    <link>
       <xsl:apply-templates select="@*|node()"/>
-    </ref>
+    </link>
   </xsl:template>
 
   <xsl:template match="a/@href">
-    <xsl:attribute name="uri">
-      <xsl:value-of select="."/>
-    </xsl:attribute>
-  </xsl:template>
-
-  <xsl:template match="span[@class='object_link']/a/@href">
     <xsl:attribute name="uri">
       <xsl:value-of select="string:fix-relative-paths()"/>
     </xsl:attribute>
   </xsl:template>
 
-  <!-- TODO: See to it to remove this from output in the first place. -->
   <xsl:template match="a/@target"/>
 
   <xsl:template match="em">
@@ -326,27 +306,25 @@
 
   <xsl:template match="table">
     <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="table[thead and not(tbody)]">
+    <xsl:copy>
       <xsl:apply-templates select="@*|thead"/>
+      <body>
+        <xsl:apply-templates select="following-sibling::thead"/>
+      </body>
+    </xsl:copy>
+  </xsl:template>
 
-      <xsl:choose>
-        <xsl:when test="tbody">
-          <xsl:apply-templates select="tbody"/>
-        </xsl:when>
-
-        <xsl:otherwise>
-          <body>
-            <xsl:choose>
-              <xsl:when test="thead">
-                <xsl:apply-templates select="following-sibling::thead"/>
-              </xsl:when>
-
-              <xsl:otherwise>
-                <xsl:apply-templates select="node()"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </body>
-        </xsl:otherwise>
-      </xsl:choose>
+  <xsl:template match="table[not(thead) and not(tbody)]">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <body>
+        <xsl:apply-templates/>
+      </body>
     </xsl:copy>
   </xsl:template>
 
@@ -368,13 +346,9 @@
     </row>
   </xsl:template>
 
-  <xsl:template match="th | td">
+  <xsl:template match="th|td">
     <cell>
       <xsl:apply-templates select="@*|node()"/>
     </cell>
-  </xsl:template>
-
-  <xsl:template match="span[@class='object_link']">
-    <xsl:apply-templates select="node()"/>
   </xsl:template>
 </xsl:stylesheet>

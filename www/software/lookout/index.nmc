@@ -1,14 +1,22 @@
                                 Lookout
 
-  Lookout is a lightweight unit testing framework. Tests (expectations) can be
-  written as follows
+  Lookout is a unit testing framework that puts your results in focus. Tests
+  (expectations) are written as follows
 
     expect 2 do
       1 + 1
     end
 
-    expect NoMethodError do
-      Object.invalid_method_call
+    expect ArgumentError do
+      Integer('1 + 1')
+    end
+
+    expect Array do
+      [1, 2, 3].select{ |i| i % 2 == 0 }
+    end
+
+    expect [2, 4, 6] do
+      [1, 2, 3].map{ |i| i * 2 }
     end
 
   Lookout is designed to encourage – force, even – unit testing best practices
@@ -27,10 +35,12 @@
 
   Other important points are
 
-•   A unified syntax for setting up both state-based and behavior-based
-    expectations
+•   Putting the expected outcome of a test in focus with the steps of the
+    calculation of the actual result only as a secondary concern
 •   A focus on code readability by providing no mechanism for describing an
     expectation other than the code in the expectation itself
+•   A unified syntax for setting up both state-based and behavior-based
+    expectations
 
   The way Lookout works has been heavily influenced by expectations¹, by
   {Jay Fields}².  The code base was once also heavily based on expectations¹,
@@ -109,6 +119,14 @@
           Enumerable
         end
 
+      or the ‹Class›:
+
+        expect String do
+          String
+        end
+
+      for obvious reasons.
+
       As you may have figured out yourself, this is accomplished by first
       trying ‹#==› and, if it returns ‹false›, then trying ‹#===› on the
       expected ‹Module›.  This is also true of ‹Ranges› and ‹Regexps›.
@@ -146,11 +164,31 @@
       This can be used to capture the output of a formatter that takes an
       output object as a parameter.
 
+      Expecting warnings from code isn’t very common, but should be done:
+
+        expect warning('this is your final one!') do
+          warn 'this is your final one!'
+        end
+
+        expect warning('this is your final one!') do
+          warn '%s:%d: warning: this is your final one!' % [__FILE__, __LINE__]
+        end
+
+      ‹$VERBOSE› is set to ‹true› during the execution of the block, so you
+      don’t need to do so yourself.  If you have other code that depends on the
+      value of $VERBOSE, that can be done with ‹#with_verbose›
+
+        expect nil do
+          with_verbose nil do
+            $VERBOSE
+          end
+        end
+
       You should always be expecting errors from – and in, but that’s a
       different story – your code:
 
-        expect NoMethodError do
-          Object.no_method
+        expect ArgumentError do
+          Integer('1 + 1')
         end
 
       Often, not only the type of the error, but its description, is important
@@ -166,79 +204,109 @@
           raise StandardError.new('message')
         end
 
-      (Note that some of Ruby’s built-in error classes have slightly
-      complicated behavior and will not allow you to pass a ‹Regexp› as a
-      parameter.  ‹NameError› is such a class.  This may warrant further
-      investigation into whether or not this is a bug, but I’ll leave that up
-      to the reader to decide.)
+      Symbols are generally matched against symbols, but as a special case,
+      symbols ending with ‹?› are seen as expectations on the result of query
+      methods on the result of the block, given that the method is of zero
+      arity and that the result isn’t a Symbol itself.  Simply expect a symbol
+      ending with ‹?›:
 
-      Lookout further provides a fluent way of setting up expectations on
-      boolean results.  An object can “be”
-
-        expect Class.new{ attr_accessor :running; }.new.to.be.running do |process|
-          process.running = true
+        expect :empty? do
+          []
         end
 
-      or “not be”
+      To expect it’s negation, expect the same symbol beginning with ‹not_›:
 
-        expect Class.new{ attr_accessor :running; }.new.not.to.be.running do |process|
-          process.running = false
+        expect :not_nil? do
+          [1, 2, 3]
         end
 
-      or to “have”
+      This is the same as
 
-        expect Class.new{ attr_accessor :finished; }.new.to.have.finished do |process|
-          process.finished = true
+        expect true do
+          [].empty?
         end
-
-      or “not have”
-
-        expect Class.new{ attr_accessor :finished; }.new.not.to.have.finished do |process|
-          process.finished = false
-        end
-
-      On the same note
-
-        expect nil.to.be.nil?
 
       and
 
-        expect Object.new.not.to.be.nil?
+        expect false do
+          [1, 2, 3].empty?
+        end
 
-      As not every boolean method “is” or “has” you can even
+      but provides much clearer failure messages.  It also makes the
+      expectation’s intent a lot clearer.
 
-        expect nil.to.respond_to? :nil?
+      There’s also a way to make the expectations of query methods explicit by
+      invoking methods on the result of the block.  For example, to check that
+      the Array ‹[1, 2, 3]› includes ‹1› you could write
 
-      The rules here are that all ‹Objects› respond to ‹#to›.  After ‹#to› you
-      may call
+        expect result.to.include? 1 do
+          [1, 2, 3].reject{ |e| e.even? }
+        end
+
+      You could likewise check that the result doesn’t include 2:
+
+        expect result.not.to.include? 2 do
+          [1, 2, 3].reject{ |e| e.even? }
+        end
+
+      This is the same as (and executes a little bit slower than) writing
+
+        expect false do
+          [1, 2, 3].reject{ |e| e.even? }.include? 2
+        end
+
+      but provides much clearer failure messages.  Given that these two last
+      examples would fail, you’d get a message saying “[1, 2, 3]#include?(2)”
+      instead of the terser “true≠false”.  It also clearly separates the actual
+      expectation from the set-up.
+
+      The keyword for this kind of expectations is ‹result›.  This may be
+      followed by any of the methods
 
     •   ‹#not›
+    •   ‹#to›
     •   ‹#be›
     •   ‹#have›
-    •   Any method whose name ends with ‹?›
 
-      A call to ‹#not› must be followed by a call to one of the three
-      alternatives that follow it in the list.  ‹#Be› and ‹#have› must be
-      followed by a call to a method.
+      or any other method you will want to call on the result.  The methods
+      ‹#to›, ‹#be›, and ‹#have› do nothing except improve readability.  The
+      ‹#not› method inverts the expectation.
+
+      If you need to literally check against any of the types of objects
+      otherwise treated specially, that is, any instances of
+
+    •   ‹Module›
+    •   ‹Range›
+    •   ‹Regexp›
+    •   ‹Exception›
+    •   ‹Symbol›, given that it ends with ‹?›
+
+      you can do so by wrapping it in ‹literal(…)›:
+
+        expect literal(:empty?) do
+          :empty?
+        end
+
+      You almost never need to do this, as, for all but symbols, instances will
+      match accordingly as well.
 
   § Expectations on Behavior
 
       We expect our objects to be on their best behavior.  Lookout allows you
       to make sure that they are.
 
-      Mocks let use verify that a method is called in the way that we expect it
-      to be:
+      Reception expectations let us verify that a method is called in the way
+      that we expect it to be:
 
-        expect mock.to.receive.dial('2125551212').twice do |phone|
-          phone.dial('2125551212')
-          phone.dial('2125551212')
+        expect mock.to.receive.to_str(without_arguments){ '123' } do |o|
+          o.to_str
         end
 
       Here, ‹#mock› creates a mock object, an object that doesn’t respond to
       anything unless you tell it to.  We tell it to expect to receive a call
-      to ‹#dail› with ‹'2125551212'› as its formal argument, and we expect it
-      to receive it twice.  The mock object is then passed in to the block so
-      that the expectations placed upon it can be fulfilled.
+      to ‹#to_str› without arguments and have ‹#to_str› return ‹'123'› when
+      called.  The mock object is then passed in to the block so that the
+      expectations placed upon it can be fulfilled.
 
       Sometimes we only want to make sure that a method is called in the way
       that we expect it to be, but we don’t care if any other methods are
@@ -246,10 +314,8 @@
       method and returns a stub object that, again, expects any method, and
       thus fits the bill.
 
-        expect stub.to.receive.dial('2125551212').twice do |phone|
-          phone.dial('2125551212')
-          phone.hangup
-          phone.dial('2125551212')
+        expect stub.to.receive.to_str(without_arguments){ '123' } do |o|
+          o.to_str if o.convertable?
         end
 
       We can also use stubs without any expectations on them:
@@ -259,23 +325,30 @@
           s.a + s.b
         end
 
-      and we can stub out a specific method on an object:
+      Blocks are also allowed:
+
+        expect 3 do
+          s = stub(:a => proc{ |a, b| a + b })
+          s.a(1, 2)
+        end
+
+      If need be, we can stub out a specific method on an object:
 
         expect 'def' do
-          a = 'abc'
-          stub(a).to_str{ 'def' }
-          a.to_str
+          stub('abc', :to_str => 'def'){ |a| a.to_str }
         end
+
+      The stub is active during the execution of the block.
 
       You don’t have to use a mock object to verify that a method is called:
 
-        expect Object.to.receive.deal do
-          Object.deal
+        expect Object.to.receive.name do
+          Object.name
         end
 
       As you have figured out by now, the expected method call is set up by
       calling ‹#receive› after ‹#to›.  ‹#Receive› is followed by a call to the
-      method to expect with any expected arguments.  The body of the mocked
+      method to expect with any expected arguments.  The body of the expected
       method can be given as the block to the method.  Finally, an expected
       invocation count may follow the method.  Let’s look at this formal
       specification in more detail.
@@ -284,25 +357,27 @@
       introduce them by giving some examples:
 
         expect mock.to.receive.a do |m|
-          …
+          m.a
         end
 
       Here, the method ‹#a› must be called with any number of arguments.  It
       may be called any number of times, but it must be called at least once.
 
-      If a method must receive exactly one argument, you can use ‹arg›:
+      If a method must receive exactly one argument, you can use ‹Object›, as
+      the same matching rules apply for arguments as they do for state
+      expectations:
 
-        expect mock.to.receive.a(arg) do |m|
-          …
+        expect mock.to.receive.a(Object) do |m|
+          m.a 0
         end
 
       If a method must receive a specific argument, you can use that argument:
 
         expect mock.to.receive.a(1..2) do |m|
-          …
+          m.a 1
         end
 
-      The same matching rules apply for arguments as they do for state
+      Again, the same matching rules apply for arguments as they do for state
       expectations, so the previous example expects a call to ‹#a› with 1, 2,
       or the Range 1..2 as an argument on ‹m›.
 
@@ -310,48 +385,36 @@
       ‹without_arguments›:
 
         expect mock.to.receive.a(without_arguments) do |m|
-          …
+          m.a
         end
 
-      You can of course use both ‹arg› and actual arguments:
+      You can of course use both ‹Object› and actual arguments:
 
-        expect mock.to.receive.a(arg, 1, arg) do |m|
-          …
+        expect mock.to.receive.a(Object, 2, Object) do |m|
+          m.a nil, 2, '3'
         end
 
-      The body of the mock method may be given as the block.  Here, calling
+      The body of the expected method may be given as the block.  Here, calling
       ‹#a› on ‹m› will give the result ‹1›:
 
         expect mock.to.receive.a{ 1 } do |m|
-          …
+          raise 'not 1' unless m.a == 1
         end
 
       If no body has been given, the result will be a stub object.
 
-      There is a caveat here in that a block can’t yield in Ruby 1.8.  To work
-      around this deficiency you have to use the ‹#yield› method:
+      To take a block, grab a block parameter and ‹#call› it:
 
-        expect mock.to.receive.a.yield(1) do |m|
-          …
+        expect mock.to.receive.a{ |&b| b.call(1) } do |m|
+          j = 0
+          m.a{ |i| j = i }
+          raise 'not 1' unless j == 1
         end
 
-      Any number of values to yield upon successive calls may be given.  The
-      last value given will be used repeatedly when all preceding values have
-      been consumed.  It’s also important to know that values are splatted when
-      they are yielded.
+      To simulate an ‹#each›-like method, ‹#call› the block several times.
 
-      To simulate an ‹#each›-like method you can use ‹#each›.  The following
-      horrible example should give you an idea of how to use it.
-
-        expect Object.new.to.receive.each.each(1, 2, 3) do |o|
-          class << o
-            include Enumerable
-          end
-          o.inject{ |i, a| i + a }
-        end
-
-      Invocation count expectations can also be set if the default expectation
-      of “at least once” isn’t good enough.  The following expectations are
+      Invocation count expectations can be set if the default expectation of
+      “at least once” isn’t good enough.  The following expectations are
       possible
 
     •   ‹#at_most_once›
@@ -377,13 +440,16 @@
       return something that we can easily control.
 
         expect 6 do |m|
-          account = Account.new
-          stub(account).slips{ [1, 2, 3] }
-          account.total
-        end
+          stub(Class.new{
+                 def slips
+                   raise 'database not available'
+                 end
 
-      As with mock methods, if no body is given, the result will be a stub
-      object.
+                 def total
+                   slips.reduce(0){ |m, n| m.to_i + n.to_i }
+                 end
+               }.new, :slips => [1, 2, 3]){ |account| account.total }
+        end
 
       To make it easy to create objects with a set of stubbed methods there’s
       also a convenience method:
@@ -393,62 +459,89 @@
           s.a + s.b
         end
 
-      Please note that this makes it impossible to stub a method on a Hash, but
-      you shouldn’t be doing that anyway.  In fact, you should never mock or
-      stub methods on value objects.
+      This short-hand notation can also be used for the expected value:
+
+        expect stub(:a => 1, :b => 2).to.receive.a do |o|
+          o.a + o.b
+        end
+
+      and also works for mock objects:
+
+        expect mock(:a => 2, :b => 2).to.receive.a do |o|
+          o.a + o.b
+        end
+
+  § Utilities
+
+      Sometimes you need to override the value of a constant during the
+      execution of some code.  Use ‹#with_const› to do just that:
+
+        expect 'hello' do
+          with_const 'A::B::C', 'hello' do
+            A::B::C
+          end
+        end
+
+      Here, the constant ‹A::B::C› is set to ‹'hello'› during the execution of
+      the block.  None of the constants ‹A›, ‹B›, and ‹C› need to exist for
+      this to work.  If a costant doesn’t exist it’s created and set to a new,
+      empty, ‹Module›. The value of ‹A::B::C›, if any, is restored after the
+      block returns and any constants that didn’t previously exist are removed.
+
+      Another thing you often need to control in your tests is the value of
+      environment variables.  Depending on such global values is, of course,
+      not a good practice, but is often unavoidable when working with external
+      libraries.  ‹#With_env› allows you to override the value of environment
+      variables during the execution of a block by giving it a ‹Hash› of
+      key/value pairs where the key is the name of the environment variable and
+      the value is the value that it should have during the execution of that
+      block:
+
+        expect 'hello' do
+          with_env 'INTRO' => 'hello' do
+            ENV['INTRO']
+          end
+        end
+
+      Any overridden values are restored and any keys that weren’t previously a
+      part of the environment are removed when the block returns.
+
+      You may also want to override the value of a global temporarily:
+
+        expect 'hello' do
+          with_global :$stdout, StringIO.new do
+            print 'hello'
+            $stdout.string
+          end
+        end
+
+      You thus provide the name of the global and a value that it should take
+      during the execution of a block of code.  The block gets passed the
+      overriden value, should you need it:
+
+        expect true do
+          with_global :$stdout, StringIO.new do |overridden|
+            $stdout != overridden
+          end
+        end
 
 § Integration
 
-    Lookout can be used from Rake¹.  Simply include the following code in
-    your ‹Rakefile›:
+    Lookout can be used from Rake¹.  Simply install Lookout-Rake²:
 
-      require 'lookout/rake/tasks'
+      % gem install lookout-rake
+
+    and add the following code to your Rakefile
+
+      require 'lookout/rake-3.0'
 
       Lookout::Rake::Tasks::Test.new
 
-    If the ‹:default› task hasn’t been defined it will be set to depend on the
-    ‹:test› task.
-
-    As an added bonus you can use Lookout’s own gem² tasks:
-
-      Lookout::Rake::Tasks::Gem.new
-
-    This provides tasks to ‹build›, ‹check›, ‹install›, and ‹push› your gem.
-
-    To use Lookout together with Vim³, place ‹contrib/rakelookout.vim› in
-    ‹~/.vim/compiler› and add
-
-      compiler rakelookout
-
-    to ‹~/.vim/after/ftplugin/ruby.vim›.  Executing ‹:make› from inside Vim
-    will now run your tests and an errors and failures can be visited with
-    ‹:cnext›.  Execute ‹:help quickfix› for additional information.
-
-    Another useful addition to your ‹~/.vim/after/ftplugin/ruby.vim› file may
-    be
-
-      nnoremap <buffer> <silent> <Leader>M <Esc>:call <SID>run_test()<CR>
-      let b:undo_ftplugin .= ' | nunmap <buffer> <Leader>M'
-
-      function! s:run_test()
-        let test = expand('%')
-        let line = 'LINE=' . line('.')
-        if test =~ '^lib/'
-          let test = substitute(test, '^lib/', 'test/', '')
-          let line = ""
-        endif
-        execute 'make' 'TEST=' . shellescape(test) line
-      endfunction
-
-    Now, pressing ‹<Leader>M› will either run all tests for a given class, if
-    the implementation file is active, or run the test at or just before the
-    cursor, if the test file is active.  This is useful if you’re currently
-    receiving a lot of errors and/or failures and want to focus on those
-    associated with a specific class or on a specific test.
+    Make sure to read up on using Lookout-Rake for further benefits and
+    customization.
 
 ¹ Read more about Rake at http://rake.rubyforge.org/
-² Get information on RubyGems at http://rubygems.org/
-³ Find out more about Vim at http://www.vim.org/
+² Get information on Lookout-Rake at http://disu.se/software/lookout-rake/
 
 § Interface Design
 
@@ -479,15 +572,16 @@
     detail.
 
     Lookout only allows you to set one expectation per test.  If you’re testing
-    behavior with a mock, then only one method-invocation expectation can be
-    set.  If you’re testing state, then only one result can be verified.  It
-    may seem like this would cause unnecessary duplication between tests.
-    While this is certainly a possibility, when you actually begin to try to
-    avoid such duplication you find that you often do so by improving your
-    interfaces.  This kind of restriction tends to encourage the use of value
-    objects, which are easy to test, and more focused objects, which require
-    simpler tests, as they have less behavior to test, per method.  By keeping
-    your interfaces focused you’re also keeping your tests focused.
+    behavior with a reception expectation, then only one method-invocation
+    expectation can be set.  If you’re testing state, then only one result can
+    be verified.  It may seem like this would cause unnecessary duplication
+    between tests.  While this is certainly a possibility, when you actually
+    begin to try to avoid such duplication you find that you often do so by
+    improving your interfaces.  This kind of restriction tends to encourage the
+    use of value objects, which are easy to test, and more focused objects,
+    which require simpler tests, as they have less behavior to test, per
+    method.  By keeping your interfaces focused you’re also keeping your tests
+    focused.
 
     Keeping your tests focused improves, in itself, test isolation, but let’s
     look at something that hinders it: setup and teardown methods.  Most unit
@@ -503,7 +597,7 @@
     process of figuring out what state an object has in a given test.
 
     Teardown methods clean up after tests, perhaps by removing records from a
-    database or deleting files from the file-system.  
+    database or deleting files from the file-system.
 
     The duplication that setup methods and teardown methods hope to remove is
     better avoided by improving your interfaces.  This can be done by providing
@@ -524,7 +618,7 @@
     support for mocks in Lookout is provided through a set of test helper
     methods that make it easier to create mocks than it would have been without
     them.  Lookout-rack³ is another example of a library providing test helper
-    methods (well, one of method, actually) that are very useful in testing web
+    methods (well, one method, actually) that are very useful in testing web
     applications that use Rack⁴.
 
     A final point at which some unit test frameworks try to fragment tests
@@ -641,6 +735,43 @@
     like a value than ‹BeginEndStorage›.  (To reach object-oriented-programming
     Nirvana you must achieve complete value.)
 
+§ News
+
+  § 3.0.0
+
+      The ‹xml› expectation has been dropped.  It wasn’t documented, didn’t
+      suit very many use cases, and can be better implemented by an external
+      library.
+
+      The ‹arg› argument matcher for mock method arguments has been removed, as
+      it didn’t provide any benefit over using Object.
+
+      The ‹#yield› and ‹#each› methods on stub and mock methods have been
+      removed.  They were slightly weird and their use case can be implemented
+      using block parameters instead.
+
+      The ‹stub› method inside ‹expect› blocks now stubs out the methods during
+      the execution of a provided block instead of during the execution of the
+      whole except block.
+
+      When a mock method is called too many times, this is reported
+      immediately, with a full backtrace.  This makes it easier to pin down
+      what’s wrong with the code.
+
+      Query expectations were added.
+
+      Explicit query expectations were added.
+
+      Fluent boolean expectations, for example, ‹expect nil.to.be.nil?› have
+      been replaced by query expectations (‹expect :nil? do nil end›) and
+      explicit query expectations (‹expect result.to.be.nil? do nil end›).
+      This was done to discourage creating objects as the expected value and
+      creating objects that change during the course of the test.
+
+      The ‹literal› expectation was added.
+
+      Equality (‹#==›) is now checked before “caseity” (‹#===›) for modules,
+      ranges, and regular expressions to match the documentation.
 
 § Contributors
 
@@ -651,7 +782,6 @@
   •   Nikolai Weibull
 
 ¹ Add an issue to the Lookout issue tracker at https://github.com/now/lookout/issues
-
 
 § License
 

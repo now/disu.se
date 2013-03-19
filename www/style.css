@@ -47,11 +47,17 @@ input, textarea {
 }
 
 body {
+  color: black;
   background-color: #f6f6f6;
-  margin: 1em auto 0;
+  margin: .2em auto 0;
   width: 40em;
   font: 12pt sans-serif;
   /* line-height: 1.25; */
+}
+
+footer {
+  margin-top: 2em;
+  text-align: center;
 }
 
 article h1 {
@@ -71,84 +77,8 @@ section h1 {
 section section h1 {
   font-size: 133%;
   margin: 1.5em 0 .6em;
-  /*
-  font-variant: small-caps;
-  */
 }
 
-:link {
-  color: #d11;
-  /* text-decoration: underline; */
-}
-
-:visited {
-  color: #d55;
-  /* text-decoration: underline; */
-}
-
-:link:focus {
-  color: white;
-  background-color: #d11;
-}
-
-:visited:focus {
-  color: white;
-  background-color: #d55;
-}
-
-header {
-  position: relative;
-  height: 28pt;
-}
-
-header h1 {
-  position: absolute;
-  left: 0;
-  margin: 0;
-  font-size: 28pt;
-  letter-spacing: -0.08em;
-}
-
-a[rel="contents"] {
-  /* text-decoration: none; */
-}
-
-.dis {
-  color: black;
-}
-
-.use {
-  color: red;
-}
-
-#trail {
-/* This seems unnecessary: display: inline-block; */
-  position: absolute;
-  left: 7em;
-  line-height: 26pt;
-}
-
-#trail li {
-  display: inline;
-  padding: 0;
-}
-
-#trail li:before {
-  content: '/';
-  margin: 0 0.25em;
-}
-
-#search {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-/*
-p {
-  text-align: justify;
-}
-*/
 p {
   -moz-hyphens: auto;
   hyphens: auto;
@@ -156,22 +86,6 @@ p {
 
 p + p {
   margin-top: 1em;
-/*  text-indent: 1.5em; */
-}
-
-table {
-  margin: 1em 0;
-  border-collapse: separate;
-  border-spacing: 1.5em 0;
-}
-
-em {
-  font-style: oblique;
-}
-
-footer {
-  margin-top: 2em;
-  text-align: center;
 }
 
 pre {
@@ -179,8 +93,10 @@ pre {
   margin-left: 1em;
 }
 
-code {
-  font-family: monospace;
+table {
+  margin: 1em 0;
+  border-collapse: separate;
+  border-spacing: 1.5em 0;
 }
 
 dl, ol, ul {
@@ -208,24 +124,9 @@ ol {
   list-style-type: decimal;
 }
 
-nav ol {
-  list-style-type: none;
-  margin: 0;
-}
-
 ul {
   list-style-type: disc;
 }
-
-/*
-dt.name {
-  font-style: oblique;
-}
-
-dt.name sub.type {
-  font-style: normal;
-}
-*/
 
 dd {
   margin-left: 1em;
@@ -235,9 +136,85 @@ li {
   padding-left: 1em;
 }
 
+:link {
+  color: #d11;
+  /* text-decoration: underline; */
+}
+
+:visited {
+  color: #d55;
+  /* text-decoration: underline; */
+}
+
+:link:focus {
+  color: white;
+  background-color: #d11;
+}
+
+:visited:focus {
+  color: white;
+  background-color: #d55;
+}
+
+code {
+  font-family: monospace;
+}
+
+em {
+  font-style: oblique;
+}
+
+sub, sup {
+  font-size: 0.83em;
+}
+
 sub {
   vertical-align: sub;
-  font-size: 0.83em;
+}
+
+sup {
+  vertical-align: super;
+}
+
+header {
+  position: relative;
+}
+
+header h1 {
+  display: inline-block;
+  margin: 0;
+  font-size: 28pt;
+  letter-spacing: -0.08em;
+  line-height: .9;
+}
+
+.dis {
+  color: black;
+}
+
+.use {
+  color: red;
+}
+
+#trail ol {
+  list-style-type: none;
+  margin: 0;
+}
+
+#trail li {
+  float: left;
+  padding: 0;
+}
+
+#trail li:before {
+  content: '/';
+  margin: 0 0.2em;
+}
+
+#search {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 sub.type, sub.visibility {
@@ -247,11 +224,6 @@ sub.type, sub.visibility {
 
 sub.return + sub.visibility:before {
   content: ', ';
-}
-
-sup {
-  vertical-align: super;
-  font-size: 0.83em;
 }
 
 sup.type {
@@ -355,16 +327,3 @@ ul.tags > li:after {
 ul.tags > li:last-child:after {
   content: '';
 }
-
-.code-comment { color: #257325; }
-.code-constant { color: #951616; }
-.code-special { color: #f02626; }
-.code-identifier { color: #2f5a9b; }
-.code-statement { color: #766020; }
-.code-preproc { color: #93376e; }
-.code-type { color: #602f80; }
-.code-underlined { text-decoration: underline; }
-.code-number { color: #181818; }
-.code-error { color: #f0a500; }
-.code-todo { background-color: #f0a500; }
-.code-normal { color: #181818; }

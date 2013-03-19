@@ -3,13 +3,14 @@
 def inline_overloads(method)
   return [] unless method
   return [method] if method.tags(:overload).empty?
-  method.tags(:overload).map{ |e|
+  method.tags(:overload).map.with_index{ |e, i|
     n = method.dup
     unless e.signature.empty?
       n.signature = e.signature
       n.parameters = e.parameters.map{ |n, d| [n.to_s, d] }
     end
     n.docstring = e.docstring unless e.docstring.blank?
+    n[:overload_index] = i
     n
   }
 end
@@ -168,9 +169,10 @@ module YARD::Templates::Helpers::HtmlHelper
   def anchor_for(object)
     case object
     when CodeObjects::MethodObject
-      Operators.include?(object.name) ?
+      s = Operators.include?(object.name) ?
         '%s-%s-operator' % [Operators[object.name], object.scope] :
         '%s-%s-method' % [object.name.to_s.sub(/\?\z/, '-p').sub(/!\z/, '-bang'), object.scope]
+      (i = object[:overload_index]) ? '%s-%d' % [s, i + 1] : s
     when CodeObjects::ClassVariableObject
       '%s-class-variable' % object.name.to_s.sub('@@', '')
     when CodeObjects::Base
