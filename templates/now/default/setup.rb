@@ -2,15 +2,17 @@
 
 def inline_overloads(method)
   return [] unless method
-  return [method] if method.tags(:overload).empty?
-  method.tags(:overload).map.with_index{ |e, i|
+  overloads = method.tags(:overload)
+  return [method] if overloads.empty?
+  overloads.map.with_index{ |e, i|
     n = method.dup
     unless e.signature.empty?
       n.signature = e.signature
       n.parameters = e.parameters.map{ |n, d| [n.to_s, d] }
     end
     n.docstring = e.docstring unless e.docstring.blank?
-    n[:overload_index] = i
+    n.docstring.line_range ||= method.docstring.line_range
+    n[:overload_index] = i if overloads.length > 1
     n
   }
 end
