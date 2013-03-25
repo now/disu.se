@@ -88,7 +88,7 @@ p + p {
   margin-top: 1em;
 }
 
-pre {
+blockquote, pre {
   margin: 1em 0;
   margin-left: 1em;
 }
@@ -97,6 +97,11 @@ table {
   margin: 1em 0;
   border-collapse: separate;
   border-spacing: 1.5em 0;
+}
+
+th {
+  font-weight: bold;
+  text-align: center;
 }
 
 dl, ol, ul {
