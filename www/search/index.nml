@@ -1,0 +1,11 @@
+<nml xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <title>Search Results</title>
+  <xhtml:div xml:id="cse-search-results"/>
+  <xhtml:script>
+    var googleSearchIframeName = "cse-search-results";
+    var googleSearchFormName = "cse-search-box";
+    var googleSearchDomain = "www.google.com";
+    var googleSearchPath = "/cse";
+  </xhtml:script>
+  <xhtml:script src="http://www.google.com/afsonline/show_afs_search.js"/>
+</nml>

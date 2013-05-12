@@ -1,0 +1,5 @@
+@import "/style.css";
+
+#cse-search-results iframe {
+  width: 100%;
+}
