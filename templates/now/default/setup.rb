@@ -173,7 +173,7 @@ module YARD::Templates::Helpers::HtmlHelper
     when CodeObjects::MethodObject
       s = Operators.include?(object.name) ?
         '%s-%s-operator' % [Operators[object.name], object.scope] :
-        '%s-%s-method' % [object.name.to_s.sub(/\?\z/, '-p').sub(/!\z/, '-bang'), object.scope]
+        '%s-%s-method' % [object.name.to_s.sub(/\?\z/, '-p').sub(/!\z/, '-bang').sub(/=\z/, '-set'), object.scope]
       (i = object[:overload_index]) ? '%s-%d' % [s, i + 1] : s
     when CodeObjects::ClassVariableObject
       '%s-class-variable' % object.name.to_s.sub('@@', '')
