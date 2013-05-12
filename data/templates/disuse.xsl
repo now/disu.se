@@ -5,21 +5,22 @@
   xmlns:date="http://exslt.org/dates-and-times"
   xmlns:func="http://exslt.org/functions"
   xmlns:nml="http://disu.se/software/nml/xsl/1.0/html"
-  exclude-result-prefixes="nml"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  exclude-result-prefixes="nml xhtml"
   extension-element-prefixes="date func">
   <xsl:import href="http://disu.se/software/nml/xsl/1.0/html.xsl"/>
 
-  <xsl:param name="root"/>
+  <xsl:param name="removable-absolute"/>
+  <xsl:param name="root" select="'/www'"/>
   <xsl:param name="path"/>
-
-  <xsl:param name="stylesheet" select="concat($root, '/style.css')"/>
+  <xsl:param name="stylesheet" select="'/style.css'"/>
 
   <func:function name="nml:adjust-uri">
     <xsl:param name="uri" select="@uri"/>
 
     <xsl:choose>
-      <xsl:when test="substring($uri, 1, 1) = '/'">
-        <func:result select="concat($root, $uri)"/>
+      <xsl:when test="$removable-absolute and starts-with($uri, $removable-absolute)">
+        <func:result select="substring($uri, string-length($removable-absolute))"/>
       </xsl:when>
 
       <xsl:otherwise>
@@ -35,7 +36,7 @@
           <a
             rel="contents"
             title="Go back to disuse front page"
-            href="{$root}/">
+            href="/">
             <xsl:call-template name="html.body.header.title"/>
           </a>
         </xsl:when>
@@ -47,8 +48,11 @@
 
       <xsl:call-template name="html.body.header.trail"/>
 
-      <!-- TODO: required -->
-      <input id="search" name="search" type="search" placeholder="Search"/>
+      <form id="search" action="/search/">
+        <input name="cref" type="hidden" value="http://disu.se/search/cse.xml"/>
+        <input type="hidden" name="cof" value="FORID:9"/>
+        <input id="q" name="q" type="search" placeholder="Google™ Site Search" required="required"/>
+      </form>
     </header>
   </xsl:template>
 
@@ -78,7 +82,7 @@
 
   <!-- TODO: Clean this up to make it easier to understand. -->
   <xsl:template name="html.body.header.trail.part">
-    <xsl:param name="path" select="$root"/>
+    <xsl:param name="path"/>
     <xsl:param name="subpath"/>
 
     <xsl:variable name="directory" select="substring-before($subpath, '/')"/>
@@ -123,5 +127,19 @@
     <sup>
       <xsl:apply-templates select="@*|node()"/>
     </sup>
+  </xsl:template>
+
+  <xsl:template match="xhtml:*">
+    <xsl:element name="{local-name()}">
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="xhtml:*/@*">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="xhtml:*/@xml:*" priority="1">
+    <xsl:apply-imports/>
   </xsl:template>
 </xsl:stylesheet>
