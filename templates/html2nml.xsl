@@ -229,6 +229,13 @@
     </term>
   </xsl:template>
 
+  <xsl:template match="dd[node()[1][self::text() and string-length(normalize-space()) > 0]]">
+    <definition>
+      <xsl:apply-templates select="@*"/>
+      <p><xsl:apply-templates select="node()"/></p>
+    </definition>
+  </xsl:template>
+
   <xsl:template match="dd">
     <definition>
       <xsl:apply-templates select="@*|node()"/>
@@ -295,12 +302,6 @@
   <xsl:template match="pre[count(*) = 1 and code]">
     <code>
       <xsl:apply-templates select="@*|code/node()"/>
-    </code>
-  </xsl:template>
-
-  <xsl:template match="pre[@class='code']">
-    <code>
-      <xsl:apply-templates select="@*|node()"/>
     </code>
   </xsl:template>
 
