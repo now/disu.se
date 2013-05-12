@@ -73,7 +73,7 @@ def yield_optional?(method)
 end
 
 def params_documented?(method)
-  method.tags(:param).any?{ |e| (e.text and not e.text.empty?) or method.tags(:option).any?{ |o| o.name == e.name } }
+  method.tags(:param).any?{ |e| (e.text and not e.text.empty?) }
 end
 
 def yieldparams_documented?(method)
