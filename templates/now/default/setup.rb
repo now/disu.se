@@ -188,10 +188,15 @@ module YARD::Templates::Helpers::HtmlHelper
 
   def link_object(obj, otitle = nil, anchor = nil, relative = true)
     return otitle unless obj
+    overload_index = ''
     resolved = if String === obj and obj == 'super' and
                    object.respond_to? :overridden_method and object.overridden_method
                  object.overridden_method
                elsif String === obj
+                 if /(-\d+)$/ =~ obj
+                   overload_index = $1
+                   obj = $`
+                 end
                  Registry.resolve(object, obj, true, true)
                else
                  obj
@@ -212,8 +217,9 @@ module YARD::Templates::Helpers::HtmlHelper
               h(resolved.to_s)
             end
     return title if not serializer or CodeObjects::Proxy === resolved
+    overload_index = '-1' if overload_index.empty? and resolved.tags(:overload).length > 1
     link = url_for(resolved, anchor, relative)
-    link ? link_url(link, title, :title => h('%s (%s)' % [resolved.path, resolved.type])) : title
+    link ? link_url(link + overload_index, title, :title => h('%s (%s)' % [resolved.path, resolved.type])) : title
   end
 
   def method_name_h(name)

@@ -8,6 +8,10 @@ end
 def link_to_alias(object)
   target = object.namespace.aliases[object]
   method = object.namespace.child(target)
+  if i = object[:overload_index] and overload = method.tags(:overload)[i]
+    overload[:overload_index] = i
+    method = overload
+  end
   method ? linkify(method, method_name_h('#%s' % method.name)) : method_name_h('#%s' % target)
 end
 
