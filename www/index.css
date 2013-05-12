@@ -1,7 +1,27 @@
 @import "style.css";
+@import url(http://fonts.googleapis.com/css?family=Permanent+Marker);
 
 section section {
   display: inline-block;
   width: 49%;
   vertical-align: top;
+}
+
+.figure-right {
+  transform: rotate(2deg);
+  padding: .7em .7em 2em .7em;
+  box-shadow: .2em .2em .25em #999;
+  width: 8em;
+  height: 8em;
+}
+
+.figure-right img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.figure-right figcaption {
+  margin-top: .1em;
+  text-align: center;
+  font-family: "Permanent Marker", "Marker Felt", sans-serif;
 }
