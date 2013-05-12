@@ -25,13 +25,14 @@ end
 
 def now_format_block(method, show_types = !yieldparams_documented?(method))
   params = now_block_params(method)
+  optional = yield_optional?(method) ? '<sup class="type">?</sup>' : ''
   return '' if params.nil?
-  return '{ … }' if params.empty?
+  return '{ … }%s' % optional if params.empty?
   '{ |%s|%s … }%s' % [now_format_parameters_with_types(params, show_types ? method.tags(:yieldparam) : []),
                       (show_types and yieldreturn_only_for_type? method) ?
                         now_format_types_h(method.tag(:yieldreturn).types) :
                         '',
-                      yield_optional?(method) ? '<sup class="type">?</sup>' : '']
+                      optional]
 end
 
 def now_format_parameters_with_types(parameters, tags)
