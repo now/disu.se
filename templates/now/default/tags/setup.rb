@@ -48,7 +48,11 @@ end
 end
 
 def param
-  erb(:param) if params_documented? object
+  if params_documented? object
+    erb(:param)
+  elsif object.tags(:option).any?{ |e| e.pair.text }
+    erb(:option)
+  end
 end
 
 def yieldparam
