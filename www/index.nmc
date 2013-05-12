@@ -1,4 +1,8 @@
-                                    disu.se
+                                    Nikolai Weibull on Wax and Silicone
+
+  This is my¹ site.  There are many like it, but this one is mine.
+
+¹ Nikolai, see me.jpg (A picture of Nikolai Weibull)
 
 § Writings
 
@@ -20,20 +24,64 @@
 
     Here is some of the most useful software that I’ve written.
 
-  § Lookout²
+  § Inventory²
 
-      Lookout is a lightweight unit testing framework for Ruby.
+      Inventory keeps track of the contents of your Ruby³ projects.
 
-  § RbTags
+  § Inventory-Rake⁴
 
-      Generate TAGS files for Ruby.
+      Inventory-Rake provides Rake⁵ tasks for your Inventory.
 
-  § U
+  § Inventory-Rake-Tasks-YARD⁶
 
-      U is a UTF-8 library for Ruby 1.8 and 1.9.
+      Inventory-Rake-Tasks-YARD provides Rake tasks for YARD⁷ using your
+      Inventory.
 
-¹ Check out my software at /software/
-² Check out Lookout at /software/lookout/
+  § Lookout⁸
+
+      Lookout is a unit testing framework for Ruby that puts your results in
+      focus.
+
+  § Lookout-Rack¹⁴
+
+      Lookout-Rack provides easy interaction with Rack¹⁵ from Lookout.
+
+  § Lookout-Rake⁹
+
+      Lookout-Rake provides Rake tasks for testing using Lookout.
+
+  § U¹⁰
+
+      U extends Ruby’s Unicode support.
+
+  § Value¹¹
+
+      Value is a library for defining immutable value objects in Ruby.
+
+  § YARD-Heuristics¹²
+
+      YARD-Heuristics heuristically determines types of parameters and return
+      values for YARD documentation that doesn’t explicitly document it.
+
+  § YARD-Value¹³
+
+      YARD-Value provides YARD handlers for Value objects.
+
+¹  Software: /software/
+²  Inventory: /software/inventory/
+³  Ruby: http://ruby-lang.org/
+⁴  Inventory-Rake: /software/inventory-rake/
+⁵  Rake: http://rake.rubyforge.org/
+⁶  Inventory-Rake-Tasks-YARD: /software/inventory-rake-tasks-yard/
+⁷  YARD: http://yardoc.org/
+⁸  Lookout: /software/lookout/
+⁹  Lookout-Rake: /software/lookout-rake/
+¹⁰ U: /software/u/
+¹¹ Value: /software/value/
+¹² YARD-Heuristics: /software/yard-heuristics/
+¹³ YARD-Value: /software/yard-value/
+¹⁴ Lookout-Rack: /software/lookout-rack/
+¹⁵ Rack: http://rack.rubyforge.org/
 
 § About¹
 
@@ -51,9 +99,9 @@
 
       Ways of contacting and/or stalking me.
 
-  § Balance
+  § Disu.se
 
-      This is simply here to balance out the page.
+      A description of how this site is built.
 
 ¹ View information about me at /about/
 ² View my resume at /about/resume/

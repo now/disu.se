@@ -13,15 +13,31 @@ HTML = \
 	www/about/index.html \
 	www/about/resume/index.html \
 	www/index.html \
+	www/search/index.html \
 	www/software/index.html \
+	www/software/inventory/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/inventory/api -type f -name '*.nml')) \
+	www/software/inventory-rake/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake/api -type f -name '*.nml')) \
+	www/software/inventory-rake-tasks-yard/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake-tasks-yard/api -type f -name '*.nml')) \
 	www/software/lookout/index.html \
-	$(patsubst %.nml,%.html,$(shell find www/software/lookout/api -type f -name '*.nml'))
-#       $(patsubst %.nml,%.html,$(shell find www/software/u/api -type f -name '*.nml'))
+	$(patsubst %.nml,%.html,$(shell find www/software/lookout/api -type f -name '*.nml')) \
+	www/software/lookout-rack/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rack/api -type f -name '*.nml')) \
+	www/software/lookout-rake/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rake/api -type f -name '*.nml')) \
+	www/software/u/index.html \
+        $(patsubst %.nml,%.html,$(shell find www/software/u/api -type f -name '*.nml')) \
+	www/software/value/index.html \
+        $(patsubst %.nml,%.html,$(shell find www/software/value/api -type f -name '*.nml')) \
+	www/software/yard-heuristics/index.html \
+	www/software/yard-value/index.html
 
 JING = jing-20091111
 RESOLVER = xml-commons-resolver-1.2
 
-ROOT =
+REMOVABLE_ABSOLUTE = http://disu.se/
 
 DEFAULT_VERBOSITY = 0
 
@@ -32,7 +48,7 @@ _v_at_ = $(_v_at_$(DEFAULT_VERBOSITY))
 _v_at_0 = @
 _v_at_1 =
 
-all: $(HTML)
+all: $(HTML) $(PUSHABLE_HTML)
 
 tools/jing.jar tools/xercesImpl.jar:
 	curl -s http://jing-trang.googlecode.com/files/$(JING).zip > $@.tmp
@@ -66,52 +82,74 @@ V_NML2HTML_0 = @echo "  GEN-HTML " $@;
 	  -jar tools/jing.jar \
 	  -C $(XML_CATALOG_FILES) \
 	  -c data/nml.rnc $<
-	$(V_at)stylesheet=$(ROOT)/www/style.css; \
+	$(V_at)rm -f $@.tmp $@
+	$(V_at)stylesheet=/style.css; \
 	  local=$(basename $@).css; \
-	  test -e "$$local" && stylesheet=$(ROOT)/$$local; \
+	  test -e "$$local" && stylesheet=/`expr "$$local" : '[^/]*/\(.*\)'`; \
 	  $(XSLTPROC) \
 	    --xinclude \
-	    --stringparam root "$(ROOT)/www" \
-	    --stringparam path "$(ROOT)/$<" \
+	    --stringparam removable-absolute "$(REMOVABLE_ABSOLUTE)" \
+	    --stringparam root "/www" \
+	    --stringparam path "/$<" \
 	    --stringparam stylesheet "$$stylesheet" \
-	    --output "$@" \
+	    --output "$@.tmp" \
 	    "$(NML2HTML)" "$<"
+	$(V_at)chmod a-w $@.tmp
+	$(V_at)mv $@.tmp $@
 
 PROJECTS = $(HOME)/Projects
 
-LOOKOUT = $(PROJECTS)/lookout
+V_README = $(V_README_$(V))
+V_README_ = $(V_README_$(DEFAULT_VERBOSITY))
+V_README_0 = @echo "  README   " $@;
 
-www/software/lookout/index.nmc: $(LOOKOUT)/README
-	cp -p $< $@
+define PROJECT_README_template
+www/software/$(1)/index.nmc: $$(PROJECTS)/$(1)/README
+	$$(V_README)rm -f $$@.tmp $$@
+	$$(V_at)cp -p $$< $$@.tmp
+	$$(V_at)chmod a-w $$@.tmp
+	$$(V_at)mv $$@.tmp $$@
 
-YARD_TEMPLATE = $(PWD)/templates/now
+endef
 
-apis: lookout-api u-api
+define PROJECT_README
+$(eval $(call PROJECT_README_template,$(1)))
+endef
 
-LOOKOUT_API = $(PWD)/www/software/lookout/api
+V_API = $(V_API_$(V))
+V_API_ = $(V_API_$(DEFAULT_VERBOSITY))
+V_API_0 = @echo "  API      " $@;
 
-lookout-api:
-	cd "$(LOOKOUT)" && rake html OPTIONS="--output $(LOOKOUT_API)"
-	find "$(LOOKOUT_API)" -type f -name '*.html' -print0 | \
-	  parallel -0 '$(XSLTPROC) \
+define PROJECT_template
+$(call PROJECT_README_template,$(1))
+apis: $(1)-api
+$(1)-api:
+	$$(V_API)rm -rf "$$(PWD)/www/software/$(1)/api"
+	$$(V_at)cd "$$(PROJECTS)/$(1)" && rake html OPTIONS="--output $$(PWD)/www/software/$(1)/api"
+	$$(V_at)find "$$(PWD)/www/software/$(1)/api" -type f -name '*.html' -print0 | \
+	  parallel -0 '$$(XSLTPROC) \
 	    --stringparam path "{}" \
 	    --output "{.}.nml" \
 	    templates/html2nml.xsl \
 	    "{}" && \
 	      rm "{}"'
 
-U = $(HOME)/Projects/u
-U_API = $(PWD)/www/software/u/api
+endef
 
-# TODO: Might want to use --template instead of --template-path.
-u-api:
-	cd "$(U)" && rake yard \
-	  OPTS="--template-path $(YARD_TEMPLATE) \
-                --output $(U_API)"
-	rm -f "$(U_API)/file.README.html"
-	find "$(U_API)" -type f -name '*.html' -print0 | \
-	  parallel -0 '$(XSLTPROC) \
-	    --stringparam path "{}" \
-	    --output "{.}.nml" \
-	    templates/html2nml.xsl \
-	    "{}" && rm "{}"'
+define PROJECT
+$(eval $(call PROJECT_template,$(1)))
+endef
+
+$(call PROJECT,inventory)
+$(call PROJECT,inventory-rake)
+$(call PROJECT,inventory-rake-tasks-yard)
+$(call PROJECT,lookout)
+$(call PROJECT,lookout-rack)
+$(call PROJECT,lookout-rake)
+$(call PROJECT,u)
+$(call PROJECT,value)
+$(call PROJECT_README,yard-heuristics)
+$(call PROJECT_README,yard-value)
+
+push:
+	rsync -avz www/. disu.se:/var/www/disu.se/

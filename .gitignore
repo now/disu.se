@@ -2,5 +2,5 @@
 *.swp
 config.mk
 /tools/
-/www/software/u/api/
-/www/software/lookout/api/
+/www/software/*/api/
+/www/software/*/index.nmc

@@ -1,7 +1,139 @@
                                    Software
 
+  Currently, most of my time is spent at my day job and in my rather busy
+  private life.  Please motivate me to spend time on these pieces of software
+  by donating some of your money to this project.  Yeah, I realize that
+  requesting money to develop software is a bit, well, capitalistic of me.  But
+  please realize that I live in a capitalistic society and I need money to have
+  other people give me the things that I need to continue living under the
+  rules of said society.  So, if you feel that any of these pieces of software
+  has helped you out enough to warrant a reward, please PayPal a donation to
+  now@disu.se¹.  Thanks!  Your support won’t go unnoticed!
+
+¹ Send a donation:
+  https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=now%40disu%2ese&item_name=Nikolai%20Weibull%20Software%20Services
+
+§ Inventory¹
+
+    Inventory keeps track of the contents of your Ruby² projects.  Such an
+    inventory can be used to load the project, create gem specifications and
+    gems, run unit tests, compile extensions, and verify that the project’s
+    content is what you think it is.
+
+¹ See /software/inventory/
+² See http://ruby-lang.org/
+
+§ Inventory-Rake¹
+
+    Inventory-Rake provides Rake² tasks for your Inventory³.  This includes
+    tasks for cleaning up our project, compiling extensions, installing
+    dependencies, installing and uninstalling the project itself, and creating
+    and pushing distribution files to distribution points.
+
+¹ See /software/inventory-rake/
+² See http://rake.rubyforge.org/
+³ See /software/inventory/
+
+§ Inventory-Rake-Tasks-YARD¹
+
+    Inventory-Rake-Tasks-YARD provides Rake² tasks for YARD³ using your
+    Inventory⁴.
+
+¹ See /software/inventory-rake-tasks-yard/
+² See http://rake.rubyforge.org/
+³ See http://yardoc.org/
+⁴ See http://disu.se/software/inventory/
+
 § Lookout¹
 
-    Lookout is a lightweight unit testing framework for Ruby.
+    Lookout is a unit testing framework for Ruby that puts your results in
+    focus. Tests (expectations) are written as follows
 
-¹ Check out Lookout at /software/lookout/
+      expect 2 do
+        1 + 1
+      end
+
+      expect ArgumentError do
+        Integer('1 + 1')
+      end
+
+      expect Array do
+        [1, 2, 3].select{ |i| i % 2 == 0 }
+      end
+
+      expect [2, 4, 6] do
+        [1, 2, 3].map{ |i| i * 2 }
+      end
+
+    Lookout is designed to encourage – force, even – unit testing best
+    practices.
+
+¹ See /software/lookout/
+
+§ Lookout-Rack¹
+
+    Lookout-Rack provides easy interaction with Rack² from Lookout.  It
+    provides you with a session connected to your Rack application through
+    which you can make requests, check responses, follow redirects and set,
+    inspect, and clear cookies.
+
+¹ See /software/lookout-rack/
+² See http://rack.rubyforge.org/
+
+§ Lookout-Rake¹
+
+    Lookout-Rake provides Rake² tasks for testing using Lookout³.
+
+¹ See /software/lookout-rake/
+² See http://rake.rubyforge.org/
+³ See /software/lookout/
+
+§ U¹
+
+    U extends Ruby’s Unicode support.  It provides a string class called
+    U::String with an interface that mimics that of the String class in Ruby
+    2.0, but that can also be used from both Ruby 1.8.  This interface also has
+    more complete Unicode support and never modifies the receiver.  Thus, a
+    U::String is a value object.
+
+    U comes with complete and very accurate documentation.  The documentation
+    can realistically also be used as a reference to the Ruby String API and
+    may actually be preferable, as it’s a lot more explicit and complete than
+    the documentation that comes with Ruby.
+
+¹ See /software/u/
+
+§ Value¹
+
+    Value is a library for defining immutable value objects in Ruby.  A value
+    object is an object whose equality to other objects is determined by its
+    value, not its identity, think dates and amounts of money.  A value object
+    should also be immutable, as you don’t want the date “2013-04-22” itself to
+    change but the current date to change from “2013-04-22” to “2013-04-23”.
+    That is, you don’t want entries in a calendar for 2013-04-22 to move to
+    2013-04-23 simply because the current date changes from 2013-04-22 to
+    2013-04-23.
+
+¹ See /software/value/
+
+§ YARD-Heuristics¹
+
+    YARD-Heuristics heuristically determines types of parameters and return
+    values for YARD² documentation that doesn’t explicitly document it.  This
+    allows you to write documentation that isn’t adorned with “obvious” types,
+    but still get that information into the output.  It also lets you
+    nice-looking references to parameters and have them be marked up
+    appropriately in HTML output.
+
+¹ See /software/yard-heuristics/
+² See http://yardoc.org/
+
+§ YARD-Value¹
+
+    YARD-Value provides YARD² handlers for Value³ objects.  It’ll document
+    whether the Value is Comparable and what attributes are used in such
+    comparisons, its #initialize method, and its protected accessors.
+
+¹ See /software/yard-value/
+² See http://yardoc.org/
+³ See http://disu.se/software/value/
