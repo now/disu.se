@@ -1,0 +1,9 @@
+<dt>Options</dt>
+<dd>
+  <dl class="options">
+  <% object.tags(:option).each do |o| %>
+    <dt><%= h(o.pair.name) %><%= now_format_types_h(o.pair.types) %><%= o.pair.defaults ? now_format_default(o.pair.defaults.join(', ')) : '' %></dt>
+    <dd><%= htmlify(o.pair.text) %></dd>
+  <% end %>
+  </dl>
+</dd>
