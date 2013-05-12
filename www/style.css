@@ -48,7 +48,7 @@ input, textarea {
 
 body {
   color: black;
-  background-color: #f6f6f6;
+  background-color: white;
   margin: .2em auto 0;
   width: 40em;
   font: 12pt sans-serif;
@@ -143,7 +143,7 @@ li {
 
 :link {
   color: #d11;
-  /* text-decoration: underline; */
+  text-decoration: none;
 }
 
 :visited {
@@ -193,6 +193,10 @@ header h1 {
   line-height: .9;
 }
 
+header :link[rel="contents"]:focus h1 {
+  background-color: grey;
+}
+
 .dis {
   color: black;
 }
@@ -222,6 +226,10 @@ header h1 {
   top: 0;
 }
 
+.figure-right {
+  float: right;
+}
+
 sub.type, sub.visibility {
   vertical-align: -0.17em;
   font-size: 0.7em;
@@ -232,6 +240,10 @@ sub.return + sub.visibility:before {
 }
 
 sup.type {
+  vertical-align: 0.17em;
+}
+
+sub sup.type {
   vertical-align: 0.17em;
   font-size: 1em;
 }
@@ -245,7 +257,7 @@ h1:hover > .anchor, h1:hover > .source, dt:hover > .anchor {
   visibility: visible;
 }
 
-:target > .anchor {
+:target .anchor {
   visibility: visible;
 }
 
