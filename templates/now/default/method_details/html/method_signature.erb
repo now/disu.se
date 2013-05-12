@@ -1,4 +1,4 @@
-<section>
-  <h1 id="<%= urlencode(anchor_for(object)) %>" class="signature"><%= title_signature(object) %><a href="#<%= urlencode(anchor_for(object)) %>" title="View this page anchored to this <%= object.type %>" class="anchor">#</a><% if globals.source_code_url %><a href="<%= globals.source_code_url % [object.file, object.line] %>" title="View the source code of this <%= object.type %>" class="source">⚙</a><% end %></h1>
+<section id="<%= urlencode(anchor_for(object)) %>">
+  <h1 class="signature"><%= title_signature(object) %><a href="#<%= urlencode(anchor_for(object)) %>" title="View this page anchored to this <%= object.type %>" class="anchor">#</a><% if globals.source_code_url %><a href="<%= globals.source_code_url % [object.file, object.line] %>" title="View the source code of this <%= object.type %>" class="source">⚙</a><% end %></h1>
   <%= yieldall %>
 </section>
