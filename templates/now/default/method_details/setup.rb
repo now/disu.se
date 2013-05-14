@@ -17,7 +17,9 @@ end
 def now_format_args(method, show_types = !params_documented?(method))
   return '' if method.parameters.nil?
   parameters = (method.has_tag? :yield or method.has_tag? :yieldparam) ?
-    method.parameters.reject{ |e| e.first.start_with? '&' and not method.tags(:param).any?{ |t| t.name == e.first[1..-1] } } :
+    method.parameters.reject{ |e|
+      e.first.start_with? '&' and
+        not method.tags(:param).any?{ |t| (t.name == e.first[1..-1] and t.text and not t.text.empty?) } } :
     method.parameters
   return '' if parameters.empty?
   '(%s)' % now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
