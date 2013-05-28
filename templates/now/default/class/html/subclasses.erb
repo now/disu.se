@@ -1,9 +1,9 @@
 <dt>Subclasses</dt>
 <dd>
-  <dl class="children">
-  <% @subclasses.each do |name, child| %>
-    <dt><%= linkify(child, name) %></dt>
-    <dd><%= htmlify(child.docstring.summary) %></dd>
+  <dl class="subclasses">
+  <% @subclasses.each do |name, subclass| %>
+    <dt><%= linkify(subclass, name) %></dt>
+    <dd><%= htmlify(subclass.docstring.summary) %></dd>
   <% end %>
   </dl>
 </dd>

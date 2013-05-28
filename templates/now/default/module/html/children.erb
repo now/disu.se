@@ -1,9 +1,14 @@
 <section>
-  <h1><%= @name %></h1>
-  <dl class="<%= @name %>s">
+  <h1>Children</h1>
+  <dl>
   <% @children.each do |e| %>
+    <% if e.type == :constant %>
+    <dt id="<%= urlencode(anchor_for(e)) %>"<%= e.has_tag?(:deprecated) ? ' class="deprecated"' : '' %>><%= e.name %><a href="#<%= urlencode(anchor_for(e)) %>" class="anchor"> #</a></dt>
+    <dd><%= htmlify(e.docstring) %></dd>
+    <% else %>
     <dt><%= linkify(e, e.name) %></dt>
     <dd><%= htmlify(e.docstring.summary) %></dd>
+    <% end %>
   <% end %>
   </dl>
 </section>

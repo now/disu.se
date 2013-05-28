@@ -4,9 +4,7 @@ def init
   sections :header,
     :box_info, [:namespace, :ancestors, :extends, :includers],
     T('docstring'),
-    :modules,
-    :classes,
-    :constant_summary, [T('docstring')],
+    :childrn,
     :class_methods, [T('method_details')],
     :methodmissing, [T('method_details')],
     :instance_methods, [T('method_details')]
@@ -47,34 +45,12 @@ def mixed_into(object)
                                   }), object)
 end
 
-def modules
-  children('Modules', :module)
-end
-
-def classes
-  children('Classes', :class)
-end
-
-def children(name, type)
-  @name = name
-  @children = run_verifier(object.children.select{ |e| e.type == type }).sort_by{ |e| e.name.to_s }
+def childrn
+  @children =
+    run_verifier(object.children.select{ |e| e.type == :module or e.type == :class } +
+                 object.constants(:inherited => false, :included => false) + object.cvars).
+    sort_by{ |e| e.name.to_s }
   erb(:children) unless @children.empty?
-end
-
-def constant_summary
-  @constants = run_verifier(object.constants(:inherited => false, :included => false) + object.cvars)
-  @inherited_constants = inherited_x{ |e|
-    e.constants(:inherited => false, :included => false).
-      select{ |c| object.child(:type => :constant, :name => c.name).nil? }
-  }
-  erb(:constant_summary) unless @constants.empty? and @inherited_constants.empty?
-end
-
-def inherited_x
-  object.inheritance_tree(true)[1..-1].
-    reject{ |e| YARD::CodeObjects::Proxy === e }.
-    map{ |e| [e, run_verifier(yield(e)).sort_by{ |x| x.name.to_s }] }.
-    reject{ |_, e| e.empty? }
 end
 
 def methodmissing
