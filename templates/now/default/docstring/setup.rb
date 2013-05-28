@@ -12,7 +12,7 @@ def link_to_alias(object)
     overload[:overload_index] = i
     method = overload
   end
-  method ? linkify(method, method_name_h('#%s' % method.name)) : method_name_h('#%s' % target)
+  method ? linkify(method, method_name_h('%s%s' % [method.sep, method.name])) : method_name_h('%s%s' % [object.sep, target])
 end
 
 def text_from_return(object)
