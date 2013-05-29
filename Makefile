@@ -15,6 +15,10 @@ HTML = \
 	www/index.html \
 	www/search/index.html \
 	www/software/index.html \
+	www/software/ame-1.0/index.html \
+	www/software/ame-1.0/api/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/ame-1.0/api/developer -type f -name '*.nml')) \
+	$(patsubst %.nml,%.html,$(shell find www/software/ame-1.0/api/user -type f -name '*.nml')) \
 	www/software/inventory/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/inventory/api -type f -name '*.nml')) \
 	www/software/inventory-rake/index.html \
@@ -120,13 +124,12 @@ V_API = $(V_API_$(V))
 V_API_ = $(V_API_$(DEFAULT_VERBOSITY))
 V_API_0 = @echo "  API      " $@;
 
-define PROJECT_template
-$(call PROJECT_README_template,$(1))
-apis: $(1)-api
-$(1)-api:
-	$$(V_API)rm -rf "$$(PWD)/www/software/$(1)/api"
-	$$(V_at)cd "$$(PROJECTS)/$(1)" && rake html OPTIONS="--output $$(PWD)/www/software/$(1)/api"
-	$$(V_at)find "$$(PWD)/www/software/$(1)/api" -type f -name '*.html' -print0 | \
+define PROJECT_API_template
+apis: $(1)$(if $(2),-$(2))-api
+$(1)$(if $(2),-$(2))-api:
+	$$(V_API)rm -rf "$$(PWD)/www/software/$(1)/api$(if $(2),/$(2))"
+	$$(V_at)cd "$$(PROJECTS)/$(1)" && rake html OPTIONS="--output $$(PWD)/www/software/$(1)/api$(if $(2),/$(2))$(if $(3), $(3))"
+	$$(V_at)find "$$(PWD)/www/software/$(1)/api$(if $(2),/$(2))" -type f -name '*.html' -print0 | \
 	  parallel -0 '$$(XSLTPROC) \
 	    --stringparam path "{}" \
 	    --output "{.}.nml" \
@@ -136,10 +139,22 @@ $(1)-api:
 
 endef
 
+define PROJECT_API
+$(eval $(call PROJECT_API_template,$(1),$(2),$(3)))
+endef
+
+define PROJECT_template
+$(call PROJECT_README,$(1))
+$(call PROJECT_API,$(1))
+endef
+
 define PROJECT
 $(eval $(call PROJECT_template,$(1)))
 endef
 
+$(call PROJECT_README,ame-1.0)
+$(call PROJECT_API,ame-1.0,developer,--api developer/user --api developer --no-api)
+$(call PROJECT_API,ame-1.0,user,--api developer/user --api user --no-api)
 $(call PROJECT,inventory)
 $(call PROJECT,inventory-rake)
 $(call PROJECT,inventory-rake-tasks-yard)

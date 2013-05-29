@@ -13,15 +13,28 @@
 ¹ Send a donation:
   https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=now%40disu%2ese&item_name=Nikolai%20Weibull%20Software%20Services
 
+§ Ame¹
+
+    Ame provides a simple command-line interface API for Ruby².  It can be used
+    to provide both simple interfaces like that of ‹rm›³ and complex ones like
+    that of ‹git›⁴.  It uses Ruby’s own classes, methods, and argument lists to
+    provide an interface that is both simple to use from the command-line side
+    and from the Ruby side.  The provided command-line interface is flexible
+    and follows commond standards for command-line processing.
+
+¹ See /software/ame-1.0/
+² See http://ruby-lang.org/
+³ See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/rm.html
+⁴ See http://git-scm.com/docs/
+
 § Inventory¹
 
-    Inventory keeps track of the contents of your Ruby² projects.  Such an
+    Inventory keeps track of the contents of your Ruby projects.  Such an
     inventory can be used to load the project, create gem specifications and
     gems, run unit tests, compile extensions, and verify that the project’s
     content is what you think it is.
 
 ¹ See /software/inventory/
-² See http://ruby-lang.org/
 
 § Inventory-Rake¹
 
