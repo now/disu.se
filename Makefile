@@ -12,6 +12,7 @@ HTML = \
 	www/about/contact/index.html \
 	www/about/index.html \
 	www/about/resume/index.html \
+	www/articles/piping-quickfix-lists-to-vim/index.html \
 	www/index.html \
 	www/search/index.html \
 	www/software/index.html \

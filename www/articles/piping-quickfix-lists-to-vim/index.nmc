@@ -1,0 +1,74 @@
+                         Piping Quickfix Lists to Vim
+
+  Quite often you’ll find yourself with a list of files and lines in those
+  files that you want to go over, say from a ‹grep(1)›¹ invocation.  Here’s a
+  quick way of sending that list to Vim².  Begin by creating a file called
+  ‹quickfix.vim› in your ‹~/.vim/macros› directory with the following content:
+
+    " Make sure Vim acts as we expect it to.
+    let s:cpo_save = &cpo
+    set cpo&vim
+
+    " Convert the current buffer’s content into a location list.
+    let list = []
+    let i = 1
+    let n = line('$')
+    while i <= n
+      let matches = matchlist(getline(i), '^\([^:]\+\):\(\d\+\):\(.*\)')aaaaaaaaaaaa
+      if !empty(matches)
+        call add(list, { 'filename': matches[1],
+                       \ 'lnum': str2nr(matches[2]),
+                       \ 'text': matches[3] })
+      endif
+      let i += 1
+    endwhile
+    call setloclist(0, list)
+
+    " Now delete the input buffer and jump to first location.
+    bdelete!
+    lwindow
+    ll
+
+    " Restore Vim to user’s settings.
+    let &cpo = s:cpo_save
+    unlet s:cpo_save
+
+  Now create a filed called ‹qf› in your ‹PATH› with the following content:
+
+    #! /bin/sh
+
+    exec vim -c 'so ~/.vim/macros/quickfix.vim' -
+
+  And make it executable³:
+
+    % chmod a+x qf
+
+  Now you’ll be able to invoke ‹grep(1)› and similar utilities in the following
+  manner⁴:
+
+    % grep stuff * | qf
+
+  and your grep matches will be presented to you in Vim.  Move through the
+  matches with ‹:lnext›⁵ and ‹:lprevious›⁶.  I have the following bindings in
+  my ‹.vimrc›⁷ to make this simpler:
+
+    noremap <silent> <Leader>p :<C-U>execute v:count .
+            \ (empty(getloclist(0)) ? 'c' : 'l') . 'previous'<CR>
+    noremap <silent> <Leader>n :<C-U>execute v:count .
+            \ (empty(getloclist(0)) ? 'c' : 'l') . 'next'<CR>
+    noremap <silent> <Leader>P :<C-U>execute v:count .
+            \ (empty(getloclist(0)) ? 'c' : 'l') . 'pfile'<CR>
+    noremap <silent> <Leader>N :<C-U>execute v:count .
+            \ (empty(getloclist(0)) ? 'c' : 'l') . 'nfile'<CR>
+
+  This makes it so that either ‹:cprevious›⁸ or ‹:lprevious› (and so on) will
+  be used, depending on whether the current window has a location list or not.
+
+¹ Grep: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html
+² Vim: http://www.vim.org/
+³ Chmod: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/chmod.html
+⁴ Pipeline: http://en.wikipedia.org/wiki/Pipeline_(Unix)
+⁵ Lnext: http://vimdoc.sourceforge.net/htmldoc/quickfix.html#:lnext
+⁶ Lprevious: http://vimdoc.sourceforge.net/htmldoc/quickfix.html#:lprevious
+⁷ Vimrc: http://vimdoc.sourceforge.net/htmldoc/starting.html#vimrc
+⁸ Cnext: http://vimdoc.sourceforge.net/htmldoc/quickfix.html#:cnext
