@@ -14,7 +14,7 @@
     let i = 1
     let n = line('$')
     while i <= n
-      let matches = matchlist(getline(i), '^\([^:]\+\):\(\d\+\):\(.*\)')aaaaaaaaaaaa
+      let matches = matchlist(getline(i), '^\([^:]\+\):\(\d\+\):\(.*\)')
       if !empty(matches)
         call add(list, { 'filename': matches[1],
                        \ 'lnum': str2nr(matches[2]),
