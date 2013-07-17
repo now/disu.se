@@ -14,6 +14,7 @@ HTML = \
 	www/about/resume/index.html \
 	www/articles/piping-quickfix-lists-to-vim/index.html \
 	www/index.html \
+	www/licenses/umd/index.html \
 	www/search/index.html \
 	www/software/index.html \
 	www/software/ame-1.0/index.html \
@@ -56,6 +57,7 @@ _v_at_1 =
 all: $(HTML) $(PUSHABLE_HTML)
 
 tools/jing.jar tools/xercesImpl.jar:
+	mkdir -p tools
 	curl -s http://jing-trang.googlecode.com/files/$(JING).zip > $@.tmp
 	unzip -p $@.tmp $(JING)/bin/$(notdir $@) > $@
 	rm $@.tmp
