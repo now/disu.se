@@ -84,7 +84,7 @@ p {
   hyphens: auto;
 }
 
-p + p {
+p + p, li + li {
   margin-top: 1em;
 }
 

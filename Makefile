@@ -15,6 +15,8 @@ HTML = \
 	www/articles/piping-quickfix-lists-to-vim/index.html \
 	www/index.html \
 	www/licenses/umd/index.html \
+	www/licenses/gpl-3.0/index.html \
+	www/licenses/lgpl-3.0/index.html \
 	www/search/index.html \
 	www/software/index.html \
 	www/software/ame-1.0/index.html \
@@ -93,6 +95,9 @@ V_NML2HTML_0 = @echo "  GEN-HTML " $@;
 	$(V_at)stylesheet=/style.css; \
 	  local=$(basename $@).css; \
 	  test -e "$$local" && stylesheet=/`expr "$$local" : '[^/]*/\(.*\)'`; \
+          xstylesheet="$(NML2HTML)"; \
+	  local=$(basename $@).xsl; \
+	  test -e "$$local" && xstylesheet=$$local; \
 	  $(XSLTPROC) \
 	    --xinclude \
 	    --stringparam removable-absolute "$(REMOVABLE_ABSOLUTE)" \
@@ -100,7 +105,7 @@ V_NML2HTML_0 = @echo "  GEN-HTML " $@;
 	    --stringparam path "/$<" \
 	    --stringparam stylesheet "$$stylesheet" \
 	    --output "$@.tmp" \
-	    "$(NML2HTML)" "$<"
+	    "$$xstylesheet" "$<"
 	$(V_at)chmod a-w $@.tmp
 	$(V_at)mv $@.tmp $@
 

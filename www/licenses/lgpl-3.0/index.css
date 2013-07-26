@@ -1,0 +1,14 @@
+@import "../gpl-3.0/index.css";
+
+section h1 {
+  position: relative;
+}
+
+section h1:before {
+  position: absolute;
+  left: -4em;
+  width: 3em;
+  text-align: right;
+  content: counter(section-counter) ".";
+  counter-increment: section-counter;
+}
