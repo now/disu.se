@@ -1,6 +1,5 @@
 *.html
-*.swp
 config.mk
 /tools/
 /www/software/*/api/
-/www/software/*/index.nmc
+/www/software/*/index.nmt

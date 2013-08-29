@@ -77,7 +77,7 @@ V_NMT2NML_0 = @echo "  GEN-NML  " $@;
 
 %.nml: %.nmt
 	$(V_NMT2NML)rm -f $@ $@.tmp
-	$(V_at)$(NMT) $< > $@.tmp
+	$(V_at)$(NMC) $< > $@.tmp
 	$(V_at)chmod a-w $@.tmp
 	$(V_at)mv $@.tmp $@
 
@@ -118,6 +118,7 @@ V_README_0 = @echo "  README   " $@;
 define PROJECT_README_template
 www/software/$(1)/index.nmt: $$(PROJECTS)/$(1)/README
 	$$(V_README)rm -f $$@.tmp $$@
+	$$(V_at)mkdir -p $$(dir $$@)
 	$$(V_at)cp -p $$< $$@.tmp
 	$$(V_at)chmod a-w $$@.tmp
 	$$(V_at)mv $$@.tmp $$@
