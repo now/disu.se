@@ -84,8 +84,12 @@ p {
   hyphens: auto;
 }
 
-p + p, li + li {
+p + p {
   margin-top: 1em;
+}
+
+li + li {
+  margin-top: .5em;
 }
 
 blockquote, pre {
