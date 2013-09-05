@@ -56,7 +56,9 @@ _v_at_ = $(_v_at_$(DEFAULT_VERBOSITY))
 _v_at_0 = @
 _v_at_1 =
 
-all: $(HTML) $(PUSHABLE_HTML)
+all: templates/now/default/fulldoc/html/css/style.css
+
+all: $(HTML)
 
 tools/jing.jar tools/xercesImpl.jar:
 	mkdir -p tools
@@ -70,6 +72,16 @@ tools/resolver.jar:
 	$(MD5SUM) $@.tmp | cut -d ' ' -f 1 | cmp $@.md5
 	unzip -p $@.tmp $(RESOLVER)/$(notdir $@) > $@
 	rm $@.md5 $@.tmp
+
+V_CP = $(V_CP_$(V))
+V_CP_ = $(V_CP_$(DEFAULT_VERBOSITY))
+V_CP_0 = @echo "  CP  " $@;
+
+templates/now/default/fulldoc/html/css/style.css: www/style.css
+	$(V_CP)rm -f $@ $@.tmp
+	$(V_at)cp $< $@.tmp
+	$(V_at)chmod a-w $@.tmp
+	$(V_at)mv $@.tmp $@
 
 V_NMT2NML = $(V_NMT2NML_$(V))
 V_NMT2NML_ = $(V_NMT2NML_$(DEFAULT_VERBOSITY))

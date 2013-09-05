@@ -1,1 +1,350 @@
-../../../../../../www/style.css
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+input, textarea {
+  font-size: 100%;
+  font: inherit;
+}
+
+body {
+  color: black;
+  background-color: white;
+  margin: .2em auto 0;
+  width: 40em;
+  font: 12pt sans-serif;
+  /* line-height: 1.25; */
+}
+
+footer {
+  margin-top: 2em;
+  text-align: center;
+}
+
+article h1 {
+  font-size: 200%;
+  /* TODO: Need more space above. */
+  margin: 1.27em 0 0.77em;
+  text-align: center;
+}
+
+section h1 {
+  font-size: 183%;
+  /* TODO: Need more space above. */
+  margin: 1.27em 0 0.77em;
+  text-align: left;
+}
+
+section section h1 {
+  font-size: 133%;
+  margin: 1.5em 0 .6em;
+}
+
+p {
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+
+p + p {
+  margin-top: 1em;
+}
+
+li + li {
+  margin-top: .5em;
+}
+
+blockquote, pre {
+  margin: 1em 0;
+  margin-left: 1em;
+}
+
+table {
+  margin: 1em 0;
+  border-collapse: separate;
+  border-spacing: 1.5em 0;
+}
+
+th {
+  font-weight: bold;
+  text-align: center;
+}
+
+dl, ol, ul {
+  margin: 1em 0;
+}
+
+/* TODO: Alternative -0.5em and have li add 2em. */
+ol, ul {
+  margin-left: -1em;
+}
+
+dd ol, dd ul {
+  margin-left: 0;
+}
+
+dd dl {
+  margin: 0;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+  margin-left: 1em;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+dd {
+  margin-left: 1em;
+}
+
+li {
+  padding-left: 1em;
+}
+
+:link {
+  color: #d11;
+  text-decoration: none;
+}
+
+:visited {
+  color: #d55;
+  /* text-decoration: underline; */
+}
+
+:link:focus {
+  color: white;
+  background-color: #d11;
+}
+
+:visited:focus {
+  color: white;
+  background-color: #d55;
+}
+
+code {
+  font-family: monospace;
+}
+
+em {
+  font-style: oblique;
+}
+
+sub, sup {
+  font-size: 0.83em;
+}
+
+sub {
+  vertical-align: sub;
+}
+
+sup {
+  vertical-align: super;
+}
+
+header {
+  position: relative;
+}
+
+header h1 {
+  display: inline-block;
+  margin: 0;
+  font-size: 28pt;
+  letter-spacing: -0.08em;
+  line-height: .9;
+}
+
+header :link[rel="contents"]:focus h1 {
+  background-color: grey;
+}
+
+.dis {
+  color: black;
+}
+
+.use {
+  color: red;
+}
+
+#trail ol {
+  list-style-type: none;
+  margin: 0;
+}
+
+#trail li {
+  float: left;
+  padding: 0;
+}
+
+#trail li:before {
+  content: '/';
+  margin: 0 0.2em;
+}
+
+#search {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.figure-right {
+  float: right;
+}
+
+sub.type, sub.visibility {
+  vertical-align: -0.17em;
+  font-size: 0.7em;
+}
+
+sub.return + sub.visibility:before {
+  content: ', ';
+}
+
+sup.type {
+  vertical-align: 0.17em;
+}
+
+sub sup.type {
+  vertical-align: 0.17em;
+  font-size: 1em;
+}
+
+.anchor, .source {
+  visibility: hidden;
+  margin-left: 0.5em;
+}
+
+h1:hover > .anchor, h1:hover > .source, dt:hover > .anchor {
+  visibility: visible;
+}
+
+:target .anchor {
+  visibility: visible;
+}
+
+ol.modules, ol.modules > li, ol.modules > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ol.modules > li:first-child:before {
+  content: '';
+}
+
+ol.modules > li:before {
+  content: ' < ';
+  font-size: smaller;
+  vertical-align: text-top;
+}
+
+p.inherited {
+  display: inline;
+}
+
+ul.inherited, ul.inherited > li, ul.inherited > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.inherited > li:first-child:before {
+  content: ' (';
+}
+
+ul.inherited > li:after {
+  content: ', ';
+}
+
+ul.inherited > li:last-child:after {
+  content: ')';
+}
+
+ul.inherited.class > li:first-child:before {
+  content: ' [';
+}
+
+ul.inherited.class > li:last-child:after {
+  content: ']';
+}
+
+ul.method-summary {
+  text-align: center;
+  margin: 0;
+}
+
+ul.method-summary > li, ul.method-summary > li > p {
+  display: inline;
+  padding: 0;
+  -moz-hyphens: manual;
+  hyphens: manual;
+}
+
+ul.method-summary > li:first-child {
+  margin-right: 0.5em;
+}
+
+ul.method-summary > li {
+  margin: 0 .5em;
+}
+
+ul.method-summary > li:last-child {
+  margin-left: 0.5em;
+}
+
+ul.tags, ul.tags > li, ul.tags > li > p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tags > li:after {
+  content: ', ';
+}
+
+ul.tags > li:last-child:after {
+  content: '';
+}
