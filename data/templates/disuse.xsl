@@ -29,6 +29,10 @@
     </xsl:choose>
   </func:function>
 
+  <xsl:template name="html.head.links">
+    <link rel="icon" type="image/png" href="/disuse-16.png"/>
+  </xsl:template>
+
   <xsl:template name="html.body.header">
     <header>
       <xsl:choose>
