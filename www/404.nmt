@@ -1,0 +1,18 @@
+                      Unknown Page (404 Not Found)
+
+  The page you’re looking for isn’t, possibly never was, and probably never
+  will be, available – at least not at the location you’ve specified.  Here’s
+  where you can go from here:
+
+•   Check the URL to make sure that there aren’t any typos
+•   Begin at {the main page}¹ and try to find the page your loking for from
+    there
+•   Use the {search field}² at the top of this page to look for your page
+
+  If you feel that the page you’re looking for should be available, please
+  {e-mail us}³, telling us the URL you were looking for and what you were
+  expecting to be at that URL.
+
+¹ Go back to the main page at /
+² Access the search field at javascript:document.getElementById('q').focus()
+³ E-mail us at mailto:now@disu.se

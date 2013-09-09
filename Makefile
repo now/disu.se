@@ -9,6 +9,7 @@ XSLTPROC = xsltproc
 NML2HTML = data/templates/disuse.xsl
 
 HTML = \
+	www/404.html \
 	www/about/contact/index.html \
 	www/about/index.html \
 	www/about/resume/index.html \
