@@ -217,6 +217,7 @@ header :link[rel="contents"]:focus h1 {
 #trail li {
   float: left;
   padding: 0;
+  margin: 0;
 }
 
 #trail li:before {
