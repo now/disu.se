@@ -189,4 +189,4 @@ $(call PROJECT_README,yard-heuristics)
 $(call PROJECT_README,yard-value)
 
 push:
-	rsync -avz www/. disu.se:/var/www/disu.se/
+	rsync -avz --delete www/. disu.se:/var/www/disu.se/
