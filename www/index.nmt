@@ -79,12 +79,12 @@
 ⁶  Inventory-Rake-Tasks-YARD: /software/inventory-rake-tasks-yard-1.0/
 ⁷  YARD: http://yardoc.org/
 ⁸  Lookout: /software/lookout-1.0/
-⁹  Lookout-Rake: /software/lookout-rake/
+⁹  Lookout-Rake: /software/lookout-rake-3.0/
 ¹⁰ U: /software/u/
 ¹¹ Value: /software/value-1.0/
 ¹² YARD-Heuristics: /software/yard-heuristics-1.0/
 ¹³ YARD-Value: /software/yard-value-1.0/
-¹⁴ Lookout-Rack: /software/lookout-rack/
+¹⁴ Lookout-Rack: /software/lookout-rack-1.0/
 ¹⁵ Rack: http://rack.rubyforge.org/
 ¹⁶ Ame: /software/ame-1.0/
 

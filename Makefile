@@ -31,10 +31,10 @@ HTML = \
 	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake-tasks-yard-1.0/api -type f -name '*.nml')) \
 	www/software/lookout-3.0/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/lookout-3.0/api -type f -name '*.nml')) \
-	www/software/lookout-rack/index.html \
-	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rack/api -type f -name '*.nml')) \
-	www/software/lookout-rake/index.html \
-	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rake/api -type f -name '*.nml')) \
+	www/software/lookout-rack-1.0/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rack-1.0/api -type f -name '*.nml')) \
+	www/software/lookout-rake-3.0/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rake-3.0/api -type f -name '*.nml')) \
 	www/software/u/index.html \
         $(patsubst %.nml,%.html,$(shell find www/software/u/api -type f -name '*.nml')) \
 	www/software/value-1.0/index.html \
@@ -180,8 +180,8 @@ $(call PROJECT,inventory-1.0)
 $(call PROJECT,inventory-rake-1.0)
 $(call PROJECT,inventory-rake-tasks-yard-1.0)
 $(call PROJECT,lookout-3.0)
-$(call PROJECT,lookout-rack)
-$(call PROJECT,lookout-rake)
+$(call PROJECT,lookout-rack-1.0)
+$(call PROJECT,lookout-rake-3.0)
 $(call PROJECT,u)
 $(call PROJECT,value-1.0)
 $(call PROJECT_README,yard-heuristics-1.0)

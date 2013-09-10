@@ -90,14 +90,14 @@
     which you can make requests, check responses, follow redirects and set,
     inspect, and clear cookies.
 
-¹ See /software/lookout-rack/
+¹ See /software/lookout-rack-1.0/
 ² See http://rack.rubyforge.org/
 
 § Lookout-Rake¹
 
     Lookout-Rake provides Rake² tasks for testing using Lookout³.
 
-¹ See /software/lookout-rake/
+¹ See /software/lookout-rake-3.0/
 ² See http://rake.rubyforge.org/
 ³ See /software/lookout-3.0/
 
