@@ -145,11 +145,17 @@ V_API = $(V_API_$(V))
 V_API_ = $(V_API_$(DEFAULT_VERBOSITY))
 V_API_0 = @echo "  API      " $@;
 
+RAKE = rake
+
+V_RAKE = $(V_RAKE_$(V))
+V_RAKE_ = $(V_RAKE_$(DEFAULT_VERBOSITY))
+V_RAKE_0 = $(RAKE) -s
+
 define PROJECT_API_template
 apis: $(1)$(if $(2),-$(2))-api
 $(1)$(if $(2),-$(2))-api:
 	$$(V_API)rm -rf "$$(PWD)/www/software/$(1)/api$(if $(2),/$(2))"
-	$$(V_at)cd "$$(PROJECTS)/$(1)" && rake html OPTIONS="--output $$(PWD)/www/software/$(1)/api$(if $(2),/$(2))$(if $(3), $(3))"
+	$$(V_at)cd "$$(PROJECTS)/$(1)" && $$(V_RAKE) html OPTIONS="--output $$(PWD)/www/software/$(1)/api$(if $(2),/$(2))$(if $(3), $(3))"
 	$$(V_at)find "$$(PWD)/www/software/$(1)/api$(if $(2),/$(2))" -type f -name '*.html' -print0 | \
 	  parallel -0 '$$(XSLTPROC) \
 	    --stringparam path "{}" \
