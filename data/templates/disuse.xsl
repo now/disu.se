@@ -34,7 +34,7 @@
   </xsl:template>
 
   <xsl:template name="html.body.header">
-    <header>
+    <header role="banner">
       <xsl:choose>
         <xsl:when test="$path != concat($root, '/index.nml')">
           <a
@@ -74,7 +74,7 @@
                         string-length('/index.nml'))"/>
 
     <xsl:if test="contains($subpath, '/')">
-      <nav id="trail">
+      <nav id="trail" role="navigation">
         <ol>
           <xsl:call-template name="html.body.header.trail.part">
             <xsl:with-param name="subpath" select="$subpath"/>
@@ -114,7 +114,7 @@
   </xsl:template>
 
   <xsl:template name="html.body.footer">
-    <footer>
+    <footer role="contentinfo">
       <xsl:text>© </xsl:text>
       <xsl:value-of select="date:year()"/>
       <xsl:text> Nikolai Weibull</xsl:text>
