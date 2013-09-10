@@ -55,6 +55,7 @@
       <form id="search" action="/search/">
         <input name="cref" type="hidden" value="http://disu.se/search/cse.xml"/>
         <input type="hidden" name="cof" value="FORID:9"/>
+        <label for="q">Search</label>
         <input id="q" name="q" type="search" placeholder="Google™ Site Search" required="required"/>
       </form>
     </header>

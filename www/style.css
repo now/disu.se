@@ -231,6 +231,10 @@ header :link[rel="contents"]:focus h1 {
   top: 0;
 }
 
+label[for="q"] {
+  display: none;
+}
+
 .figure-right {
   float: right;
 }
