@@ -147,6 +147,6 @@
     whether the Value is Comparable and what attributes are used in such
     comparisons, its #initialize method, and its protected accessors.
 
-¹ See /software/yard-value/
+¹ See /software/yard-value-1.0/
 ² See http://yardoc.org/
 ³ See /software/value-1.0/

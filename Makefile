@@ -40,7 +40,7 @@ HTML = \
 	www/software/value-1.0/index.html \
         $(patsubst %.nml,%.html,$(shell find www/software/value-1.0/api -type f -name '*.nml')) \
 	www/software/yard-heuristics/index.html \
-	www/software/yard-value/index.html
+	www/software/yard-value-1.0/index.html
 
 JING = jing-20091111
 RESOLVER = xml-commons-resolver-1.2
@@ -185,7 +185,7 @@ $(call PROJECT,lookout-rake)
 $(call PROJECT,u)
 $(call PROJECT,value-1.0)
 $(call PROJECT_README,yard-heuristics)
-$(call PROJECT_README,yard-value)
+$(call PROJECT_README,yard-value-1.0)
 
 push:
 	rsync -avz --delete www/. disu.se:/var/www/disu.se/
