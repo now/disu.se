@@ -39,7 +39,7 @@ HTML = \
         $(patsubst %.nml,%.html,$(shell find www/software/u/api -type f -name '*.nml')) \
 	www/software/value-1.0/index.html \
         $(patsubst %.nml,%.html,$(shell find www/software/value-1.0/api -type f -name '*.nml')) \
-	www/software/yard-heuristics/index.html \
+	www/software/yard-heuristics-1.0/index.html \
 	www/software/yard-value-1.0/index.html
 
 JING = jing-20091111
@@ -184,7 +184,7 @@ $(call PROJECT,lookout-rack)
 $(call PROJECT,lookout-rake)
 $(call PROJECT,u)
 $(call PROJECT,value-1.0)
-$(call PROJECT_README,yard-heuristics)
+$(call PROJECT_README,yard-heuristics-1.0)
 $(call PROJECT_README,yard-value-1.0)
 
 push:
