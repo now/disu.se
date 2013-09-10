@@ -74,7 +74,7 @@
 ¹  Software: /software/
 ²  Inventory: /software/inventory-1.0/
 ³  Ruby: http://ruby-lang.org/
-⁴  Inventory-Rake: /software/inventory-rake/
+⁴  Inventory-Rake: /software/inventory-rake-1.0/
 ⁵  Rake: http://rake.rubyforge.org/
 ⁶  Inventory-Rake-Tasks-YARD: /software/inventory-rake-tasks-yard/
 ⁷  YARD: http://yardoc.org/

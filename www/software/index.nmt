@@ -43,7 +43,7 @@
     dependencies, installing and uninstalling the project itself, and creating
     and pushing distribution files to distribution points.
 
-¹ See /software/inventory-rake/
+¹ See /software/inventory-rake-1.0/
 ² See http://rake.rubyforge.org/
 ³ See /software/inventory-1.0/
 
