@@ -15,7 +15,6 @@ HTML = \
 	www/about/resume/index.html \
 	www/articles/piping-quickfix-lists-to-vim/index.html \
 	www/index.html \
-	www/licenses/umd/index.html \
 	www/licenses/gpl-3.0/index.html \
 	www/licenses/lgpl-3.0/index.html \
 	www/search/index.html \
