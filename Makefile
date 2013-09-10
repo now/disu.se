@@ -37,8 +37,8 @@ HTML = \
 	$(patsubst %.nml,%.html,$(shell find www/software/lookout-rake/api -type f -name '*.nml')) \
 	www/software/u/index.html \
         $(patsubst %.nml,%.html,$(shell find www/software/u/api -type f -name '*.nml')) \
-	www/software/value/index.html \
-        $(patsubst %.nml,%.html,$(shell find www/software/value/api -type f -name '*.nml')) \
+	www/software/value-1.0/index.html \
+        $(patsubst %.nml,%.html,$(shell find www/software/value-1.0/api -type f -name '*.nml')) \
 	www/software/yard-heuristics/index.html \
 	www/software/yard-value/index.html
 
@@ -183,7 +183,7 @@ $(call PROJECT,lookout)
 $(call PROJECT,lookout-rack)
 $(call PROJECT,lookout-rake)
 $(call PROJECT,u)
-$(call PROJECT,value)
+$(call PROJECT,value-1.0)
 $(call PROJECT_README,yard-heuristics)
 $(call PROJECT_README,yard-value)
 
