@@ -27,8 +27,8 @@ HTML = \
 	$(patsubst %.nml,%.html,$(shell find www/software/inventory-1.0/api -type f -name '*.nml')) \
 	www/software/inventory-rake-1.0/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake-1.0/api -type f -name '*.nml')) \
-	www/software/inventory-rake-tasks-yard/index.html \
-	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake-tasks-yard/api -type f -name '*.nml')) \
+	www/software/inventory-rake-tasks-yard-1.0/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake-tasks-yard-1.0/api -type f -name '*.nml')) \
 	www/software/lookout/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/lookout/api -type f -name '*.nml')) \
 	www/software/lookout-rack/index.html \
@@ -178,7 +178,7 @@ $(call PROJECT_API,ame-1.0,developer,--api developer/user --api developer --no-a
 $(call PROJECT_API,ame-1.0,user,--api developer/user --api user --no-api)
 $(call PROJECT,inventory-1.0)
 $(call PROJECT,inventory-rake-1.0)
-$(call PROJECT,inventory-rake-tasks-yard)
+$(call PROJECT,inventory-rake-tasks-yard-1.0)
 $(call PROJECT,lookout)
 $(call PROJECT,lookout-rack)
 $(call PROJECT,lookout-rake)

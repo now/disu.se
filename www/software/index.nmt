@@ -52,7 +52,7 @@
     Inventory-Rake-Tasks-YARD provides Rake² tasks for YARD³ using your
     Inventory⁴.
 
-¹ See /software/inventory-rake-tasks-yard/
+¹ See /software/inventory-rake-tasks-yard-1.0/
 ² See http://rake.rubyforge.org/
 ³ See http://yardoc.org/
 ⁴ See /software/inventory-1.0/
