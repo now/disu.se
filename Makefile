@@ -76,7 +76,7 @@ tools/resolver.jar:
 
 V_CP = $(V_CP_$(V))
 V_CP_ = $(V_CP_$(DEFAULT_VERBOSITY))
-V_CP_0 = @echo "  CP  " $@;
+V_CP_0 = @echo "  CP       " $@;
 
 templates/now/default/fulldoc/html/css/style.css: www/style.css
 	$(V_CP)rm -f $@ $@.tmp
