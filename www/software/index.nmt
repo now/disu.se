@@ -34,7 +34,7 @@
     gems, run unit tests, compile extensions, and verify that the project’s
     content is what you think it is.
 
-¹ See /software/inventory/
+¹ See /software/inventory-1.0/
 
 § Inventory-Rake¹
 
@@ -45,7 +45,7 @@
 
 ¹ See /software/inventory-rake/
 ² See http://rake.rubyforge.org/
-³ See /software/inventory/
+³ See /software/inventory-1.0/
 
 § Inventory-Rake-Tasks-YARD¹
 
@@ -55,7 +55,7 @@
 ¹ See /software/inventory-rake-tasks-yard/
 ² See http://rake.rubyforge.org/
 ³ See http://yardoc.org/
-⁴ See http://disu.se/software/inventory/
+⁴ See /software/inventory-1.0/
 
 § Lookout¹
 

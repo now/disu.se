@@ -72,7 +72,7 @@
       YARD-Value provides YARD handlers for Value objects.
 
 ¹  Software: /software/
-²  Inventory: /software/inventory/
+²  Inventory: /software/inventory-1.0/
 ³  Ruby: http://ruby-lang.org/
 ⁴  Inventory-Rake: /software/inventory-rake/
 ⁵  Rake: http://rake.rubyforge.org/

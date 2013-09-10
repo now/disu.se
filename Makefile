@@ -23,8 +23,8 @@ HTML = \
 	www/software/ame-1.0/api/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/ame-1.0/api/developer -type f -name '*.nml')) \
 	$(patsubst %.nml,%.html,$(shell find www/software/ame-1.0/api/user -type f -name '*.nml')) \
-	www/software/inventory/index.html \
-	$(patsubst %.nml,%.html,$(shell find www/software/inventory/api -type f -name '*.nml')) \
+	www/software/inventory-1.0/index.html \
+	$(patsubst %.nml,%.html,$(shell find www/software/inventory-1.0/api -type f -name '*.nml')) \
 	www/software/inventory-rake/index.html \
 	$(patsubst %.nml,%.html,$(shell find www/software/inventory-rake/api -type f -name '*.nml')) \
 	www/software/inventory-rake-tasks-yard/index.html \
@@ -176,7 +176,7 @@ endef
 $(call PROJECT_README,ame-1.0)
 $(call PROJECT_API,ame-1.0,developer,--api developer/user --api developer --no-api)
 $(call PROJECT_API,ame-1.0,user,--api developer/user --api user --no-api)
-$(call PROJECT,inventory)
+$(call PROJECT,inventory-1.0)
 $(call PROJECT,inventory-rake)
 $(call PROJECT,inventory-rake-tasks-yard)
 $(call PROJECT,lookout)
