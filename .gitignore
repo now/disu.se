@@ -1,5 +1,6 @@
 *.html
 config.mk
+/templates/now/default/fulldoc/html/css/style.css
 /tools/
 /www/software/*/api/
 /www/software/*/index.nmt
