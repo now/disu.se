@@ -51,8 +51,7 @@ body {
   background-color: white;
   margin: .2em auto 0;
   width: 40em;
-  font: 12pt sans-serif;
-  /* line-height: 1.25; */
+  font: 12pt/1.25 sans-serif;
 }
 
 footer {
@@ -86,10 +85,6 @@ p {
 
 p + p {
   margin-top: 1em;
-}
-
-li + li {
-  margin-top: .5em;
 }
 
 blockquote, pre {
