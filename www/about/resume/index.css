@@ -1,5 +1,9 @@
 @import "/style.css";
 
+dl {
+  text-align: center;
+}
+
 dt {
   display: none;
 }
