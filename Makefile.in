@@ -1,0 +1,472 @@
+SHELL = /bin/sh
+
+abs_top_builddir = @abs_top_builddir@
+abs_srcdir = @abs_srcdir@
+prefix = @prefix@
+srcdir = @srcdir@
+sysconfdir = @sysconfdir@
+
+VPATH = @srcdir@
+
+hostname = @hostname@
+nginxuserdirective = @nginxuserdirective@
+port = @port@
+sslport = @sslport@
+webrootdir = @webrootdir@
+
+CURL = @CURL@
+INSTALL = @INSTALL@
+GEM = @GEM@
+GIT = @GIT@
+JAVA = @JAVA@
+MKDIR_P = @MKDIR_P@
+NMC = @NMC@
+RAKE = @RAKE@
+RSYNC = @RSYNC@
+XSLTPROC = @XSLTPROC@
+
+# TODO Configurable
+XML_CATALOG_FILES = $(HOME)/opt/etc/xml/catalog
+export XML_CATALOG_FILES
+
+REMOVABLE_ABSOLUTE = http://disu.se/
+
+NGINX_VERSION = 1.10.3
+NGINX_DAV_EXT_MODULE_VERSION = 89d582d31ab624ff1c6a4cec0c1a52839507b323
+
+DEFAULT_VERBOSITY = 0
+
+V_at = $(_v_at_$(V))
+_v_at_ = $(_v_at_$(DEFAULT_VERBOSITY))
+_v_at_0 = @
+_v_at_1 =
+
+V_GEN = $(_V_GEN_$(V))
+_V_GEN_ = $(_V_GEN_$(DEFAULT_VERBOSITY))
+_V_GEN_0 = @echo "  GEN      " $@;
+_V_GEN_1 =
+
+.SUFFIXES:
+
+# Rule used to make sure that both sources and built sources are available in
+# the same directory structure, such as etc/nginx/bitwi.se and
+# etc/nginx/disu.se(.in).
+.PHONY: stage
+
+# TODO Why not build directly in opt/?  That way we don’t need additional
+# copies and additional staging.  I guess we’d need to change the %.html: %.nml
+# rule.
+define DIR_DATA
+$($(1)_DATA): $(1)/.dirstamp
+
+$(patsubst %.html,%.nml,$(filter %.html,$($(1)_DATA))): $(1)/.dirstamp
+
+$(addprefix opt/,$($(1)_DATA)): opt/$(1)/.dirstamp
+
+stage: $(addprefix opt/,$($(1)_DATA))
+
+endef
+
+DIR = $(eval $(call DIR_DATA,$(1)))
+
+%/.dirstamp:
+	$(V_at)$(MKDIR_P) $*
+	$(V_at): > $@
+
+%: %.in Makefile
+	$(V_GEN)sed \
+	  -e 's|@hostname[@]|$(hostname)|g' \
+	  -e 's|@nginxuserdirective[@]|$(nginxuserdirective)|g' \
+	  -e 's|@port[@]|$(port)|g' \
+	  -e 's|@prefix[@]|$(prefix)|g' \
+	  -e 's|@sslport[@]|$(sslport)|g' \
+	  -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
+	  -e 's|@webrootdir[@]|$(webrootdir)|g' \
+	  $< > $@.tmp
+	$(V_at)mv $@.tmp $@
+
+V_NMC = $(_V_NMC_$(V))
+_V_NMC_ = $(_V_NMC_$(DEFAULT_VERBOSITY))
+_V_NMC_0 = @echo "  NMC      " $@;
+_V_NMC_1 =
+
+%.nml: %.nmt
+	$(V_NMC)$(NMC) $< > $@.tmp
+	$(V_at)mv $@.tmp $@
+
+V_HTML = $(_V_HTML_$(V))
+_V_HTML_ = $(_V_HTML_$(DEFAULT_VERBOSITY))
+_V_HTML_0 = @echo "  HTML     " $@;
+_V_HTML_1 =
+
+CSS_STYLESHEET = /style.css
+XSL_STYLESHEET = data/templates/disuse.xsl
+
+%.html: %.nml data/templates/disuse.xsl
+	$(V_HTML)$(JAVA) -jar $(srcdir)/build/jing.jar \
+          -C $(XML_CATALOG_FILES) -c $(srcdir)/data/nml.rnc $<
+	$(V_at)$(XSLTPROC) \
+	    --stringparam removable-absolute "$(REMOVABLE_ABSOLUTE)" \
+	    --stringparam root /www \
+	    --stringparam path "/$@" \
+	    --stringparam stylesheet "$(CSS_STYLESHEET)" \
+	    --output "$@.tmp" \
+	    "$(srcdir)/$(XSL_STYLESHEET)" "$<"
+	$(V_at)mv "$@.tmp" "$@"
+
+etc/nginx_DATA = \
+	etc/nginx/mime.types \
+	etc/nginx/nginx.conf
+
+etc/nginx/sites-enabled_DATA = \
+	etc/nginx/sites-enabled/bitwi.se \
+	etc/nginx/sites-enabled/dav.disu.se \
+	etc/nginx/sites-enabled/disu.se
+
+$(call DIR,etc/nginx)
+$(call DIR,etc/nginx/sites-enabled)
+
+V_STAGE = $(_V_STAGE_$(V))
+_V_STAGE_ = $(_V_STAGE_$(DEFAULT_VERBOSITY))
+_V_STAGE_0 = @echo "  STAGE    " $@;
+_V_STAGE_1 =
+
+opt/%: %
+	$(V_STAGE)$(INSTALL) $< $@
+
+nginx_version = nginx-$(NGINX_VERSION)
+nginx_tar_gz = nginx-$(NGINX_VERSION).tar.gz
+
+opt/src/$(nginx_tar_gz): opt/src/.dirstamp
+	$(CURL) -Ls http://nginx.org/download/$(nginx_tar_gz) > $@.tmp
+	mv $@.tmp $@
+
+opt/src/$(nginx_version)/configure: opt/src/$(nginx_tar_gz)
+	tar -zxvm -C opt/src -f $<
+
+nginx-dav-ext-module_version = nginx-dav-ext-module-$(NGINX_DAV_EXT_MODULE_VERSION)
+
+opt/src/$(nginx-dav-ext-module_version)/config:
+	$(GIT) clone --no-checkout \
+	  git@github.com:arut/nginx-dav-ext-module.git \
+	  opt/src/$(nginx-dav-ext-module_version)
+	cd opt/src/$(nginx-dav-ext-module_version) && \
+	  $(GIT) checkout $(NGINX_DAV_EXT_MODULE_VERSION)
+
+opt/sbin/nginx: \
+	opt/src/$(nginx_version)/configure \
+	opt/src/$(nginx-dav-ext-module_version)/config \
+	opt/sbin/.dirstamp
+	cd opt/src/$(nginx_version) && \
+	  ./configure \
+	    --prefix=$(abs_top_builddir)/opt \
+	    --conf-path=$(abs_top_builddir)/opt/etc/nginx/nginx.conf \
+	    --error-log-path=$(abs_top_builddir)/opt/var/log/nginx/error.log \
+	    --http-client-body-temp-path=$(abs_top_builddir)/opt/var/lib/nginx/body \
+	    --http-fastcgi-temp-path=$(abs_top_builddir)/opt/var/lib/nginx/fastcgi \
+	    --http-log-path=$(abs_top_builddir)/opt/var/log/nginx/access.log \
+	    --http-proxy-temp-path=$(abs_top_builddir)/opt/var/lib/nginx/proxy \
+	    --http-scgi-temp-path=$(abs_top_builddir)/opt/var/lib/nginx/scgi \
+	    --http-uwsgi-temp-path=$(abs_top_builddir)/opt/var/lib/nginx/uwsgi \
+	    --lock-path=$(abs_top_builddir)/opt/var/lock/nginx.lock \
+	    --pid-path=$(abs_top_builddir)/opt/var/run/nginx/nginx.pid \
+	    --with-debug \
+	    --with-http_dav_module \
+	    --with-http_ssl_module \
+	    --add-module=$(abs_top_builddir)/opt/src/$(nginx-dav-ext-module_version) && \
+	  make binary && \
+	  cp objs/nginx $(abs_top_builddir)/opt/sbin/nginx
+
+opt/etc/letsencrypt/live/disu.se/privkey.pem: \
+	opt/etc/letsencrypt/live/disu.se/.dirstamp
+	openssl genrsa -out $@ 2048
+
+opt/etc/letsencrypt/live/disu.se/fullchain.pem: \
+	opt/etc/letsencrypt/live/disu.se/privkey.pem
+	openssl req -new -x509 -days 3650 -key $< -out $@ \
+	  -subj '/CN=*.disu.se/OU=disu.se/emailAddress=now@disu.se'
+
+www_DATA = \
+	www/404.html \
+	www/disuse-16.png \
+	www/index.css \
+	www/index.html \
+	www/me.jpg \
+	www/style.css
+
+www/index.html: CSS_STYLESHEET = /index.css
+
+$(call DIR,www)
+
+www/about_DATA = \
+	www/about/index.html
+
+$(call DIR,www/about)
+
+www/about/contact_DATA = \
+	www/about/contact/index.html
+
+$(call DIR,www/about/contact)
+
+www/about/resume_DATA = \
+	www/about/resume/index.css \
+	www/about/resume/index.html
+
+www/about/resume/index.html: CSS_STYLESHEET = /about/resume/index.css
+
+$(call DIR,www/about/resume)
+
+www/licenses/gpl-3.0_DATA = \
+	www/licenses/gpl-3.0/index.css \
+	www/licenses/gpl-3.0/index.html
+
+www/licenses/gpl-3.0/index.html: www/licenses/gpl-3.0/index.xsl
+www/licenses/gpl-3.0/index.html: XSL_STYLESHEET = www/licenses/gpl-3.0/index.xsl
+
+$(call DIR,www/licenses/gpl-3.0)
+
+www/licenses/lgpl-3.0_DATA = \
+	www/licenses/lgpl-3.0/index.css \
+	www/licenses/lgpl-3.0/index.html
+
+www/licenses/lgpl-3.0/index.html: www/licenses/lgpl-3.0/index.xsl
+www/licenses/lgpl-3.0/index.html: XSL_STYLESHEET = www/licenses/lgpl-3.0/index.xsl
+
+$(call DIR,www/licenses/lgpl-3.0)
+
+www/search_DATA = \
+	www/search/index.css \
+	www/search/index.html
+
+www/search/index.html: CSS_STYLESHEET = /search/index.css
+
+$(call DIR,www/search)
+
+www/software_DATA = \
+	www/software/index.html
+
+$(call DIR,www/software)
+
+V_RAKE = $(_V_RAKE_$(V))
+_V_RAKE_ = $(_V_RAKE_$(DEFAULT_VERBOSITY))
+_V_RAKE_0 = s
+_V_RAKE_1 =
+
+V_README = $(_V_README_$(V))
+_V_README_ = $(_V_README_$(DEFAULT_VERBOSITY))
+_V_README_0 = @echo "  README   " $@;
+_V_README_1 =
+
+V_CLONE = $(_V_CLONE_$(V))
+_V_CLONE_ = $(_V_CLONE_$(DEFAULT_VERBOSITY))
+_V_CLONE_0 = @echo "  CLONE    " $(@D);
+_V_CLONE_1 =
+
+V_CHECKOUT = $(_V_CHECKOUT_$(V))
+_V_CHECKOUT_ = $(_V_CHECKOUT_$(DEFAULT_VERBOSITY))
+_V_CHECKOUT_0 = @echo "  CHECKOUT " $(@D);
+_V_CHECKOUT_1 =
+
+# 1: Name
+# 2: Version
+# 3: Source location
+# 4: Target location
+define PROJECT_README_template
+$(3)/.git/index: opt/src/.dirstamp
+	$$(V_CLONE)$$(GIT) clone $$(if $$(V_CLONE),-q )--no-checkout \
+	  git@github.com:now/$(1).git $(3).tmp
+	$$(V_at)mv $(3).tmp $(3)
+
+$(3)/README: $(3)/.git/index
+	$$(V_CHECKOUT)$$(GIT) --git-dir $(3)/.git --work-tree $(3) \
+	  checkout $$(if $$(V_CLONE),-q )v$(2)
+	$$(V_at)touch $$@
+
+$(1)/.gem-deps-installed: $(1)/README
+	$$(V_at)GEM_HOME=$$(abs_top_builddir)/opt/src/gems \
+	  $$(GEM) install --conservative -N inventory-rake -v '~> 1.6'
+	@echo "make: Entering directory '$(1)'"
+	$$(V_at)cd $(1) && \
+	  GEM_HOME=$$(abs_top_builddir)/opt/src/gems \
+	    $$(RAKE) -N$$(V_RAKE) gem:deps:install
+	$$(V_at)touch $$@
+
+$(1)/.yardopts.html: $(1)/.gem-deps-installed
+	$$(V_GEN)echo '--template-path $(abs_srcdir)/templates/now --no-highlight' > $$@
+
+$(4)/index.nmt: $(3)/README $(4)/.dirstamp
+	$$(V_README)cp $$< $$@.tmp
+	$$(V_at)mv $$@.tmp $$@
+
+$(4)_DATA = \
+	$(4)/index.html
+
+$$(call DIR,$(4))
+endef
+
+# 1: Name
+# 2: Version
+PROJECT_SRC = opt/src/$(1)-$(2)
+
+# 1: Name
+# 2: Version
+PROJECT_TRG = www/software/$(1)-$(firstword $(subst ., ,$(2))).0
+
+# 1: Name
+# 2: Location
+PROJECT_README = \
+	$(eval $(call PROJECT_README_template,$(1),$(2),$(call PROJECT_SRC,$(1),$(2)),$(call PROJECT_TRG,$(1),$(2))))
+
+# 1: Source location
+# 2: Target location
+# 3: API sub-directory
+# 4: HTML options
+define PROJECT_API_template
+$(1)/doc$(3)/index.html: $(1)/.yardopts.html
+	@echo "make: Entering directory '$(1)'"
+	$$(V_at)cd $(1) && \
+	  GEM_HOME=$$(abs_top_builddir)/opt/src/gems \
+	    $$(RAKE) -N$(V_RAKE) html OPTIONS="-o doc$(3)$(if $(4), $(4))"
+
+-include $(1)/doc$(3)/doc.mk
+
+stage: $(1)/doc$(3)/doc.mk
+
+$(1)/doc$(3)/doc.mk: $(1)/doc$(3)/index.html
+	$$(V_GEN)r=$(1)/doc$(3); \
+	  w=$(2)/api$(3); \
+          es=`find "$$$$r" -type f -name \*.html | sed 's/\.html$$$$//' | sort`; \
+	  for d in `printf %s "$$$$es" | sed 's,/[^/]*$$$$,,' | sort | uniq`; do \
+	    printf %s "$$$$es" | \
+	      awk -v d="$$$$d" -v r="$$$$r" -v w="$$$$w" ' \
+	        substr($$$$0, 1, length(d)) == d && \
+	        substr($$$$0, length(d) + 2) ~ /^[^\/]+$$$$/ { \
+	          fs[length(fs)] = substr($$$$0, length(d) + 2) \
+	        } \
+	        END { \
+	          p = substr(d, length(r) + 2); \
+	          if (length(p) > 0) \
+	            p = "/"p; \
+	          e = w p; \
+	          printf "%s_DATA = ", e; \
+	          for (f in fs) \
+	            printf "\\\n\t%s/%s.html", e, fs[f]; \
+	          printf "\n\n$$$$(call DIR,%s)\n\n", e; \
+	          for (f in fs) { \
+	            printf "%s/%s.nml: %s%s/%s.html\n", e, fs[f], r, p, fs[f]; \
+	            print "\t$$$$(V_GEN)xsltproc --stringparam path $$$$< $$(srcdir)/templates/html2nml.xsl $$$$< > $$$$@.tmp"; \
+	            print "\t$$$$(V_at)mv $$$$@.tmp $$$$@\n"; \
+	          } \
+	        }'; \
+	  done > $$@.tmp
+	$$(V_at)mv $$@.tmp $$@
+endef
+
+# 1: Name
+# 2: Version
+# 3: API sub-directory
+# 4: HTML options
+PROJECT_API = \
+	$(eval $(call PROJECT_API_template,$(call PROJECT_SRC,$(1),$(2)),$(call PROJECT_TRG,$(1),$(2)),$(if $(3),/$(3)),$(4)))
+
+# 1: Name
+# 2: Version
+# 3: API sub-directory
+# 4: HTML options
+PROJECT = \
+	$(call PROJECT_README,$(1),$(2)) \
+	$(call PROJECT_API,$(1),$(2),$(3),$(4))
+
+$(call PROJECT_README,ame,1.0.1)
+$(call PROJECT_API,ame,1.0.1,developer,--api developer/user --api developer --no-api)
+$(call PROJECT_API,ame,1.0.1,user,--api developer/user --api user --no-api)
+$(call PROJECT,inventory,1.5.2)
+$(call PROJECT,inventory-rake,1.6.4)
+$(call PROJECT,inventory-rake-tasks-yard,1.4.1)
+$(call PROJECT,lookout,3.0.1)
+$(call PROJECT,lookout-rack,1.0.1)
+$(call PROJECT,lookout-rake,3.1.0)
+$(call PROJECT,u,1.0.2)
+$(call PROJECT,value,1.1.3)
+$(call PROJECT_README,yard-heuristics,1.2.2)
+$(call PROJECT_README,yard-value,1.2.5)
+
+www/software/ame-1.0/api_DATA = \
+	www/software/ame-1.0/api/index.html
+
+$(call DIR,www/software/ame-1.0/api)
+
+V_RUN = $(_V_RUN_$(V))
+_V_RUN_ = $(_V_RUN_$(DEFAULT_VERBOSITY))
+_V_RUN_0 = @echo "  RUN";
+_V_RUN_1 =
+
+.PHONY: run
+run: \
+        opt/etc/letsencrypt/live/disu.se/fullchain.pem \
+	opt/etc/nginx/nginx.conf \
+	opt/sbin/nginx \
+	opt/var/lib/nginx/body/.dirstamp \
+	stage
+	$(V_RUN)opt/sbin/nginx -g 'daemon off;'
+
+V_PUSH = $(_V_PUSH_$(V))
+_V_PUSH_ = $(_V_PUSH_$(DEFAULT_VERBOSITY))
+_V_PUSH_0 = @echo "  PUSH";
+_V_PUSH_1 =
+
+# TODO Plan: Log in remotely via ssh, update via git, make, make install.  Make
+# install should install /etc/nginx.$(date)/{nginx.conf,sites-enablend} and
+# /var/www/disu.se/$(date), then ln -snf /etc/nginx.$(date) /etc/nginx && ln
+# -snf /var/www/disu.se/$(date) /var/www/disu.se/current && service nginx
+# restart.  As either ln may fail, we need to try to roll back the previous
+# change, should the second fail.  The -n option to ln is not specified by
+# POSIX.  The -f option to ln is not portable.  The -s option is not portable,
+# but can be worked around with $(LN_S).  $(date) should of course be the hash
+# of the commit being installed.
+#
+# Consider whether what we do as stage can instead be done as install.  The
+# problem may again be that not all files are in the same place and would
+# require separate install calls, but that’s being done already for the
+# staging, so we’re not losing much more than that it’d speed up the final
+# install, which happens seldom and is thus not an area to optimize.  But
+# staging is only done for changed files, so install is actually different.
+#
+# Install would be done using DESTDIR to get separate directories that
+# would then be ln -s’d into the current one when we’re ready to use a
+# new version.  Install could also be smart here and ln anything
+# that’s already been installed and is the same (via cmp) instead of
+# creating a new copy.
+#
+# Can we perhaps simply link the staging area to the various things mentioned
+# above?  Question then is how we keep the various git versions separate?
+# Git-worktree?  We want to run ./configure once so that the options are set,
+# but would like to keep the stagings separate.  No, git-worktree won’t work,
+# as it doesn’t retain the ./configure.
+#
+# Install also needs to set up the dav structure correctly and, since these
+# files should remain between versions, this needs to be taken care of as well.
+# I guess we can simply softlink it into the installation directory.
+#
+# It feels a bit…excessive to have separate directories for whenever we add an
+# article or whatever…though, I guess, we simply remove them whenever we don’t
+# need them and installing them isn’t that painful.
+#
+# Perhaps we can push the staged www and only generate the nginx stuff.
+.PHONY: push
+push: stage
+	$(V_PUSH)$(RSYNC) -avz --delete opt/www/. disu.se:/var/www/disu.se/
+
+$(srcdir)/configure: configure.ac
+	$(V_GEN)cd $(srcdir) && autoconf
+
+Makefile: Makefile.in config.status
+	$(V_GEN)./config.status
+
+config.status: configure
+	$(V_GEN)./config.status --recheck
+
+# HTML = \
+# 	www/articles/piping-quickfix-lists-to-vim/index.html \
+
+# all: templates/now/default/fulldoc/html/css/style.css
