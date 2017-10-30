@@ -76,5 +76,5 @@ def tag(name)
 end
 
 def now_inline_htmlify(object)
-  htmlify(object).sub(%r'\A<p>', '').sub(%r'</p>', '')
+  htmlify(object).sub(%r'\A\s*<p>', '').sub(%r'</p>\s*\z', '')
 end

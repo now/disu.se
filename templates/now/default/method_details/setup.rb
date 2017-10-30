@@ -22,7 +22,15 @@ def now_format_args(method, show_types = !params_documented?(method))
         not method.tags(:param).any?{ |t| (t.name == e.first[1..-1] and t.text and not t.text.empty?) } } :
     method.parameters
   return '' if parameters.empty?
-  '(%s)' % now_format_parameters_with_types(parameters, show_types ? method.tags(:param) : [])
+  tags = show_types ?
+           method.tags(:param).tap{ |tags|
+             if method.respond_to?(:writer?) && method.writer? &&
+                tags.empty? &&
+                (rs = method.tags(:return)).length == 1 && !rs.first.types.empty?
+               tags.push YARD::Tags::Tag.new(:param, '', rs.first.types.dup, 'value')
+             end
+           } : []
+  '(%s)' % now_format_parameters_with_types(parameters, tags)
 end
 
 def now_format_block(method, show_types = !yieldparams_documented?(method))

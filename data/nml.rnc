@@ -1,3 +1,4 @@
+namespace gcse = 'http://cse.google.com/cse'
 namespace xhtml = 'http://www.w3.org/1999/xhtml'
 
 include 'http://disu.se/software/nml/relaxng/1.0/nml.rnc'
@@ -12,14 +13,13 @@ superscript.attributes = common.attributes
 superscript.content = common.inline.content
 common.inline.elements |= superscript
 
-xhtml-div = element xhtml:div { xhtml-div.attributes, xhtml-div.content }
-xhtml-div.attributes = common.attributes
-xhtml-div.content = empty
-common.block.elements |= xhtml-div
+gcse.searchresults-only = element gcse:searchresults-only { empty }
+common.block.elements |= gcse.searchresults-only
 
 xhtml-script = element xhtml:script { xhtml-script.attributes, xhtml-script.content }
 xhtml-script.attributes =
   common.attributes,
+  attribute async { 'true' }?,
   attribute src { xsd:anyURI }?
 xhtml-script.content = text
 common.block.elements |= xhtml-script

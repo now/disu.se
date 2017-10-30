@@ -1,0 +1,19 @@
+                                   Ame APIs
+
+  Ame comes with two separate APis, one for use by the user writing a
+  command-line interface to some bit of code they have, and one for use by the
+  developer writing an extension to the Ame API itself, such as a new form of
+  option, argument, method, type, or help class.
+
+§ {User API}¹
+
+    This is the API to use if you’re writing a command-line interface.
+
+¹ See user/
+
+§ {Developer API}¹
+
+    This is the API to use if you’re writing an extension to the Ame API
+    itself.
+
+¹ See developer/

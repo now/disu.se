@@ -1,6 +1,7 @@
 *.html
-config.mk
+/.build
+/configure
 /templates/now/default/fulldoc/html/css/style.css
-/tools/
-/www/software/*/api/
+/www/software/*/api/*
+!/www/software/ame-1.0/api/index.nmt
 /www/software/*/index.nmt

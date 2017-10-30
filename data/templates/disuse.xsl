@@ -4,9 +4,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:date="http://exslt.org/dates-and-times"
   xmlns:func="http://exslt.org/functions"
+  xmlns:gcse="http://cse.google.com/cse"
   xmlns:nml="http://disu.se/software/nml/xsl/1.0/html"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
-  exclude-result-prefixes="nml xhtml"
+  exclude-result-prefixes="gcse nml xhtml"
   extension-element-prefixes="date func">
   <xsl:import href="http://disu.se/software/nml/xsl/1.0/html.xsl"/>
 
@@ -36,7 +37,7 @@
   <xsl:template name="html.body.header">
     <header role="banner">
       <xsl:choose>
-        <xsl:when test="$path != concat($root, '/index.nml')">
+        <xsl:when test="$path != concat($root, '/index.html')">
           <a
             rel="contents"
             title="Go back to disuse front page"
@@ -52,11 +53,10 @@
 
       <xsl:call-template name="html.body.header.trail"/>
 
-      <form id="search" action="/search/">
-        <input name="cref" type="hidden" value="http://disu.se/search/cse.xml"/>
-        <input type="hidden" name="cof" value="FORID:9"/>
-        <label for="q">Search</label>
-        <input id="q" name="q" type="search" placeholder="Google™ Site Search" required="required"/>
+      <form id="search-form" action="/search/">
+        <label for="search">Search</label>
+        <input id="search" name="search" type="search"
+               placeholder="Google™ Custom Search" required="required"/>
       </form>
     </header>
   </xsl:template>
@@ -72,7 +72,7 @@
                         string-length($root) + 2,
                         string-length($path) -
                         (string-length($root) + 1) -
-                        string-length('/index.nml'))"/>
+                        string-length('/index.html'))"/>
 
     <xsl:if test="contains($subpath, '/')">
       <nav id="trail" role="navigation">
@@ -132,6 +132,12 @@
     <sup>
       <xsl:apply-templates select="@*|node()"/>
     </sup>
+  </xsl:template>
+
+  <xsl:template match="gcse:searchresults-only">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:template match="xhtml:*">

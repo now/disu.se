@@ -1,5 +1,127 @@
 @import "/style.css";
 
-#cse-search-results iframe {
-  width: 100%;
+.gsc-control-cse, .gsc-above-wrapper-area {
+  border-width: 0 !important;
+  padding: 0 !important;
+}
+
+.gsc-control-cse, .gsc-control-cse .gsc-table-result {
+  font-family: sans-serif !important;
+  font-size: 12pt !important;
+}
+
+.gsc-results {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.gsc-above-wrapper-area-container, .gsc-resultsHeader, .gsc-table-result {
+  margin: 0;
+  border-spacing: 0;
+}
+
+.gsc-result-info {
+  color: black !important;
+  padding: 0 !important;
+  font-size: 12pt !important;
+}
+
+.gsc-orderby-label {
+  color: black !important;
+  font-size: 12pt !important;
+}
+
+.gcsc-branding {
+  padding: 0 !important;
+  padding-top: 0.5em !important;
+}
+
+td.gcsc-branding-text {
+  color: black !important;
+}
+
+.gsc-webResult .gsc-result {
+  padding: 1em 0 !important;
+  border-width: 0 !important;
+}
+
+.gsc-table-result, .gsc-thumbnail-inside, .gsc-url-top {
+  padding: 0 !important;
+}
+
+.gsc-control-cse .gs-result .gs-title,
+.gsc-control-cse .gs-result .gs-title * {
+  font-size: 110% !important;
+  font-weight: normal !important;
+}
+
+.gsc-result .gs-title {
+  height: 100% !important;
+}
+
+.gs-result .gs-title, .gs-result .gs-title * {
+  text-decoration: none !important;
+}
+
+.gs-webResult.gs-result a.gs-title:link,
+.gs-webResult.gs-result a.gs-title:link b,
+.gs-imageResult a.gs-title:link,
+.gs-imageResult a.gs-title:link b,
+.gs-webResult.gs-result a.gs-title:hover,
+.gs-webResult.gs-result a.gs-title:hover b,
+.gs-imageResult a.gs-title:hover,
+.gs-imageResult a.gs-title:hover b {
+  color: #d11 !important;
+}
+
+.gs-webResult.gs-result a.gs-title:visited,
+.gs-webResult.gs-result a.gs-title:visited b,
+.gs-imageResult a.gs-title:visited,
+.gs-imageResult a.gs-title:visited b,
+.gs-webResult.gs-result a.gs-title:hover:visited,
+.gs-webResult.gs-result a.gs-title:hover:visited b,
+.gs-imageResult a.gs-title:hover:visited,
+.gs-imageResult a.gs-title:hover:visited b {
+  color: #d55 !important;
+}
+
+.gs-webResult.gs-result a.gs-title:active,
+.gs-webResult.gs-result a.gs-title:active b,
+.gs-imageResult a.gs-title:active,
+.gs-imageResult a.gs-title:active b {
+  color: white !important;
+  background-color: #d11 !important;
+}
+
+.gs-webResult.gs-result a.gs-title:focus,
+.gs-webResult.gs-result a.gs-title:focus b,
+.gs-imageResult a.gs-title:focus,
+.gs-imageResult a.gs-title:focus b {
+  color: white !important;
+  background-color: #d11 !important;
+}
+
+.gs-webResult div.gs-visibleUrl, .gs-imageResult div.gs-visibleUrl {
+  color: gray !important;
+}
+
+.gsc-cursor-page {
+  color: #d11 !important;
+}
+
+a.gsc-trailing-more-results:link {
+  color: #d11 !important;
+}
+
+.gsc-results .gsc-cursor-box .gsc-cursor-page {
+  color: #d11 !important;
+}
+
+.gsc-results .gsc-cursor-box .gsc-cursor-page:hover {
+  text-decoration: none !important;
+}
+
+.gsc-results .gsc-cursor-box .gsc-cursor-current-page {
+  color: #d11 !important;
+  font-weight: bold;
 }

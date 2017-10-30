@@ -1,11 +1,6 @@
 <nml xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <title>Search Results</title>
-  <xhtml:div xml:id="cse-search-results"/>
-  <xhtml:script>
-    var googleSearchIframeName = "cse-search-results";
-    var googleSearchFormName = "cse-search-box";
-    var googleSearchDomain = "www.google.com";
-    var googleSearchPath = "/cse";
-  </xhtml:script>
-  <xhtml:script src="http://www.google.com/afsonline/show_afs_search.js"/>
+  <xhtml:script async="true"
+                src="https://cse.google.com/cse.js?cx=001711222789018620689:vygynxdpbxc"/>
+  <gcse:searchresults-only xmlns:gcse="http://cse.google.com/cse"/>
 </nml>

@@ -220,14 +220,18 @@ header :link[rel="contents"]:focus h1 {
   margin: 0 0.2em;
 }
 
-#search {
+#search-form {
   position: absolute;
   right: 0;
   top: 0;
 }
 
-label[for="q"] {
+label[for="search"] {
   display: none;
+}
+
+#search {
+  width: 12em;
 }
 
 .figure-right {

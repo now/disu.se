@@ -48,13 +48,24 @@ section section p + p {
   text-indent: 0;
 }
 
-li {
+section section li {
+  margin-left: 10em;
+}
+
+section section p + ul, section section li + li {
+  margin-top: -1em;
+}
+section section li p {
+  padding-left: 0;
+}
+
+#interests li {
   float: left;
   display: inline;
   width: 30%;
 }
 
-li p:before {
+#interests li p:before {
   content: '•';
   padding-right: 1em;
 }
